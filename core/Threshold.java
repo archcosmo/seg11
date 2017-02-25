@@ -1,3 +1,5 @@
+package core;
+
 public class Threshold {
 	int tora, toda, asda, lda;
 	

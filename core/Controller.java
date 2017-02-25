@@ -11,7 +11,9 @@ public class Controller
 	{
 		/* Initialise state */
 		view = new Console(this);
-		model = new Model(view);
+		model = new Model();
+		
+		model.registerView(view);
 		
 		//Ask model to get airport, returns NULL if none
 		//Ask model for run-ways

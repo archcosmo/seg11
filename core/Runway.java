@@ -1,4 +1,6 @@
-import java.util.ArrayList
+package core;
+
+import java.util.ArrayList;
 
 public class Runway {
 	String name;
@@ -10,6 +12,6 @@ public class Runway {
 	}
 	
 	public void addThreshold(int tora, int toda, int asda, int lda) {
-		threshold.add(new Threshold(tora, toda, asda, lda));
+		thresholds.add(new Threshold(tora, toda, asda, lda));
 	}
 }

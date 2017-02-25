@@ -1,3 +1,7 @@
+package core;
+
+import java.util.ArrayList;
+
 public class Airport {
 	String name;
 	ArrayList<Runway> runways;

@@ -3,7 +3,7 @@ package core;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
-public class Console 
+public class Console implements Updatable
 {
 	Scanner s;
 	Controller controller;
@@ -69,5 +69,10 @@ public class Console
 		printBar("Exiting Application");
 		try { TimeUnit.SECONDS.sleep(3); } catch (InterruptedException e) { e.printStackTrace(); } // Sleep 3 seconds
 		s.close();
+	}
+
+	@Override
+	public void updateView(String msg) {
+		System.out.println(msg);
 	}
 }
