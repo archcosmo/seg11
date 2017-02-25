@@ -6,9 +6,11 @@ import java.util.concurrent.TimeUnit;
 public class Console 
 {
 	Scanner s;
+	Controller controller;
 	
-	public Console() 
+	public Console(Controller controller) 
 	{
+		this.controller = controller;
 		printBar("Runway Re-Declaration Tool");
 	}
 	

@@ -10,8 +10,8 @@ public class Controller
 	public Controller() 
 	{
 		/* Initialise state */
-		view = new Console();
-		model = new Model();
+		view = new Console(this);
+		model = new Model(view);
 		
 		//Ask model to get airport, returns NULL if none
 		//Ask model for run-ways
