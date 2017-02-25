@@ -11,7 +11,7 @@ public class Runway {
 		thresholds = new ArrayList<Threshold>();
 	}
 	
-	public void addThreshold(int tora, int toda, int asda, int lda) {
-		thresholds.add(new Threshold(tora, toda, asda, lda));
+	public void addThreshold(String designator, int tora, int toda, int asda, int lda) {
+		thresholds.add(new Threshold(designator, tora, toda, asda, lda));
 	}
 }
