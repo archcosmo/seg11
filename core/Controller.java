@@ -11,9 +11,7 @@ public class Controller
 	{
 		/* Initialise state */
 		view = new Console(this);
-		model = new Model();
-		
-		model.registerView(view);
+		model = new Model(view);
 		
 		//Ask model to get airport, returns NULL if none
 		//Ask model for run-ways
@@ -27,18 +25,20 @@ public class Controller
 	 */
 	private void loop()
 	{
-		/* Loop user input
-		 * returns true when flagging program exit
-		 */
 		while ( !view.handle_input() );
 		quit();
 	}
+	
+	public void getAirports() { model.getAirports(); }
+	public void getRunways() { model.getRunways(); }
+	public void getObjects() { model.getObjects(); }
 
 	/* Safely closes application */
-	private void quit() {
+	private void quit() 
+	{
 		view.quit();
 		view = null;
-		
-		//Saves any persistent data and halts
+		model.quit();
+		model = null;
 	}
 }
