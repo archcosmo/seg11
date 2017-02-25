@@ -1,15 +1,42 @@
 package core;
 
-import javafx.application.Application;
-
-public class Controller {
+public class Controller 
+{
 	
-	GUI view;
-
-	public static void main(String[] args) { new Controller(args); } /* Starts application */
+	Console view;
+	Model model;
 	
-	public Controller(String[] args) {
-		Application.launch(GUI.class, args);
+	static public void main(String[] args) { new Controller(); } /* Initialise program */
+	
+	public Controller() 
+	{
+		/* Initialise state */
+		view = new Console();
+		model = new Model();
+		
+		//Ask model to get airport, returns NULL if none
+		//Ask model for run-ways
+		loop();
 	}
+	
+	/* Main program loop */
+	private void loop()
+	{
+		boolean quit = false;
+		while ( !quit )
+		{
+			
+			quit = true; // Force exit application
+		}
+		quit();
+	}
+	
+	/* Safely closes application */
+	private void quit() {
+		view.quit();
+		view = null;
+		
+	}
+	
 
 }
