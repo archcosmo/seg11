@@ -1,9 +1,11 @@
 package core;
 
+import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
 public class Console 
 {
+	Scanner s;
 	
 	public Console() 
 	{
@@ -28,9 +30,13 @@ public class Console
 	/* Gets user input
 	 * parses input
 	 */
-	public String getInput()
+	public String[] getInput()
 	{
-		return null;	
+		System.out.print("input: ");
+		
+		s = new Scanner(System.in);
+		String input = s.nextLine();
+		return input.split(" ");
 	}
 	
 	/* Displays quit sign 
@@ -39,7 +45,8 @@ public class Console
 	public void quit()
 	{
 		printBar("Exiting Application");
-		try { TimeUnit.SECONDS.sleep(3); } catch (InterruptedException e) { e.printStackTrace(); } // Delay 3 seconds
+		try { TimeUnit.SECONDS.sleep(3); } catch (InterruptedException e) { e.printStackTrace(); } // Sleep 3 seconds
+		s.close();
 	}
 
 }

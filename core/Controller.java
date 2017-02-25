@@ -19,23 +19,39 @@ public class Controller
 		loop();
 	}
 	
-	/* Main program loop */
+	/* Main program loop
+	 * Handles input for all top-level commands
+	 */
 	private void loop()
 	{
-		boolean quit = false;
-		while ( !quit )
+		String[] input;
+		boolean quit_flag = false;
+		while ( !quit_flag )
 		{
-			
-			quit = true; // Force exit application
+			/* Handle Input */
+			input = view.getInput();
+			switch( input[0] ) 
+			{
+				case "help":
+					System.out.println("Placeholder Help Page..."); /* PLACEHOLDER HELP DOCUMENTATION */
+					break;
+				case "quit":
+					quit_flag = true;
+					break;
+				default:
+					System.out.println("Invalid input. Use 'help' for a list of commands and uses.");
+					break;
+			}
 		}
 		quit();
 	}
-	
+
 	/* Safely closes application */
 	private void quit() {
 		view.quit();
 		view = null;
 		
+		//Saves any persistent data and halts
 	}
 	
 
