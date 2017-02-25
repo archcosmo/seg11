@@ -1,11 +1,17 @@
 package core;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -27,70 +33,147 @@ public class XMLParser {
 	//SAXException - Invalid format of input file
 	public static Airport readAirportInfoFromXML(String filename) throws IOException, SAXException, ParserConfigurationException {
 		//Load and parse XML file
-		DocumentBuilder db;
-		db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+		DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 		Document doc = db.parse(new File(filename));
 		doc.getDocumentElement().normalize();
 		
 		//Check validity of the file
-		Element root = doc.getDocumentElement();
-		if(!root.getNodeName().equals("airport"))
+		return unmarshallAirport(doc.getDocumentElement());
+		
+	}
+
+	public static boolean saveAirportInfoToXML(Airport airport) throws IOException {
+		return saveAirportInfoToXML("airportInfo.xml", airport);
+	}
+	
+	public static boolean saveAirportInfoToXML(String filename, Airport airport) throws IOException{
+		DocumentBuilder db;
+		try {
+			db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+
+			Document doc = db.newDocument();
+			doc.appendChild(marshallAirport(airport, doc));
+			
+			DOMSource xmlSource = new DOMSource(doc);
+			
+			FileWriter fw = new FileWriter(new File(filename));
+			StreamResult outputTarget = new StreamResult(fw);
+			
+			Transformer transformer = TransformerFactory.newInstance().newTransformer();
+			transformer.transform(xmlSource, outputTarget);
+			
+			return true;
+			
+		} catch (ParserConfigurationException | TransformerException e) {
+			return false;
+		}
+	}
+	
+	private static Airport unmarshallAirport(Element eAirport) throws SAXException {
+		if(!eAirport.getNodeName().equals("airport"))
 			throw new SAXException("Misnamed root node.");
 		
 		//Build Airport Object
-		Airport airport = new Airport(root.getAttribute("name"));
+		Airport airport = new Airport(eAirport.getAttribute("name"));
 		
 		//Build Runways
-		NodeList runways = root.getElementsByTagName("runway");
-		for(int i = 0; i < runways.getLength(); i++) {
-			Node nRunway = runways.item(i);
-			if(nRunway.getNodeType() == Node.ELEMENT_NODE) {
-				Element eRunway = (Element) nRunway;
-				Runway runway = new Runway(eRunway.getAttribute("name"));
-				
-				//Build Thresholds
-				NodeList thresholds = eRunway.getElementsByTagName("threshold");
-				for(int j = 0; j < thresholds.getLength(); j++) {
-					Node nThreshold = thresholds.item(j);
-					if(nThreshold.getNodeType() == Node.ELEMENT_NODE) {
-						Element eThreshold = (Element) nThreshold;
-						String thresholdDesignator = eThreshold.getAttribute("designator");
-						
-						//Designator is an important attribute and must be checked for file validity
-						if(thresholdDesignator.isEmpty())
-							throw new SAXException("Invalid file format: Threshold Designator undefined.");
-						
-						int tora, toda, asda, lda;
-						
-						tora = getAttributeValue(eThreshold.getElementsByTagName("tora"));
-						if(tora == -1)
-							throw new SAXException("TORA value not specified.");
-						
-						toda = getAttributeValue(eThreshold.getElementsByTagName("toda"));
-						if(toda == -1)
-							throw new SAXException("TODA value not specified.");
-						
-						asda = getAttributeValue(eThreshold.getElementsByTagName("asda"));
-						if(asda == -1)
-							throw new SAXException("ASDA value not specified.");
-						
-						lda = getAttributeValue(eThreshold.getElementsByTagName("lda"));
-						if(lda == -1)
-							throw new SAXException("value not specified.");
-						
-						runway.addThreshold(thresholdDesignator, tora, toda, asda, lda);
-					}
-					else
-						throw new SAXException("Invalid file format.");
-				}
-				
-				airport.addRunway(runway);
-			}
-			else
-				throw new SAXException("Invalid file format.");
-		}
+		NodeList runways = eAirport.getElementsByTagName("runway");
+		for(int i = 0; i < runways.getLength(); i++)
+			airport.addRunway(unmarshallRunway(runways.item(i)));
 		
 		return airport;
+	}
+	
+	private static Node marshallAirport(Airport airport, Document doc) {
+		Element nAirport = doc.createElement("airport");
+		nAirport.setAttribute("name", airport.name);
+
+		for(Runway runway : airport.runways)
+			nAirport.appendChild(marshallRunway(runway, doc));
+		
+		return nAirport;
+	}
+	
+	private static Runway unmarshallRunway(Node nRunway) throws SAXException {
+		if(nRunway.getNodeType() == Node.ELEMENT_NODE) {
+			Element eRunway = (Element) nRunway;
+			Runway runway = new Runway(eRunway.getAttribute("name"));
+			
+			//Build Thresholds
+			NodeList thresholds = eRunway.getElementsByTagName("threshold");
+			for(int j = 0; j < thresholds.getLength(); j++)
+				runway.addThreshold(unmarshallThreshold(thresholds.item(j)));
+			
+			return runway;
+		}
+		else
+			throw new SAXException("Invalid file format.");
+	}
+	
+	private static Node marshallRunway(Runway runway, Document doc) {
+		Element nRunway = doc.createElement("runway");
+		nRunway.setAttribute("name", runway.name);
+		
+		for(Threshold threshold : runway.thresholds)
+			nRunway.appendChild(marshallThreshold(threshold, doc));
+		
+		return nRunway;
+	}
+	
+	private static Threshold unmarshallThreshold(Node nThreshold) throws SAXException {
+		if(nThreshold.getNodeType() == Node.ELEMENT_NODE) {
+			Element eThreshold = (Element) nThreshold;
+			String thresholdDesignator = eThreshold.getAttribute("designator");
+			
+			//Designator is an important attribute and must be checked for file validity
+			if(thresholdDesignator.isEmpty())
+				throw new SAXException("Invalid file format: Threshold Designator undefined.");
+			
+			int tora, toda, asda, lda;
+			
+			tora = getAttributeValue(eThreshold.getElementsByTagName("tora"));
+			if(tora == -1)
+				throw new SAXException("TORA value not specified.");
+			
+			toda = getAttributeValue(eThreshold.getElementsByTagName("toda"));
+			if(toda == -1)
+				throw new SAXException("TODA value not specified.");
+			
+			asda = getAttributeValue(eThreshold.getElementsByTagName("asda"));
+			if(asda == -1)
+				throw new SAXException("ASDA value not specified.");
+			
+			lda = getAttributeValue(eThreshold.getElementsByTagName("lda"));
+			if(lda == -1)
+				throw new SAXException("value not specified.");
+			
+			return new Threshold(thresholdDesignator, tora, toda, asda, lda);
+		}
+		else
+			throw new SAXException("Invalid file format.");
+	}
+	
+	private static Node marshallThreshold(Threshold threshold, Document doc) {
+		Element nThreshold = doc.createElement("threshold");
+		nThreshold.setAttribute("designator", threshold.designator);
+		
+		Element tora = doc.createElement("tora");
+		tora.setTextContent("" + threshold.tora);
+		nThreshold.appendChild(tora);
+		
+		Element toda = doc.createElement("toda");
+		toda.setTextContent("" + threshold.toda);
+		nThreshold.appendChild(toda);
+		
+		Element asda = doc.createElement("asda");
+		asda.setTextContent("" + threshold.asda);
+		nThreshold.appendChild(asda);
+		
+		Element lda = doc.createElement("lda");
+		lda.setTextContent("" + threshold.lda);
+		nThreshold.appendChild(lda);
+		
+		return nThreshold;
 	}
 	
 	/**
