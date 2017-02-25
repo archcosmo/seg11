@@ -27,16 +27,36 @@ public class Console
 		/* Takes a structure of calculations, formats and outputs */
 	}
 	
-	/* Gets user input
-	 * parses input
-	 */
-	public String[] getInput()
+	/* Gets user input */
+	private String[] getInput()
 	{
 		System.out.print("input: ");
 		
 		s = new Scanner(System.in);
 		String input = s.nextLine();
 		return input.split(" ");
+	}
+	
+	/* Public input resolver
+	 * returns quit_flag
+	 */
+	public boolean handle_input()
+	{
+		boolean quit_flag = false;
+		String[] input = getInput();
+		switch( input[0] ) 
+		{
+			case "help":
+				System.out.println("Placeholder Help Page..."); /* PLACEHOLDER HELP DOCUMENTATION */
+				break;
+			case "quit":
+				quit_flag = true;
+				break;
+			default:
+				System.out.println("Invalid input. Use 'help' for a list of commands and uses.");
+				break;
+		}
+		return quit_flag;
 	}
 	
 	/* Displays quit sign 
@@ -48,5 +68,4 @@ public class Console
 		try { TimeUnit.SECONDS.sleep(3); } catch (InterruptedException e) { e.printStackTrace(); } // Sleep 3 seconds
 		s.close();
 	}
-
 }

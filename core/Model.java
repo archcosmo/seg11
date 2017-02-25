@@ -1,5 +1,6 @@
 package core;
 
-public class Model {
+public class Model 
+{
 
 }

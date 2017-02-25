@@ -2,7 +2,6 @@ package core;
 
 public class Controller 
 {
-	
 	Console view;
 	Model model;
 	
@@ -20,29 +19,16 @@ public class Controller
 	}
 	
 	/* Main program loop
-	 * Handles input for all top-level commands
+	 * loops user input
+	 * - exits on program 'quit' command
+	 * terminates program by calling quit method
 	 */
 	private void loop()
 	{
-		String[] input;
-		boolean quit_flag = false;
-		while ( !quit_flag )
-		{
-			/* Handle Input */
-			input = view.getInput();
-			switch( input[0] ) 
-			{
-				case "help":
-					System.out.println("Placeholder Help Page..."); /* PLACEHOLDER HELP DOCUMENTATION */
-					break;
-				case "quit":
-					quit_flag = true;
-					break;
-				default:
-					System.out.println("Invalid input. Use 'help' for a list of commands and uses.");
-					break;
-			}
-		}
+		/* Loop user input
+		 * returns true when flagging program exit
+		 */
+		while ( !view.handle_input() );
 		quit();
 	}
 
@@ -53,6 +39,4 @@ public class Controller
 		
 		//Saves any persistent data and halts
 	}
-	
-
 }
