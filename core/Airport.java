@@ -11,7 +11,7 @@ public class Airport {
 		runways = new ArrayList<Runway>();
 	}
 	
-	public void addRunway(String runwayName) {
-		runways.add(new Runway(runwayName));
+	public void addRunway(Runway runway) {
+		runways.add(runway);
 	}
 }
