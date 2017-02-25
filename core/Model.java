@@ -1,25 +1,78 @@
 package core;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Model 
 {
-	private List<Updatable> views;
+	Console view;
+	//XML Airport info
+	//XML Object info
+	//PUBLIC Selected runway (Default NULL)
+	//PUBLIC selected airport (Default NULL)
+	//current obst. (Default NULL)
 
-	public Model() 
+	public Model(Console view) 
 	{
-		this.views = new ArrayList<Updatable>();
+		this.view = view;
 	}
 	
-	public void registerView(Updatable view) {
-		this.views.add(view);
+	/* Add airport
+	 * return false if airport name taken
+	 */
+	public boolean addAirport(String name) 
+	{
+		return false;
 	}
 	
-	//Updates all registered views
-	//TODO: Change to reference to this so GUI can extract information they need.
-	private void updateViews(String msg) {
-		for(Updatable v : views)
-			v.updateView(msg);
+	public boolean deleteAirport(String name)
+	{
+		return false;
+	}
+	
+	public boolean addRunway(String name)
+	{
+		return false;
+	}
+	
+	public boolean deleteRunway(String name)
+	{
+		return false;
+	}
+	
+	public boolean addObject(String name)
+	{
+		return false;
+	}
+	
+	public boolean deleteObject(String name)
+	{
+		return false;
+	}
+	
+	//Passthroughs, calls printList in view, passing ordered array of String[]
+	public void getAirports() {  }
+	public void getRunways() {  }
+	public void getObjects() {  }
+	
+	public boolean selectAirport(int id) 
+	{
+		return false;
+	}
+	
+	public boolean selectRunway(int id) 
+	{
+		return false;
+	}
+	
+	public boolean selectObject(int id) // Add distance values 
+	{
+		return false;
+	}
+	
+	public boolean removeObject() {
+		return false;
+	}
+
+	public void quit() {
+		// TODO Auto-generated method stub
+		
 	}
 }
