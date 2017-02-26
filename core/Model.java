@@ -1,8 +1,12 @@
 package core;
 
+import java.util.ArrayList;
+
 public class Model 
 {
 	Console view;
+	ArrayList<Airport> airports;
+	Airport selectedAirport;
 	//XML Airport info
 	//XML Object info
 	//PUBLIC Selected runway (Default NULL)
@@ -13,48 +17,84 @@ public class Model
 	{
 		this.view = view;
 	}
-	
+
 	/* IMPORTANT
 	 * many of these will need more than a single argument
 	 * you will need to add the arguments you need
 	 * if a function does not exist (ie.. Calculation and possibly thresholds), feel free to add them
 	 * I need this done so I can finalise the controller passthrough
 	 */
-	
+
 	/* Add airport
 	 * return false if airport name taken
 	 */
 	public boolean addAirport(String name) 
 	{
+		boolean inList = false;
+		for (Airport a : airports) {
+			if (a.name.equals(name)) {
+				inList = true;
+			}
+		}
+		if (!inList) {
+			airports.add(new Airport(name));
+			return true;
+		}
 		return false;
 	}
-	
+
 	/* delete airport
 	 * return false if name does not exist
 	 */
 	public boolean deleteAirport(String name)
 	{
+		for (Airport a : airports) {
+			if (a.name.equals(name)) {
+				airports.remove(a);
+				return true;
+			}
+		}
 		return false;
 	}
-	
+
 	/* add runway
 	 * return false if runway name taken
 	 * return false if airport not selected
 	 */
 	public boolean addRunway(String name)
 	{
-		return false;
+		if (selectedAirport != null) {
+			boolean inList = false;
+			for (Runway r : selectedAirport.runways) {
+				if (r.name.equals(name)) {
+					inList = true;
+				}
+			}
+			if (!inList) {
+				selectedAirport.runways.add(new Runway(name));
+				return true;
+			}
+		}
+		return false; 
 	}
-	
+
 	/* delete runway
 	 * return false if runway name nonexistant
 	 * return false if airport not selected
 	 */
 	public boolean deleteRunway(String name)
 	{
+		if (selectedAirport != null) {
+			for (Runway r : selectedAirport.runways) {
+				if (r.name.equals(name)) {
+					airports.remove(r);
+					return true;
+				}
+			}
+		}
 		return false;
 	}
-	
+
 	/* Add object
 	 * return false if airport name taken
 	 */
@@ -62,7 +102,7 @@ public class Model
 	{
 		return false;
 	}
-	
+
 	/* delete object
 	 * return false if object does not exist
 	 */
@@ -70,12 +110,12 @@ public class Model
 	{
 		return false;
 	}
-	
+
 	//Passthroughs, calls *printList()* in view, passing ordered array of String[]
 	public void getAirports() {  }
 	public void getRunways() {  }
 	public void getObjects() {  }
-	
+
 	/* Takes string
 	 * resolves string to object
 	 * returns false if string != object name
@@ -84,7 +124,7 @@ public class Model
 	{
 		return false;
 	}
-	
+
 	/* Takes string
 	 * resolves string to object
 	 * returns false if string != object name
@@ -94,7 +134,7 @@ public class Model
 	{
 		return false;
 	}
-	
+
 	/* Takes string
 	 * resolves string to object
 	 * returns false if string != object name
@@ -103,7 +143,7 @@ public class Model
 	{
 		return false;
 	}
-	
+
 	/* Removes current object reference
 	 * Returns false if object reference is already null
 	 */
@@ -115,6 +155,6 @@ public class Model
 	/* Deallocates memory and stores changes before a system shutdown */
 	public void quit() 
 	{
-		
+
 	}
 }
