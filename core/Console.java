@@ -12,6 +12,7 @@ public class Console
 	{
 		this.controller = controller;
 		printBar("Runway Re-Declaration Tool");
+		System.out.println("Use 'help' to get started.");
 	}
 	
 	/* Print formatted bar
