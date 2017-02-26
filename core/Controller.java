@@ -41,4 +41,11 @@ public class Controller
 		model.quit();
 		model = null;
 	}
+
+	public void calculate(boolean b) {}
+	public void getStatus() {}
+
+	public void selectObject(String name) {}
+	public void selectAirport(String name) {}
+	public void selectRunway(String name) {}
 }

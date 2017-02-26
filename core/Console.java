@@ -30,6 +30,16 @@ public class Console
 		/* Takes a structure of calculations, formats and outputs */
 	}
 	
+	public void printAnswers()
+	{
+		
+	}
+	
+	public void printStatus()
+	{
+		
+	}
+	
 	/* Gets user input */
 	private String[] getInput()
 	{
@@ -60,7 +70,16 @@ public class Console
 		case "help":
 			if ( input.length == 1 ) 
 			{
-				System.out.println("Placeholder Help Page..."); /* PLACEHOLDER HELP DOCUMENTATION */
+				System.out.println("To use the application, use the following commands:"); 
+				System.out.println("** NT: type = airport(s), runway(s), object(s); (Use of plural where appropriate)"); 
+				System.out.println("* list (types*)"); 
+				System.out.println("* select (type) (name)");
+				System.out.println("** NT: select object null   -- Clears object");
+				System.out.println("* add (type) (name)");
+				System.out.println("* delete (type) (name)"); 
+				System.out.println("* calculate [-v]"); 
+				System.out.println("* status"); 
+				System.out.println("* quit"); 
 			} else { wrong_args(input); }
 			break;
 		case "quit":
@@ -92,7 +111,7 @@ public class Console
 		case "add":
 			if ( input.length == 2 ) 
 			{
-				
+				/* NEEDS COMPLETING WHEN ADD METHODS DONE */
 			} else { wrong_args(input); }
 			break;
 		case "delete":
@@ -115,15 +134,39 @@ public class Console
 				}
 			} else { wrong_args(input); }
 			break;
+		case "select":
+			if ( input.length == 3 ) 
+			{
+				switch ( input[1] )
+				{
+				case "airport":
+					controller.selectAirport(input[2]);
+					break;
+				case "runway":
+					controller.selectRunway(input[2]);
+					break;
+				case "object":
+					controller.selectObject(input[2]);
+					break;
+				default:
+					System.out.println("Invalid argument to command 'delete (type) (id)'\n : Valid types are; 'airport', 'runway', 'object'");
+					break;
+				}
+			} else { wrong_args(input); }
+			break;
 		case "calculate":
 			if ( input.length == 1 ) 
 			{
-				// Recalculate and show
+				controller.calculate(false);
 			}
-			else if (input[1] == "-n" )
+			else if (input[1] == "-v" )
 			{
-				// Show calculations no recalculate
+				//verbose, show calculations
+				controller.calculate(true);
 			} else { wrong_args(input); }
+			break;
+		case "status":
+			controller.getStatus();
 			break;
 		default:
 			for ( int i = 0; i < input.length; i++) System.out.print(input[i] + " ");
