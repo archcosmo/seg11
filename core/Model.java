@@ -1,12 +1,19 @@
 package core;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
 
 public class Model 
 {
 	Console view;
-	ArrayList<Airport> airports;
+	List<Airport> airports;
 	Airport selectedAirport;
+	Runway selectedRunway;
 	//XML Airport info
 	//XML Object info
 	//PUBLIC Selected runway (Default NULL)
@@ -16,6 +23,7 @@ public class Model
 	public Model(Console view) 
 	{
 		this.view = view;
+		init();
 	}
 
 	/* IMPORTANT
@@ -25,7 +33,36 @@ public class Model
 	 * I need this done so I can finalise the controller passthrough
 	 */
 
-	/* Add airport
+	private void init() {
+		this.airports = new ArrayList<Airport>();
+	}
+	
+	public boolean airportXMLInfoExists() {
+		return XMLParser.defaultXMLFileExists();
+	}
+	
+	public boolean saveAirportInfoToFile() {
+		try {
+			XMLParser.saveAirportInfoToXML(airports.get(0));
+			return true;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	public boolean loadAirportInfoFromFile() {
+		try {
+			airports.add(XMLParser.readAirportInfoFromXML());
+			selectedAirport = airports.get(0);
+			return true;
+		} catch (IOException | SAXException | ParserConfigurationException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	/* Add airportindex
 	 * return false if airport name taken
 	 */
 	public boolean addAirport(String name) 
@@ -38,6 +75,19 @@ public class Model
 		}
 		if (!inList) {
 			airports.add(new Airport(name));
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean addAirport(Airport airport) {
+		boolean inList = false;
+		for(Airport a : airports) {
+			if (a.name.equals((airport.name)))
+					inList = true;
+		}
+		if(!inList) {
+			airports.add(airport);
 			return true;
 		}
 		return false;
@@ -111,9 +161,15 @@ public class Model
 		return false;
 	}
 
-	//Passthroughs, calls *printList()* in view, passing ordered array of String[]
-	public void getAirports() {  }
-	public void getRunways() {  }
+	public List<Airport> getAirports() { 
+		return airports;
+	}
+	public List<Runway> getRunways() {
+		if(selectedAirport == null)
+			return null;
+		else
+			return selectedAirport.runways;
+	}
 	public void getObjects() {  }
 
 	/* Takes string
@@ -122,7 +178,11 @@ public class Model
 	 */
 	public boolean selectAirport(int id) 
 	{
-		return false;
+		try {
+			this.selectedAirport = airports.get(id);
+			return true;
+		}
+		catch(IndexOutOfBoundsException e) { return false; }
 	}
 
 	/* Takes string
@@ -132,7 +192,11 @@ public class Model
 	 */
 	public boolean selectRunway(int id) 
 	{
-		return false;
+		try {
+			this.selectedRunway = selectedAirport.runways.get(id);
+			return true;
+		}
+		catch(IndexOutOfBoundsException e) { return false; }
 	}
 
 	/* Takes string

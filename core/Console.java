@@ -1,5 +1,6 @@
 package core;
 
+import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
 
@@ -38,6 +39,17 @@ public class Console
 	public void printStatus()
 	{
 		
+	}
+	
+	public void displayMessage(String msg) {
+		System.out.println(msg);
+	}
+	
+	public String prompt(String prompt) {
+		System.out.print(prompt + "\n$ : ");
+		
+		s = new Scanner(System.in);
+		return s.nextLine();
 	}
 	
 	/* Gets user input */
@@ -94,10 +106,10 @@ public class Console
 				switch ( input[1] )
 				{
 				case "airports":
-					controller.getAirports();
+					list_airports(controller.getAirports());
 					break;
 				case "runways":
-					controller.getRunways();
+					list_runways(controller.getRunways());
 					break;
 				case "objects":
 					controller.getObjects();
@@ -173,6 +185,32 @@ public class Console
 			System.out.println(" : Command not found");
 		}
 		return quit_flag;
+	}
+	
+	private void list_airports(List<Airport> airports) {
+		if(airports.size() == 0)
+			System.out.println("There are currently no airports registered to the system.");
+		
+		for(int i = 0; i < airports.size(); i++) {
+			Airport airport = airports.get(i);
+			String name = (airport.name == null || airport.name.isEmpty()) ? ("Airport " + i) : airport.name;
+			System.out.println("[" + i + "] : " + name);
+		}
+	}
+	
+	private void list_runways(List<Runway> runways) {
+		if(runways == null) {
+			System.out.println("No airport is currently selected. Please select one with 'select airport'.");
+			return;
+		}
+		if(runways.size() == 0)
+			System.out.println("There are no runways registered to this airport.");
+		
+		for(int i = 0; i < runways.size(); i++) {
+			Runway runway = runways.get(i);
+			String name = (runway.name == null || runway.name.isEmpty()) ? ("Runway " + i) : runway.name;
+			System.out.println("[" + i + "] : " + name);
+		}
 	}
 	
 	private void wrong_args(String[] input)
