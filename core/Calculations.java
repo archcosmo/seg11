@@ -6,7 +6,6 @@ public class Calculations {
     int toda, tora, asda, lda, stopwayLength, stopwayWidth, clearway;
 
     //TODO: if obstacle lies on stopway/clearway
-    //TODO: use hight of obstacle to calculate take-off
 
     public Threshold calculateDistances(Threshold threshold, int stopwayLength, int stopwayWidth, int clearway,
                                         Obstacle obstacle, int obstacleXPos, int obstacleYPos) {
@@ -24,18 +23,22 @@ public class Calculations {
         //Calculate which half of runway, the obstacle is on
         if (obstacleXPos > (threshold.tora / 2.0)) {
             //Take off / land before obstacle
-            newTora = threshold.tora;
-            newToda = threshold.toda;
-            newAsda = threshold.asda;
-            newLda = threshold.tora;
+            //TODO: use height of obstacle to calculate take-off (ALS)
+            int ALS = 0;
+            newTora = threshold.tora - stopwayLength - Math.max(240, ALS); //Strip-end + (new RESA / threshold)
+            newToda = newTora;
+            newAsda = newTora;
+            newLda = obstacleXPos -(240 + stopwayLength); //Strip-end + new RESA
         } else {
             //Take off / land after obstacle
             //TODO: engine blast radius
             newTora = threshold.tora - obstacleXPos;
-            newToda = threshold.toda - obstacleXPos + clearway;
-            newAsda = threshold.asda - obstacleXPos + stopwayWidth;
+            newToda = threshold.toda - obstacleXPos - clearway;
+            newAsda = threshold.asda - obstacleXPos - stopwayLength;
             //TODO: displaced thresholds
-            newLda = threshold.tora - (240 + 60); //new RESA + strip-end
+            //TODO: use height of obstacle to calculate take-off (ALS)
+            int ALS = 0;
+            newLda = threshold.tora - stopwayLength - Math.max(240, ALS); //Strip-end + (new RESA / threshold)
         }
         /*
         calculateTORA();
