@@ -15,7 +15,19 @@ public class Console
 		printBar("Runway Re-Declaration Tool");
 		
 		controller.getAirports();
-		controller.selectAirport("1"); //Parse this shit
+		//String[] input = getInput();
+	
+		/* GRAB INPUT */
+		/* TODO:
+		 * list_objects
+		 * printCalculations
+		 * printAnswers
+		 * printStatus
+		 * **InitialSelectRunway
+		 */
+		
+		
+		controller.selectAirport(1); //Parse this shit
 		
 		System.out.println("Use 'help' to get started.");
 	}
@@ -33,11 +45,6 @@ public class Console
 	public void printCalculations()
 	{
 		/* Takes a structure of calculations, formats and outputs */
-	}
-	
-	private boolean isNumber() 
-	{
-		return false;
 	}
 	
 	public void printAnswers()
@@ -94,10 +101,10 @@ public class Console
 				System.out.println("To use the application, use the following commands:"); 
 				System.out.println("** NT: type = airport(s), runway(s), object(s); (Use of plural where appropriate)"); 
 				System.out.println("* list (types*)"); 
-				System.out.println("* select (type) (name)");
+				System.out.println("* select (type) (id)");
 				System.out.println("** NT: select object null   -- Clears object");
-				System.out.println("* add (type) (name)");
-				System.out.println("* delete (type) (name)"); 
+				System.out.println("* add (type) (id)");
+				System.out.println("* delete (type) (id)"); 
 				System.out.println("* calculate [-v]"); 
 				System.out.println("* status"); 
 				System.out.println("* quit"); 
@@ -136,18 +143,19 @@ public class Console
 			} else { wrong_args(input); }
 			break;
 		case "delete":
-			if ( input.length == 3 ) 
+			if ( input.length == 3 && isInt(input[2])) 
 			{
+				int ID = Integer.parseInt(input[2]);
 				switch ( input[1] )
 				{
 				case "airport":
-					controller.getAirports();
+					controller.deleteAirport(ID);
 					break;
 				case "runway":
-					controller.getRunways();
+					controller.deleteRunway(ID);
 					break;
 				case "object":
-					controller.getObjects();
+					controller.deleteObject(ID);
 					break;
 				default:
 					System.out.println("Invalid argument to command 'delete (type) (id)'\n : Valid types are; 'airport', 'runway', 'object'");
@@ -156,18 +164,19 @@ public class Console
 			} else { wrong_args(input); }
 			break;
 		case "select":
-			if ( input.length == 3 ) 
+			if ( input.length == 3 && isInt(input[2])) 
 			{
+				int ID = Integer.parseInt(input[2]);
 				switch ( input[1] )
 				{
 				case "airport":
-					controller.selectAirport(input[2]);
+					controller.selectAirport(ID);
 					break;
 				case "runway":
-					controller.selectRunway(input[2]);
+					controller.selectRunway(ID);
 					break;
 				case "object":
-					controller.selectObject(input[2]);
+					controller.selectObject(ID);
 					break;
 				default:
 					System.out.println("Invalid argument to command 'select (type) (id)'\n : Valid types are; 'airport', 'runway', 'object'");
@@ -196,6 +205,22 @@ public class Console
 		return quit_flag;
 	}
 	
+	
+	/* Checks if string is int
+	 * returns false if error while converting string to int
+	 */
+	private boolean isInt(String string) {
+		try 
+		{
+			Integer.parseInt(string);
+		}
+		catch (Exception e)
+		{
+			return false;
+		}
+		return true;
+	}
+
 	private void list_airports(List<Airport> airports) {
 		if(airports.size() == 0)
 			System.out.println("There are currently no airports registered to the system.");
