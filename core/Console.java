@@ -13,6 +13,27 @@ public class Console
 	{
 		this.controller = controller;
 		printBar("Runway Re-Declaration Tool");
+		
+		controller.getAirports();
+		String[] input;
+		do 
+		{
+			input = getInput();
+		} while (input.length != 1 && isInt(input[0]));
+		
+		controller.selectRunway(Integer.parseInt(input[0]));
+	
+		/* GRAB INPUT */
+		/* TODO:
+		 * list_objects
+		 * printCalculations
+		 * printAnswers
+		 * printStatus
+		 */
+		
+		
+		controller.selectAirport(1); //Parse this shit
+		
 		System.out.println("Use 'help' to get started.");
 	}
 	
@@ -62,11 +83,6 @@ public class Console
 		return input.split(" ");
 	}
 	
-	public void printList(String[] list)
-	{
-		
-	}
-	
 	/* Public input resolver
 	 * resolves first argument
 	 * checks number of arguments based on function
@@ -85,13 +101,31 @@ public class Console
 				System.out.println("To use the application, use the following commands:"); 
 				System.out.println("** NT: type = airport(s), runway(s), object(s); (Use of plural where appropriate)"); 
 				System.out.println("* list (types*)"); 
-				System.out.println("* select (type) (name)");
+				System.out.println("* select (type) (id)");
 				System.out.println("** NT: select object null   -- Clears object");
-				System.out.println("* add (type) (name)");
-				System.out.println("* delete (type) (name)"); 
+				System.out.println("* add (type) (id)");
+				System.out.println("* delete (type) (id)"); 
 				System.out.println("* calculate [-v]"); 
 				System.out.println("* status"); 
-				System.out.println("* quit"); 
+				System.out.println("* quit"); 			if ( input.length == 3 && isInt(input[2])) 
+				{
+					int ID = Integer.parseInt(input[2]);
+					switch ( input[1] )
+					{
+					case "airport":
+						controller.deleteAirport(ID);
+						break;
+					case "runway":
+						controller.deleteRunway(ID);
+						break;
+					case "object":
+						controller.deleteObject(ID);
+						break;
+					default:
+						System.out.println("Invalid argument to command 'delete (type) (id)'\n : Valid types are; 'airport', 'runway', 'object'");
+						break;
+					}
+				} else { wrong_args(input); }
 			} else { wrong_args(input); }
 			break;
 		case "quit":
@@ -127,18 +161,19 @@ public class Console
 			} else { wrong_args(input); }
 			break;
 		case "delete":
-			if ( input.length == 3 ) 
+			if ( input.length == 3 && isInt(input[2])) 
 			{
+				int ID = Integer.parseInt(input[2]);
 				switch ( input[1] )
 				{
 				case "airport":
-					controller.getAirports();
+					controller.deleteAirport(ID);
 					break;
 				case "runway":
-					controller.getRunways();
+					controller.deleteRunway(ID);
 					break;
 				case "object":
-					controller.getObjects();
+					controller.deleteObject(ID);
 					break;
 				default:
 					System.out.println("Invalid argument to command 'delete (type) (id)'\n : Valid types are; 'airport', 'runway', 'object'");
@@ -147,21 +182,22 @@ public class Console
 			} else { wrong_args(input); }
 			break;
 		case "select":
-			if ( input.length == 3 ) 
+			if ( input.length == 3 && isInt(input[2])) 
 			{
+				int ID = Integer.parseInt(input[2]);
 				switch ( input[1] )
 				{
 				case "airport":
-					controller.selectAirport(input[2]);
+					controller.selectAirport(ID);
 					break;
 				case "runway":
-					controller.selectRunway(input[2]);
+					controller.selectRunway(ID);
 					break;
 				case "object":
-					controller.selectObject(input[2]);
+					controller.selectObject(ID);
 					break;
 				default:
-					System.out.println("Invalid argument to command 'delete (type) (id)'\n : Valid types are; 'airport', 'runway', 'object'");
+					System.out.println("Invalid argument to command 'select (type) (id)'\n : Valid types are; 'airport', 'runway', 'object'");
 					break;
 				}
 			} else { wrong_args(input); }
@@ -187,6 +223,22 @@ public class Console
 		return quit_flag;
 	}
 	
+	
+	/* Checks if string is int
+	 * returns false if error while converting string to int
+	 */
+	private boolean isInt(String string) {
+		try 
+		{
+			Integer.parseInt(string);
+		}
+		catch (Exception e)
+		{
+			return false;
+		}
+		return true;
+	}
+
 	private void list_airports(List<Airport> airports) {
 		if(airports.size() == 0)
 			System.out.println("There are currently no airports registered to the system.");

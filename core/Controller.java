@@ -165,10 +165,16 @@ public class Controller
 		model = null;
 	}
 
+	
+	/* Many of these types will have to be changed */
 	public void calculate(boolean b) {}
 	public void getStatus() {}
 
-	public void selectObject(String name) {}
-	public void selectAirport(String name) {}
-	public void selectRunway(String name) {}
+	public void selectObject(int ID) {}
+	public void selectAirport(int ID) {}
+	public void selectRunway(int ID) {}
+
+	public void deleteAirport(int iD) {}
+	public void deleteRunway(int iD) {}
+	public void deleteObject(int iD) {}
 }
