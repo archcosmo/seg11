@@ -5,6 +5,8 @@ import java.util.ArrayList;
 public class Runway {
 	String name;
 	ArrayList<Threshold> thresholds;
+	int stopwayLength, stopwayWidth;
+	int clearway;
 	
 	public Runway(String name) {
 		this.name = name;
