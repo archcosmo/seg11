@@ -132,9 +132,10 @@ public class Controller
 	public void calculate(boolean b) {}
 	public void getStatus() {}
 
-	public void selectObject(int ID) {}
-	public void selectAirport(int ID) {}
-	public void selectRunway(int ID) {}
+	/* Return false if ID does not exist */
+	public boolean selectObject(int ID) { return false; }
+	public boolean selectAirport(int ID) { return false; }
+	public boolean selectRunway(int ID) { return false; }
 
 	public void deleteAirport(int iD) {}
 	public void deleteRunway(int iD) {}

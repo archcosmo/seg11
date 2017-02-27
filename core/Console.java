@@ -1,5 +1,13 @@
 package core;
 
+		/* TODO:
+		 * list_objects
+		 * printCalculations
+		 * printAnswers
+		 * printStatus
+		 */
+
+
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
@@ -19,20 +27,7 @@ public class Console
 		do 
 		{
 			input = getInput();
-		} while (input.length != 1 && isInt(input[0]));
-		
-		controller.selectRunway(Integer.parseInt(input[0]));
-	
-		/* GRAB INPUT */
-		/* TODO:
-		 * list_objects
-		 * printCalculations
-		 * printAnswers
-		 * printStatus
-		 */
-		
-		
-		controller.selectAirport(1); //Parse this shit
+		} while (input.length != 1 && isInt(input[0]) && controller.selectAirport(Integer.parseInt(input[0]))); 
 		
 		System.out.println("Use 'help' to get started.");
 	}
