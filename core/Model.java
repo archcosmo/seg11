@@ -53,8 +53,13 @@ public class Model
 	
 	public boolean loadAirportInfoFromFile() {
 		try {
-			airports.add(XMLParser.readAirportInfoFromXML());
-			selectedAirport = airports.get(0);
+			List<Airport> loadedAirports = XMLParser.readAirportInfoFromXML();
+			
+			if(loadedAirports.size() == 0)
+				return false;
+			
+			for(Airport airport : loadedAirports)
+				airports.add(airport);
 			return true;
 		} catch (IOException | SAXException | ParserConfigurationException e) {
 			e.printStackTrace();
