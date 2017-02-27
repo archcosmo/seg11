@@ -15,7 +15,13 @@ public class Console
 		printBar("Runway Re-Declaration Tool");
 		
 		controller.getAirports();
-		//String[] input = getInput();
+		String[] input;
+		do 
+		{
+			input = getInput();
+		} while (input.length != 1 && isInt(input[0]));
+		
+		controller.selectRunway(Integer.parseInt(input[0]));
 	
 		/* GRAB INPUT */
 		/* TODO:
@@ -23,7 +29,6 @@ public class Console
 		 * printCalculations
 		 * printAnswers
 		 * printStatus
-		 * **InitialSelectRunway
 		 */
 		
 		
@@ -78,11 +83,6 @@ public class Console
 		return input.split(" ");
 	}
 	
-	public void printList(String[] list)
-	{
-		
-	}
-	
 	/* Public input resolver
 	 * resolves first argument
 	 * checks number of arguments based on function
@@ -107,7 +107,25 @@ public class Console
 				System.out.println("* delete (type) (id)"); 
 				System.out.println("* calculate [-v]"); 
 				System.out.println("* status"); 
-				System.out.println("* quit"); 
+				System.out.println("* quit"); 			if ( input.length == 3 && isInt(input[2])) 
+				{
+					int ID = Integer.parseInt(input[2]);
+					switch ( input[1] )
+					{
+					case "airport":
+						controller.deleteAirport(ID);
+						break;
+					case "runway":
+						controller.deleteRunway(ID);
+						break;
+					case "object":
+						controller.deleteObject(ID);
+						break;
+					default:
+						System.out.println("Invalid argument to command 'delete (type) (id)'\n : Valid types are; 'airport', 'runway', 'object'");
+						break;
+					}
+				} else { wrong_args(input); }
 			} else { wrong_args(input); }
 			break;
 		case "quit":
