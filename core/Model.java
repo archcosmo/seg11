@@ -43,9 +43,7 @@ public class Model
 	
 	public boolean saveAirportInfoToFile() {
 		try {
-			for(Airport airport : airports) {
-				XMLParser.saveAirportInfoToXML(airport);
-			}
+			XMLParser.saveAirportInfoToXML(airports.get(0));
 			return true;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -55,13 +53,8 @@ public class Model
 	
 	public boolean loadAirportInfoFromFile() {
 		try {
-			List<Airport> loadedAirports = XMLParser.readAirportInfoFromXML();
-			if(loadedAirports.size() == 0)
-				return false;
-			
-			for(Airport airport : loadedAirports)
-				airports.add(airport);
-			
+			airports.add(XMLParser.readAirportInfoFromXML());
+			selectedAirport = airports.get(0);
 			return true;
 		} catch (IOException | SAXException | ParserConfigurationException e) {
 			e.printStackTrace();

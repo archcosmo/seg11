@@ -22,13 +22,6 @@ public class Console
 		this.controller = controller;
 		printBar("Runway Re-Declaration Tool");
 		
-		controller.getAirports();
-		String[] input;
-		do 
-		{
-			input = getInput();
-		} while (input.length != 1 && isInt(input[0]) && controller.selectAirport(Integer.parseInt(input[0]))); 
-		
 		System.out.println("Use 'help' to get started.");
 	}
 	
