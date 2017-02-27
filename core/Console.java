@@ -12,6 +12,10 @@ public class Console
 	{
 		this.controller = controller;
 		printBar("Runway Re-Declaration Tool");
+		
+		controller.getAirports();
+		controller.selectAirport("1"); //Parse this shit
+		
 		System.out.println("Use 'help' to get started.");
 	}
 	
@@ -28,6 +32,11 @@ public class Console
 	public void printCalculations()
 	{
 		/* Takes a structure of calculations, formats and outputs */
+	}
+	
+	private boolean isNumber() 
+	{
+		return false;
 	}
 	
 	public void printAnswers()
@@ -149,7 +158,7 @@ public class Console
 					controller.selectObject(input[2]);
 					break;
 				default:
-					System.out.println("Invalid argument to command 'delete (type) (id)'\n : Valid types are; 'airport', 'runway', 'object'");
+					System.out.println("Invalid argument to command 'select (type) (id)'\n : Valid types are; 'airport', 'runway', 'object'");
 					break;
 				}
 			} else { wrong_args(input); }
