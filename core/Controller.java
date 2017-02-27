@@ -36,18 +36,52 @@ public class Controller
 	}
 	
 	private void init() {
-		if(model.airportXMLInfoExists()) {
-			model.loadAirportInfoFromFile();
-		}
-		else {
+		if(!model.loadAirportInfoFromFile())
 			initialAirportConfiguration();
+
+		while(true) {
+			List<Airport> airports = model.getAirports();
+			String promptMsg = "Select an Airport:\n";
+			int i;
+			for(i = 0; i < airports.size(); i++) {
+				String name = (airports.get(i).name == null || airports.get(i).name.isEmpty()) ? ("Airport " + i) : airports.get(i).name;
+				promptMsg += "[" + i + "] : " + name + "\n";
+			}
+			promptMsg += "[" + i + "] : Configure New Airport";
+
+
+			try {
+				Integer result = Integer.parseInt(view.prompt(promptMsg));
+				if(result < 0 || result > i)
+					throw new NumberFormatException();
+				if(result == i) {
+					initialAirportConfiguration();
+					continue;
+				}
+				else {
+					model.selectAirport(result);
+				}
+			} catch(NumberFormatException e) {
+				view.displayMessage("Number expected between 0 and " + i + ".");
+				continue;
+			}
+			break;
 		}
 	}
 	
 	private void initialAirportConfiguration() {
-		String airportName = view.prompt("Airport Information needs to be configured.\nEnter Airport Name:");
-		Airport airport = new Airport(airportName);
-		
+		String airportName = "";
+		Airport airport = null;
+		while(true) {
+			airportName = view.prompt("Airport Information needs to be configured.\nEnter Airport Name:");
+			if(airportName.replaceAll("\\s+", "").isEmpty()) {
+				view.displayMessage("An airport name cannot be empty.");
+				continue;
+			}
+			
+			airport = new Airport(airportName);
+			break;
+		}
 		boolean finishedRunways = false;
 		while(!finishedRunways) {
 			String runwayName = view.prompt("Enter runway name for " + airportName + ",\n"
@@ -57,6 +91,11 @@ public class Controller
 				break;
 			}
 
+			if(runwayName.replaceAll("\\s+", "").isEmpty()) {
+				view.displayMessage("An runway name cannot be empty.");
+				continue;
+			}
+			
 			Runway runway = new Runway(runwayName);
 
 			boolean finishedThresholds = false;
@@ -110,7 +149,6 @@ public class Controller
 			airport.addRunway(runway);
 		}
 		model.addAirport(airport);
-		model.selectAirport(model.getAirports().size() - 1);
 		model.saveAirportInfoToFile();
 	}
 	

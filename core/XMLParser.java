@@ -3,6 +3,8 @@ package core;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -20,13 +22,41 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class XMLParser {
-
+	
 	public static boolean defaultXMLFileExists() {
 		return new File("airportInfo.xml").isFile();
 	}
 	
-	public static Airport readAirportInfoFromXML() throws IOException, SAXException, ParserConfigurationException {
-		return readAirportInfoFromXML("airportInfo.xml");
+	private static List<String> getAirportFileNames() {
+		List<String> fileNames = new ArrayList<String>();
+		
+		File airportDir = new File("xml/airports/");
+		
+		if(!airportDir.exists())
+			airportDir.mkdirs();
+		
+		//Get all files in default directory
+		File[] airportDirFiles = airportDir.listFiles();
+		for(File f : airportDirFiles) {
+			String[] fNameSplit = f.getName().split("\\.");
+			
+			//Get XML Files
+			if(fNameSplit[fNameSplit.length -1].equals("xml")) {
+				fileNames.add("xml/airports/" + f.getName());
+			}
+				
+		}
+		
+		return fileNames;
+	}
+	
+	public static List<Airport> readAirportInfoFromXML() throws IOException, SAXException, ParserConfigurationException {
+		List<String> fileNames = getAirportFileNames();
+		List<Airport> airports = new ArrayList<Airport>();
+		for(String name : fileNames) {
+			airports.add(readAirportInfoFromXML(name));
+		}
+		return airports;
 	}
 	
 	//IOException - File Not Found
@@ -43,7 +73,8 @@ public class XMLParser {
 	}
 
 	public static boolean saveAirportInfoToXML(Airport airport) throws IOException {
-		return saveAirportInfoToXML("airportInfo.xml", airport);
+		String fileName = airport.name.toLowerCase().replaceAll("\\s+", "");
+		return saveAirportInfoToXML("xml/airports/" + fileName + ".xml", airport);
 	}
 	
 	public static boolean saveAirportInfoToXML(String filename, Airport airport) throws IOException{
