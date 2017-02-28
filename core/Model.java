@@ -15,24 +15,12 @@ public class Model
 	Airport selectedAirport;
 	Runway selectedRunway;
 	List<Obstacle> objects;
-	//XML Airport info
-	//XML Object info
-	//PUBLIC Selected runway (Default NULL)
-	//PUBLIC selected airport (Default NULL)
-	//current obst. (Default NULL)
 
 	public Model(Console view) 
 	{
 		this.view = view;
 		init();
 	}
-
-	/* IMPORTANT
-	 * many of these will need more than a single argument
-	 * you will need to add the arguments you need
-	 * if a function does not exist (ie.. Calculation and possibly thresholds), feel free to add them
-	 * I need this done so I can finalise the controller passthrough
-	 */
 
 	private void init() {
 		this.airports = new ArrayList<Airport>();

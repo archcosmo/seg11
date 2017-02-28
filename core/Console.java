@@ -22,7 +22,7 @@ public class Console
 		this.controller = controller;
 		printBar("Runway Re-Declaration Tool");
 		
-		System.out.println("Use 'help' to get started.");
+		//System.out.println("Use 'help' to get started.");
 	}
 	
 	/* Print formatted bar
@@ -186,7 +186,7 @@ public class Console
 	
 	private Threshold configureThreshold() {
 		
-		String thresholdDesignator = prompt("Enter threshold designator:\n(Or enter '!' to cancel)");
+		String thresholdDesignator = prompt("Enter threshold designator: ( ##[LR] )\n(Or enter '!' to cancel)");
 
 		if(thresholdDesignator.replaceAll("\\s+", "").equals("!"))
 			return null;
