@@ -1,23 +1,17 @@
-package core;
+	package core;
 
-import java.util.ArrayList;
+	import java.util.ArrayList;
 
-public class Runway {
-	String name;
-	ArrayList<Threshold> thresholds;
-	int stopwayLength, stopwayWidth;
-	int clearway;
-	
-	public Runway(String name) {
-		this.name = name;
-		thresholds = new ArrayList<Threshold>();
+	public class Runway {
+		String name;
+		ArrayList<LogicalRunway> logicalRunways; //TODO: store runways in pairs?
+
+		public Runway(String name) {
+			this.name = name;
+		}
+
+		public void addLogicalRunway(LogicalRunway logicalRunway) {
+			//TODO: add many LogRuns
+			logicalRunways.add(logicalRunway);
+		}
 	}
-	
-	public void addThreshold(String designator, int tora, int toda, int asda, int lda) {
-		thresholds.add(new Threshold(designator, tora, toda, asda, lda));
-	}
-	
-	public void addThreshold(Threshold t) {
-		thresholds.add(t);
-	}
-}
