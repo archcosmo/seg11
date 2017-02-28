@@ -50,6 +50,41 @@ public class Console
 		
 	}
 	
+	private Integer readInt(String msg, int min, int max) {
+		while(true) {
+			String inputStr = prompt(msg + "(" + min + "-" + max + "):");
+			
+			try{
+				Integer intgr = Integer.parseInt(inputStr);
+				
+				if(intgr < min || intgr > max)
+					throw new NumberFormatException();
+				
+				return intgr;
+				
+			} catch(NumberFormatException e) {
+				displayMessage("Expected integer between " + min + " and " + max + ", but " + inputStr + " was given.");
+				continue;
+			}
+		}
+	}
+	
+	private Integer readInt(String msg) {
+		while(true) {
+			String inputStr = prompt(msg + ":");
+			
+			try{
+				Integer intgr = Integer.parseInt(inputStr);
+				
+				return intgr;
+				
+			} catch(NumberFormatException e) {
+				displayMessage("Expected integer, but " + inputStr + " was given.");
+				continue;
+			}
+		}
+	}
+	
 	public void displayMessage(String msg) {
 		System.out.println(msg);
 	}
@@ -109,11 +144,11 @@ public class Console
 			controller.addRunway(airportId, runway);
 	}
 	
-	public void addThreshold(Integer airportId, Integer runwayId) {
-		Threshold threshold = configureThreshold();
-		if(threshold != null)
-			controller.addThreshold(airportId, runwayId, threshold);
-	}
+//	public void addThreshold(Integer airportId, Integer runwayId) {
+//		Threshold threshold = configureThreshold();
+//		if(threshold != null)
+//			controller.addThreshold(airportId, runwayId, threshold);
+//	}
 	
 	private Airport configureAirport() {
 		while(true) {
@@ -162,69 +197,85 @@ public class Console
 			}
 
 			Runway runway = new Runway(runwayName);
-
-			//Add thresholds to Runway
-			while(true) {
-				String confirm = prompt("Add (another) threshold to " + runwayName + "?(y/n):");
-
-				if(confirm.equalsIgnoreCase("y")) {
-					Threshold threshold = configureThreshold();
-					if(threshold != null)
-						runway.addThreshold(threshold);
-				}
-				else if(confirm.equalsIgnoreCase("n")) {
-					break;
-				}
-				else {
-					displayMessage("Expected 'y' or 'n'");
-					continue;
+			
+			Integer angle = readInt("Enter an angle for the runway", 0, 359);
+			Integer noRunways = readInt("Enter number of logical runways", 1, 3);
+			
+			Integer startClearway = readInt("Enter the length of the start clearway");
+			Integer startStopway = readInt("Enter the length of the start stopway");
+			Integer endClearway = readInt("Enter the length of the end clearway");
+			Integer endStopway = readInt("Enter the length of the end stopway");
+			
+			Integer runwayLength = readInt("Enter the length of the runway");
+			
+			angle /= 10;
+			
+			for(int i = 0; i < noRunways; i++) {
+				for(int j = 0; j < 2; j++) {
+					String letter = "";
+					
+					switch(noRunways) {
+						case 1:
+							letter = "";
+							break;
+						case 2:
+							letter = (i == j) ? "L" : "R";
+							break;
+						case 3:
+							letter = (i == 1) ? "C" : ((i == j) ? "L" : "R");
+							break;
+					}
+					
+					Integer logicalAngle = (j == 0) ? angle : 36 - angle;
+					LogicalRunway lr = new LogicalRunway(String.format("%02d" + letter, logicalAngle), runwayLength, (j == 0) ? endStopway : startStopway, (j == 0) ? endClearway : startClearway);
 				}
 			}
+			
 			return runway;
 		}
 	}
 	
-	private Threshold configureThreshold() {
-		
-		String thresholdDesignator = prompt("Enter threshold designator: ( ##[LR] )\n(Or enter '!' to cancel)");
-
-		if(thresholdDesignator.replaceAll("\\s+", "").equals("!"))
-			return null;
-		
-		while(true) {
-			String data[] = prompt("Enter TORA,TODA,ASDA,LDA information in order separated by a comma,\ne.g. 3902,3902,3902,3592:").split(",");
-			if(data.length < 4) {
-				displayMessage("Not enough information supplied, expected 4 integer values separated by a comma.");
-				continue;
-			}
-
-			Integer iData[] = new Integer[data.length];
-
-			int i = 0;
-			try {
-				for(i = 0; i < 4; i++) {
-					iData[i] = Integer.parseInt(data[i].replaceAll("\\s+", ""));
-				}
-			} catch(NumberFormatException e) {
-				displayMessage("Information in incorrect format, expected number but " + data[i] + " was given.");
-				continue;
-			}
-
-			while(true) {
-				String confirm = prompt("Is this correct?\nTORA: " + data[0] + "\nTODA: " + data[1] + "\nASDA: " + data[2] + "\nLDA: " + data[3] + "\n(y/n)");
-				if(confirm.equalsIgnoreCase("y")) {
-					return new Threshold(thresholdDesignator, iData[0], iData[1], iData[2], iData[3]);
-				}
-				else if(confirm.equalsIgnoreCase("n")) {
-					break;
-				}
-				else {
-					displayMessage("Expected 'y' or 'n'");
-					continue;
-				}
-			}
-		}
-	}
+//	private Threshold configureThreshold() {
+//		
+//		String thresholdDesignator = prompt("Enter threshold designator: ( ##[LR] )\n(Or enter '!' to cancel)");
+//
+//		if(thresholdDesignator.replaceAll("\\s+", "").equals("!"))
+//			return null;
+//		
+//		while(true) {
+//			String data[] = prompt("Enter TORA,TODA,ASDA,LDA information in order separated by a comma,\ne.g. 3902,3902,3902,3592:").split(",");
+//			if(data.length < 4) {
+//				displayMessage("Not enough information supplied, expected 4 integer values separated by a comma.");
+//				continue;
+//			}
+//
+//			Integer iData[] = new Integer[data.length];
+//
+//			int i = 0;
+//			try {
+//				for(i = 0; i < 4; i++) {
+//					iData[i] = Integer.parseInt(data[i].replaceAll("\\s+", ""));
+//				}
+//			} catch(NumberFormatException e) {
+//				displayMessage("Information in incorrect format, expected number but " + data[i] + " was given.");
+//				continue;
+//			}
+//
+//			while(true) {
+//				String confirm = prompt("Is this correct?\nTORA: " + data[0] + "\nTODA: " + data[1] + "\nASDA: " + data[2] + "\nLDA: " + data[3] + "\n(y/n)");
+//				if(confirm.equalsIgnoreCase("y")) {
+//					return new Threshold(thresholdDesignator, iData[0], iData[1], iData[2], iData[3]);
+//				}
+//				else if(confirm.equalsIgnoreCase("n")) {
+//					break;
+//				}
+//				else {
+//					displayMessage("Expected 'y' or 'n'");
+//					continue;
+//				}
+//			}
+//		}
+//	}
 	
 	/* Gets user input */
 	private String[] getInput()
