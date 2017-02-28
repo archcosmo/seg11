@@ -2,11 +2,9 @@ package core;
 
 public class LogicalRunway {
 
-    String name;
-    int stopwayLength, stopwayWidth;
-    int clearway;
+	String designator;
+    int stopwayLength, clearwayLength;
     int tora, toda, asda, lda;
-    String designator;
 
     public LogicalRunway(String designator, int tora, int toda, int asda, int lda) {
         this.designator = designator;
@@ -14,5 +12,14 @@ public class LogicalRunway {
         this.toda = toda;
         this.asda = asda;
         this.lda = lda;
+		//TODO: calculate lengths
     }
+
+    public LogicalRunway(String designator, int runwayLength, int stopwayLength, int clearwayLength) {
+		this.designator = designator;
+		this.tora = runwayLength;
+		this.stopwayLength = stopwayLength;
+		this.clearwayLength = clearwayLength;
+		//TODO: calculate thresholds
+	}
 }

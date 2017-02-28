@@ -10,8 +10,7 @@ public class Calculations {
 
     //TODO: if obstacle lies on stopway/clearway
     //TODO: move clearway and stopway
-    public LogicalRunway calculateDistances(LogicalRunway runway, int stopwayLength, int clearway,
-                                        Obstacle obstacle, int blastAllowance) {
+    public LogicalRunway calculateDistances(LogicalRunway runway, Obstacle obstacle, int blastAllowance) {
         int newTora;
         int newToda;
         int newAsda;
@@ -25,21 +24,21 @@ public class Calculations {
             //Take off / land before obstacle
             int ALSWidth = DEFAULT_ANGLE_OF_DESCENT * obstacle.height;
             int ALSDistance = runway.tora - obstacle.left - ALSWidth;
-            newTora = runway.tora - stopwayLength - Math.max(DEFAULT_RESA, ALSDistance);
+            newTora = runway.tora - runway.stopwayLength - Math.max(DEFAULT_RESA, ALSDistance);
             newToda = newTora;
             newAsda = newTora;
-            newLda = obstacle.left -(DEFAULT_RESA + stopwayLength);
+            newLda = obstacle.left -(DEFAULT_RESA + runway.stopwayLength);
         } else {
             //Take off / land after obstacle
             if (blastAllowance == -1) {
                 blastAllowance = DEFAULT_BLAST_ALLOWANCE;
             }
             newTora = runway.tora - obstacle.left;
-            newToda = runway.toda - obstacle.left - clearway;
-            newAsda = runway.asda - obstacle.left - stopwayLength;
+            newToda = runway.toda - obstacle.left - runway.clearwayLength;
+            newAsda = runway.asda - obstacle.left - runway.stopwayLength;
             //TODO: displaced thresholds
             int ALSWidth = DEFAULT_ANGLE_OF_DESCENT * obstacle.height;
-            newLda = runway.tora - obstacle.left - Math.max(blastAllowance, stopwayLength + Math.max(DEFAULT_RESA, ALSWidth));
+            newLda = runway.tora - obstacle.left - Math.max(blastAllowance, runway.stopwayLength + Math.max(DEFAULT_RESA, ALSWidth));
         }
         return new LogicalRunway(runway.designator, newTora, newToda, newAsda, newLda);
     }
