@@ -4,14 +4,17 @@
 
 	public class Runway {
 		String name;
-		ArrayList<LogicalRunway> logicalRunways; //TODO: store runways in pairs?
+		ArrayList<LogicalRunway> logicalRunways;
+		int RESA;
+		int blastAllowance;
 
-		public Runway(String name) {
+		//TODO: where should runway RESA and blast allowance be stored?
+		public Runway(String name, int RESA, int blastAllowance) {
 			this.name = name;
 		}
 
+		//TODO: method to add many Logical Runways
 		public void addLogicalRunway(LogicalRunway logicalRunway) {
-			//TODO: add many LogRuns
 			logicalRunways.add(logicalRunway);
 		}
 	}

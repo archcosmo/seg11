@@ -8,17 +8,16 @@ public class Calculations {
 
     String lastCalculationBreakdown;
 
-    //TODO: if obstacle lies on stopway/clearway
-    //TODO: move clearway and stopway
-    public LogicalRunway calculateDistances(LogicalRunway runway, Obstacle obstacle, int blastAllowance) {
+    //TODO: can take whole runway object (and calculate for each logical runway)
+    public void calculateDistances(LogicalRunway runway, Obstacle obstacle, int blastAllowance /* = -1 */) {
         int newTora;
         int newToda;
         int newAsda;
         int newLda;
 
-        double obstacleMidXPosition = obstacle.left + ((obstacle.right - obstacle.left) / 2.0);
         //TODO: if obstacle not inside cleared and graded area, no need to redeclare distances
 
+		double obstacleMidXPosition = obstacle.left + ((obstacle.right - obstacle.left) / 2.0);
         //Calculate which half of runway, the obstacle is on
         if (obstacleMidXPosition > (runway.tora / 2.0)) {
             //Take off / land before obstacle
@@ -40,7 +39,7 @@ public class Calculations {
             int ALSWidth = DEFAULT_ANGLE_OF_DESCENT * obstacle.height;
             newLda = runway.tora - obstacle.left - Math.max(blastAllowance, runway.stopwayLength + Math.max(DEFAULT_RESA, ALSWidth));
         }
-        return new LogicalRunway(runway.designator, newTora, newToda, newAsda, newLda);
+        //TODO: return new Threshold Class
     }
 
     public String getLastCalculationBreakdown() {
