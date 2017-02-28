@@ -61,6 +61,171 @@ public class Console
 		return s.nextLine();
 	}
 	
+	public void initialAirportConfiguration() {
+		displayMessage("Airport Information needs to be configured.");
+		addAirport();
+	}
+	
+	public void selectAirports() {
+		while(true) {
+			List<Airport> airports = controller.getAirports();
+			String promptMsg = "Select an Airport:\n";
+			int i;
+			for(i = 0; i < airports.size(); i++) {
+				String name = (airports.get(i).name == null || airports.get(i).name.isEmpty()) ? ("Airport " + i) : airports.get(i).name;
+				promptMsg += "[" + i + "] : " + name + "\n";
+			}
+			promptMsg += "[" + i + "] : Configure New Airport";
+
+
+			try {
+				Integer result = Integer.parseInt(prompt(promptMsg));
+				if(result < 0 || result > i)
+					throw new NumberFormatException();
+				if(result == i) {
+					initialAirportConfiguration();
+					continue;
+				}
+				else {
+					controller.selectAirport(result);
+				}
+			} catch(NumberFormatException e) {
+				displayMessage("Number expected between 0 and " + i + ".");
+				continue;
+			}
+			break;
+		}
+	}
+	
+	public void addAirport() {
+		Airport airport = configureAirport();
+		if(airport != null)
+			controller.addAirport(airport);
+	}
+	
+	public void addRunway(Integer airportId) {
+		Runway runway = configureRunway();
+		if(runway != null)
+			controller.addRunway(airportId, runway);
+	}
+	
+	public void addThreshold(Integer airportId, Integer runwayId) {
+		Threshold threshold = configureThreshold();
+		if(threshold != null)
+			controller.addThreshold(airportId, runwayId, threshold);
+	}
+	
+	private Airport configureAirport() {
+		while(true) {
+			String airportName = prompt("Enter Airport Name:\n(Or enter '!' to cancel)");
+			if(airportName.replaceAll("\\s+", "").equals("!")) {
+				return null;
+			}
+			
+			if(airportName.replaceAll("\\s+", "").isEmpty()) {
+				displayMessage("An airport name cannot be empty.");
+				continue;
+			}
+
+			Airport airport = new Airport(airportName);
+			
+			while(true) {
+				String confirm = prompt("Add (another) runway to " + airportName + "?(y/n):");
+
+				if(confirm.equalsIgnoreCase("y")) {
+					Runway runway = configureRunway();
+					if(runway != null)
+						airport.addRunway(runway);
+				}
+				else if(confirm.equalsIgnoreCase("n")) {
+					break;
+				}
+				else {
+					displayMessage("Expected 'y' or 'n'");
+					continue;
+				}
+			}
+			return airport;
+		}
+	}
+	
+	private Runway configureRunway() {
+		while(true) {
+			String runwayName = prompt("Enter runway name:\n(Or enter to '!' to cancel)");
+			if(runwayName.replaceAll("\\s+", "").equals("!")) {
+				return null;
+			}
+
+			if(runwayName.replaceAll("\\s+", "").isEmpty()) {
+				displayMessage("A runway name cannot be empty.");
+				continue;
+			}
+
+			Runway runway = new Runway(runwayName);
+
+			//Add thresholds to Runway
+			while(true) {
+				String confirm = prompt("Add (another) threshold to " + runwayName + "?(y/n):");
+
+				if(confirm.equalsIgnoreCase("y")) {
+					Threshold threshold = configureThreshold();
+					if(threshold != null)
+						runway.addThreshold(threshold);
+				}
+				else if(confirm.equalsIgnoreCase("n")) {
+					break;
+				}
+				else {
+					displayMessage("Expected 'y' or 'n'");
+					continue;
+				}
+			}
+			return runway;
+		}
+	}
+	
+	private Threshold configureThreshold() {
+		
+		String thresholdDesignator = prompt("Enter threshold designator:\n(Or enter '!' to cancel)");
+
+		if(thresholdDesignator.replaceAll("\\s+", "").equals("!"))
+			return null;
+		
+		while(true) {
+			String data[] = prompt("Enter TORA,TODA,ASDA,LDA information in order separated by a comma,\ne.g. 3902,3902,3902,3592:").split(",");
+			if(data.length < 4) {
+				displayMessage("Not enough information supplied, expected 4 integer values separated by a comma.");
+				continue;
+			}
+
+			Integer iData[] = new Integer[data.length];
+
+			int i = 0;
+			try {
+				for(i = 0; i < 4; i++) {
+					iData[i] = Integer.parseInt(data[i].replaceAll("\\s+", ""));
+				}
+			} catch(NumberFormatException e) {
+				displayMessage("Information in incorrect format, expected number but " + data[i] + " was given.");
+				continue;
+			}
+
+			while(true) {
+				String confirm = prompt("Is this correct?\nTORA: " + data[0] + "\nTODA: " + data[1] + "\nASDA: " + data[2] + "\nLDA: " + data[3] + "\n(y/n)");
+				if(confirm.equalsIgnoreCase("y")) {
+					return new Threshold(thresholdDesignator, iData[0], iData[1], iData[2], iData[3]);
+				}
+				else if(confirm.equalsIgnoreCase("n")) {
+					break;
+				}
+				else {
+					displayMessage("Expected 'y' or 'n'");
+					continue;
+				}
+			}
+		}
+	}
+	
 	/* Gets user input */
 	private String[] getInput()
 	{
