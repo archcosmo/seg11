@@ -14,6 +14,7 @@ public class Model
 	List<Airport> airports;
 	Airport selectedAirport;
 	Runway selectedRunway;
+	List<Obstacle> objects;
 	//XML Airport info
 	//XML Object info
 	//PUBLIC Selected runway (Default NULL)
@@ -35,6 +36,7 @@ public class Model
 
 	private void init() {
 		this.airports = new ArrayList<Airport>();
+		this.objects = new ArrayList<Obstacle>();
 	}
 	
 	public boolean airportXMLInfoExists() {
@@ -72,30 +74,21 @@ public class Model
 	 */
 	public boolean addAirport(String name) 
 	{
-		boolean inList = false;
-		for (Airport a : airports) {
-			if (a.name.equals(name)) {
-				inList = true;
-			}
+		for(Airport a : airports) {
+			if (a.name.equals(name))
+					return false;
 		}
-		if (!inList) {
-			airports.add(new Airport(name));
-			return true;
-		}
-		return false;
+		airports.add(new Airport(name));
+		return true;
 	}
 	
 	public boolean addAirport(Airport airport) {
-		boolean inList = false;
 		for(Airport a : airports) {
 			if (a.name.equals((airport.name)))
-					inList = true;
+					return false;
 		}
-		if(!inList) {
-			airports.add(airport);
-			return true;
-		}
-		return false;
+		airports.add(airport);
+		return true;
 	}
 
 	/* delete airport
@@ -119,18 +112,14 @@ public class Model
 	public boolean addRunway(String name)
 	{
 		if (selectedAirport != null) {
-			boolean inList = false;
-			for (Runway r : selectedAirport.runways) {
-				if (r.name.equals(name)) {
-					inList = true;
-				}
+			for(Runway r : selectedAirport.runways) {
+				if (r.name.equals((name)))
+					return false;
 			}
-			if (!inList) {
-				selectedAirport.runways.add(new Runway(name));
-				return true;
-			}
+			selectedAirport.runways.add(new Runway(name));
+			return true;
 		}
-		return false; 
+		return false;
 	}
 
 	/* delete runway
@@ -153,9 +142,15 @@ public class Model
 	/* Add object
 	 * return false if airport name taken
 	 */
-	public boolean addObject(String name)
+	public boolean addObject(String name, int height, int width, int length)
 	{
-		return false;
+		for (Obstacle o : objects) {
+			if (o.name.equals(name)) {
+				return false;
+			}
+		}
+		objects.add(new Obstacle(height, width, length, name));
+		return true;
 	}
 
 	/* delete object
@@ -163,6 +158,12 @@ public class Model
 	 */
 	public boolean deleteObject(String name)
 	{
+		for (Obstacle o : objects) {
+			if (o.name.equals(name)) {
+				objects.remove(o);
+				return true;
+			}
+		}
 		return false;
 	}
 
@@ -175,7 +176,9 @@ public class Model
 		else
 			return selectedAirport.runways;
 	}
-	public void getObjects() {  }
+	public List<Obstacle> getObjects() { 
+		return objects;
+	}
 
 	/* Takes string
 	 * resolves string to object
