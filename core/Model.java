@@ -14,7 +14,7 @@ public class Model
 	List<Airport> airports;
 	Airport selectedAirport;
 	Runway selectedRunway;
-	List<Obstacle> objects;
+	List<Obstacle> obstacles;
 
 	
 	
@@ -30,17 +30,36 @@ public class Model
 
 	private void init() {
 		this.airports = new ArrayList<Airport>();
-		this.objects = new ArrayList<Obstacle>();
+		this.obstacles = new ArrayList<Obstacle>();
 	}
 	
-	public boolean saveObjectInfoToFile() {
+	public boolean saveObstacleInfoToFile() {
 		try {
-			XMLParser.saveObstacleInfoToXML(objects);
+			XMLParser.saveObstacleInfoToXML(obstacles);
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
 		}
+	}
+	
+	public boolean loadObstacleInfoFromFile() {
+		try {
+			List<Obstacle> loadedObstacles = XMLParser.readObstacleInfoFromXML();
+			
+			if(loadedObstacles.size() == 0)
+				return false;
+			
+			for(Obstacle obstacle : loadedObstacles)
+				obstacles.add(obstacle);
+			return true;
+		} catch (IOException e) {
+			return false;
+		} catch(SAXException | ParserConfigurationException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
 	}
 	 
 	public boolean airportXMLInfoExists() {
@@ -147,15 +166,15 @@ public class Model
 	/* Add object
 	 * return false if airport name taken
 	 */
-	public boolean addObject(String name, int height, int width, int length)
+	public boolean addObstacle(Obstacle obstacle)
 	{
-		for (Obstacle o : objects) {
-			if (o.name.equals(name)) {
+		for (Obstacle o : obstacles) {
+			if (o.name.equals(obstacle.name)) {
 				return false;
 			}
 		}
 
-		objects.add(new Obstacle(name, width, length, height));
+		obstacles.add(obstacle);
 		return true;
 	}
 
@@ -164,9 +183,9 @@ public class Model
 	 */
 	public boolean deleteObject(String name)
 	{
-		for (Obstacle o : objects) {
+		for (Obstacle o : obstacles) {
 			if (o.name.equals(name)) {
-				objects.remove(o);
+				obstacles.remove(o);
 				return true;
 			}
 		}
@@ -183,7 +202,7 @@ public class Model
 			return selectedAirport.runways;
 	}
 	public List<Obstacle> getObjects() { 
-		return objects;
+		return obstacles;
 	}
 
 	/* Takes string

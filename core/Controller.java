@@ -39,17 +39,52 @@ public class Controller
 		if(!model.loadAirportInfoFromFile())
 			initialAirportConfiguration();
 
+		model.loadObstacleInfoFromFile();
+		
 		view.selectAirports();
 	}
 	
-	public boolean addAirport(Airport airport) {
+	public boolean createAirport() {
+		Airport airport = view.configureAirport();
+		
+		if(airport == null)
+			return false;
+		
+		Runway runway = null;
+		do {
+			runway = view.configureRunway(false);
+			if(runway != null)
+				airport.addRunway(runway);
+		} while(runway != null);
+		
 		model.addAirport(airport);
 		model.saveAirportInfoToFile();
 		return true;
 	}
 	
+	public boolean createRunway(int airportId) {
+		Runway runway = view.configureRunway(true);
+		
+		if(runway == null)
+			return false;
+		
+		return addRunway(airportId, runway);
+	}
+	
+	public boolean createObstacle() {
+		Obstacle obstacle = view.configureObstacle();
+		
+		if(obstacle == null)
+			return false;
+		
+		model.addObstacle(obstacle);
+		model.saveObstacleInfoToFile();
+		
+		return true;
+	}
+	
 	//TODO: Replace the false return with exceptions so more detailed error messages can be passed back.
-	public boolean addRunway(Integer airportId, Runway runway) {
+	private boolean addRunway(Integer airportId, Runway runway) {
 		try {
 			Airport airport = model.getAirports().get(airportId);
 			if(airport == null)
@@ -63,23 +98,23 @@ public class Controller
 		}
 	}
 	
-	public boolean addLogicalRunway(Integer airportId, Integer runwayId, LogicalRunway logicalRunway) {
-		try {
-			Airport airport = model.getAirports().get(airportId);
-			if(airport == null)
-				return false;
-			
-			Runway runway = airport.runways.get(runwayId);
-			if(runway == null)
-				return false;
-
-			runway.addLogicalRunway(logicalRunway);
-			model.saveAirportInfoToFile();
-			return true;
-		} catch(IndexOutOfBoundsException e) {
-			return false;
-		}
-	}
+//	private boolean addLogicalRunway(Integer airportId, Integer runwayId, LogicalRunway logicalRunway) {
+//		try {
+//			Airport airport = model.getAirports().get(airportId);
+//			if(airport == null)
+//				return false;
+//			
+//			Runway runway = airport.runways.get(runwayId);
+//			if(runway == null)
+//				return false;
+//
+//			runway.addLogicalRunway(logicalRunway);
+//			model.saveAirportInfoToFile();
+//			return true;
+//		} catch(IndexOutOfBoundsException e) {
+//			return false;
+//		}
+//	}
 	
 	private void initialAirportConfiguration() {
 		view.initialAirportConfiguration();
@@ -171,7 +206,7 @@ public class Controller
 	
 	public List<Airport> getAirports() { return model.getAirports(); }
 	public List<Runway> getRunways() { return model.getRunways(); }
-	public void getObjects() { model.getObjects(); }
+	public List<Obstacle> getObstacles() { return model.getObjects(); }
 
 	/* Safely closes application */
 	private void quit() 

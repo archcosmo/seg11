@@ -98,7 +98,7 @@ public class Console
 	
 	public void initialAirportConfiguration() {
 		displayMessage("Airport Information needs to be configured.");
-		addAirport();
+		controller.createAirport();
 	}
 	
 	public void selectAirports() {
@@ -132,25 +132,13 @@ public class Console
 		}
 	}
 	
-	public void addAirport() {
-		Airport airport = configureAirport();
-		if(airport != null)
-			controller.addAirport(airport);
-	}
-	
-	public void addRunway(Integer airportId) {
-		Runway runway = configureRunway();
-		if(runway != null)
-			controller.addRunway(airportId, runway);
-	}
-	
 //	public void addThreshold(Integer airportId, Integer runwayId) {
 //		Threshold threshold = configureThreshold();
 //		if(threshold != null)
 //			controller.addThreshold(airportId, runwayId, threshold);
 //	}
 	
-	private Airport configureAirport() {
+	public Airport configureAirport() {
 		while(true) {
 			String airportName = prompt("Enter Airport Name:\n(Or enter '!' to cancel)");
 			if(airportName.replaceAll("\\s+", "").equals("!")) {
@@ -164,29 +152,13 @@ public class Console
 
 			Airport airport = new Airport(airportName);
 			
-			while(true) {
-				String confirm = prompt("Add (another) runway to " + airportName + "?(y/n):");
-
-				if(confirm.equalsIgnoreCase("y")) {
-					Runway runway = configureRunway();
-					if(runway != null)
-						airport.addRunway(runway);
-				}
-				else if(confirm.equalsIgnoreCase("n")) {
-					break;
-				}
-				else {
-					displayMessage("Expected 'y' or 'n'");
-					continue;
-				}
-			}
 			return airport;
 		}
 	}
 	
-	private Runway configureRunway() {
+	public Runway configureRunway(boolean toCancel) {
 		while(true) {
-			String runwayName = prompt("Enter runway name:\n(Or enter to '!' to cancel)");
+			String runwayName = prompt("Enter runway name:\n(Or enter to '!' to " + (toCancel ? " cancel)" : " finish entering runways."));
 			if(runwayName.replaceAll("\\s+", "").equals("!")) {
 				return null;
 			}
@@ -237,6 +209,28 @@ public class Console
 			}
 			
 			return runway;
+		}
+	}
+	
+	public Obstacle configureObstacle() {
+		while(true) {
+			String obstacleName = prompt("Enter Obstacle Name:\n(Or enter '!' to cancel)");
+			if(obstacleName.replaceAll("\\s+", "").equals("!")) {
+				return null;
+			}
+			
+			if(obstacleName.replaceAll("\\s+", "").isEmpty()) {
+				displayMessage("An obstacle name cannot be empty.");
+				continue;
+			}
+
+			Integer width = readInt("Enter obstacle width");
+			Integer length = readInt("Enter obstacle length");
+			Integer height = readInt("Enter obstacle height");
+			
+			Obstacle obstacle = new Obstacle(obstacleName, width, length, height);
+			
+			return obstacle;
 		}
 	}
 	
@@ -336,8 +330,8 @@ public class Console
 				case "runways":
 					list_runways(controller.getRunways());
 					break;
-				case "objects":
-					controller.getObjects();
+				case "obstacles":
+					list_obstacles(controller.getObstacles());
 					break;
 				default:
 					System.out.println("Invalid argument to command 'list (type)'\n : Valid types are; 'airports', 'runways', 'objects'");
@@ -346,9 +340,37 @@ public class Console
 			} else { wrong_args(input); }
 			break;
 		case "add":
-			if ( input.length == 2 ) 
+			if ( input.length >= 2 ) 
 			{
-				/* NEEDS COMPLETING WHEN ADD METHODS DONE */
+				switch ( input[1] )
+				{
+				case "airport":
+					controller.createAirport();
+					break;
+				case "runway":
+					if(input.length == 3)
+						try {
+							Integer airport_id = Integer.parseInt(input[2]);
+							if(airport_id < 0 || airport_id >= controller.getAirports().size())
+								System.out.println("Invalid airport id, use 'list airports' to list valid airport ids.");
+							else
+								controller.createRunway(Integer.parseInt(input[2]));
+							
+						} catch(NumberFormatException e) {
+							System.out.println("Expected number for second argument, but " + input[2] + " was given.");
+						}
+					else {
+						wrong_args(input);
+						System.out.println("Expected 'add runway [airport_id]'");
+					}
+					break;
+				case "obstacle":
+					controller.createObstacle();
+					break;
+				default:
+					System.out.println("Invalid argument to command 'list (type)'\n : Valid types are; 'airports', 'runways', 'objects'");
+					break;
+				}
 			} else { wrong_args(input); }
 			break;
 		case "delete":
@@ -363,7 +385,7 @@ public class Console
 				case "runway":
 					controller.deleteRunway(ID);
 					break;
-				case "object":
+				case "obstacle":
 					controller.deleteObject(ID);
 					break;
 				default:
@@ -456,19 +478,29 @@ public class Console
 		}
 	}
 	
+	private void list_obstacles(List<Obstacle> obstacles) {
+		if(obstacles.size() == 0)
+			System.out.println("There are no obstacles registered to the system. Add some with 'add obstacle'");
+		
+		for(int i = 0; i < obstacles.size(); i++) {
+			Obstacle obstacle = obstacles.get(i);
+			String name = (obstacle.name == null || obstacle.name.isEmpty()) ? ("Obstacle " + i) : obstacle.name;
+			System.out.println("[" + i + "] : " + name);
+		}
+	}
+	
 	private void wrong_args(String[] input)
 	{
 		for ( int i = 0; i < input.length; i++) System.out.print(input[i] + " ");
 		System.out.println(" : Invalid number of arguments");
 	}
 	
-	/* Displays quit sign 
+	/* Displays  sign 
 	 * halts program for 3 seconds to notify user
 	 */
 	public void quit()
 	{
 		printBar("Exiting Application");
-		try { TimeUnit.SECONDS.sleep(3); } catch (InterruptedException e) { e.printStackTrace(); } // Sleep 3 seconds
 		s.close();
 	}
 }

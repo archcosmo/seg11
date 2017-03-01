@@ -276,7 +276,7 @@ public class XMLParser {
 		eObstacle.appendChild(width);
 		
 		Element length = doc.createElement("length");
-		height.setTextContent("" + obstacle.length);
+		length.setTextContent("" + obstacle.length);
 		eObstacle.appendChild(length);
 		
 		return eObstacle;
