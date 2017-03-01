@@ -18,12 +18,4 @@ public class LogicalRunway {
         this.clearwayLength = clearwayLength;
 		//TODO: calculate lengths
     }
-
-    public LogicalRunway(String designator, Runway runway, int runwayLength, int stopwayLength, int clearwayLength) {
-		this.designator = designator;
-		this.tora = runwayLength;
-		this.stopwayLength = stopwayLength;
-		this.clearwayLength = clearwayLength;
-		//TODO: calculate thresholds
-	}
 }

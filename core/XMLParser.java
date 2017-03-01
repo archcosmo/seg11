@@ -133,7 +133,7 @@ public class XMLParser {
 			//Build Thresholds
 			NodeList thresholds = eRunway.getElementsByTagName("threshold");
 			for(int j = 0; j < thresholds.getLength(); j++)
-				runway.addLogicalRunway(unmarshallLogicalRunway(thresholds.item(j)));
+				runway.addLogicalRunway(unmarshallLogicalRunway(runway, thresholds.item(j)));
 			
 			return runway;
 		}
@@ -151,7 +151,7 @@ public class XMLParser {
 		return nRunway;
 	}
 	
-	private static LogicalRunway unmarshallLogicalRunway(Node nLogicalRunway) throws SAXException {
+	private static LogicalRunway unmarshallLogicalRunway(Runway parentRunway, Node nLogicalRunway) throws SAXException {
 		if(nLogicalRunway.getNodeType() == Node.ELEMENT_NODE) {
 			Element eLogicalRunway = (Element) nLogicalRunway;
 			String logicalRunwayDesignator = eLogicalRunway.getAttribute("designator");
@@ -160,11 +160,7 @@ public class XMLParser {
 			if(logicalRunwayDesignator.isEmpty())
 				throw new SAXException("Invalid file format: Threshold Designator undefined.");
 
-			Runway runway;
-			int tora, toda, asda, lda;
-
-			//TODO: get Runway and throw SAXException (might have to pass runway into method?)
-			runway = getAttributeValue(eLogicalRunway.getElementsByTagName("runway"));
+			int tora, toda, asda, lda, displacedThreshold, stopwayLength, clearwayLength;
 			
 			tora = getAttributeValue(eLogicalRunway.getElementsByTagName("tora"));
 			if(tora == -1)
@@ -182,7 +178,19 @@ public class XMLParser {
 			if(lda == -1)
 				throw new SAXException("value not specified.");
 			
-			return new LogicalRunway(logicalRunwayDesignator, runway, tora, toda, asda, lda);
+			displacedThreshold = getAttributeValue(eLogicalRunway.getElementsByTagName("displacedThreshold"));
+			if(displacedThreshold == -1)
+				throw new SAXException("value not specified.");
+			
+			stopwayLength = getAttributeValue(eLogicalRunway.getElementsByTagName("stopwayLength"));
+			if(stopwayLength == -1)
+				throw new SAXException("value not specified.");
+			
+			clearwayLength = getAttributeValue(eLogicalRunway.getElementsByTagName("clearwayLength"));
+			if(clearwayLength == -1)
+				throw new SAXException("value not specified.");
+			
+			return new LogicalRunway(logicalRunwayDesignator, parentRunway, tora, toda, asda, lda, displacedThreshold, stopwayLength, clearwayLength);
 		}
 		else
 			throw new SAXException("Invalid file format.");
@@ -207,6 +215,18 @@ public class XMLParser {
 		Element lda = doc.createElement("lda");
 		lda.setTextContent("" + logicalRunway.lda);
 		nThreshold.appendChild(lda);
+		
+		Element displacedThreshold = doc.createElement("displacedThreshold");
+		displacedThreshold.setTextContent("" + logicalRunway.displacedThreshold);
+		nThreshold.appendChild(displacedThreshold);
+		
+		Element stopwayLength = doc.createElement("stopwayLength");
+		stopwayLength.setTextContent("" + logicalRunway.stopwayLength);
+		nThreshold.appendChild(stopwayLength);
+		
+		Element clearwayLength = doc.createElement("clearwayLength");
+		clearwayLength.setTextContent("" + logicalRunway.clearwayLength);
+		nThreshold.appendChild(clearwayLength);
 		
 		return nThreshold;
 	}
