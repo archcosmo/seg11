@@ -35,19 +35,19 @@ public class Calculations {
 
         if (direction.equalsIgnoreCase("towards")) {//if (obstacleMidXPosition > (logicalRunway.tora / 2.0)) {
             //Take off towards/ land towards obstacle
-            newTora = fromThresh + logicalRunway.displacedThreshold - ALSWidth - logicalRunway.stripEnd; 
+            newTora = fromThresh + logicalRunway.displacedThreshold - ALSWidth - logicalRunway.getStripEnd(); 
             newToda = newTora;
             newAsda = newTora;
-            newLda = fromThresh - DEFAULT_RESA - logicalRunway.stripEnd;
+            newLda = fromThresh - DEFAULT_RESA - logicalRunway.getStripEnd();
         } else {
             //Take off away/ land over obstacle
             if (blastAllowance == -1) {
                 blastAllowance = DEFAULT_BLAST_ALLOWANCE;
             }
-            newTora = logicalRunway.tora - fromThresh - Math.max((DEFAULT_RESA + logicalRunway.stripEnd), (DEFAULT_BLAST_ALLOWANCE + logicalRunway.displacedThreshold));
+            newTora = logicalRunway.tora - fromThresh - Math.max((DEFAULT_RESA + logicalRunway.getStripEnd()), (DEFAULT_BLAST_ALLOWANCE + logicalRunway.displacedThreshold));
             newToda = newTora + logicalRunway.clearwayLength;
             newAsda = newTora + logicalRunway.stopwayLength;
-            newLda = logicalRunway.lda - fromThresh - ALSWidth - logicalRunway.stripEnd;
+            newLda = logicalRunway.lda - fromThresh - ALSWidth - logicalRunway.getStripEnd();
         }
 
         ArrayList<Integer> thresholds = new ArrayList<>();

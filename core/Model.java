@@ -121,7 +121,7 @@ public class Model
 				if (r.name.equals((name)))
 					return false;
 			}
-			selectedAirport.runways.add(new Runway(name, -1, -1));
+			selectedAirport.runways.add(new Runway(name, -1, -1, -1));
 			return true;
 		}
 		return false;

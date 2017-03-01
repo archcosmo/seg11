@@ -196,14 +196,12 @@ public class Console
 				continue;
 			}
 
-			Runway runway = new Runway(runwayName, -1, -1);
+			Runway runway = new Runway(runwayName, -1, -1, -1);
 			
 			Integer angle = readInt("Enter an angle for the runway", 0, 359);
 			Integer noRunways = readInt("Enter number of logical runways", 1, 3);
 			
-			Integer startClearway = readInt("Enter the length of the start clearway");
 			Integer startStopway = readInt("Enter the length of the start stopway");
-			Integer endClearway = readInt("Enter the length of the end clearway");
 			Integer endStopway = readInt("Enter the length of the end stopway");
 			
 			angle /= 10;
@@ -233,7 +231,7 @@ public class Console
 					Integer lda = readInt("Enter LDA value for " + designator);
 					Integer displacedThreshold = readInt("Enter Displaced Threshold value for " + designator);
 					
-					LogicalRunway lr = new LogicalRunway(String.format("%02d" + letter, logicalAngle), runway, tora, toda, asda, lda, displacedThreshold, (j == 0) ? endStopway : startStopway, (j == 0) ? endClearway : startClearway);
+					LogicalRunway lr = new LogicalRunway(String.format("%02d" + letter, logicalAngle), runway, tora, toda, asda, lda, displacedThreshold, (j == 0) ? endStopway : startStopway);
 					runway.addLogicalRunway(lr);
 				}
 			}

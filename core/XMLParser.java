@@ -129,7 +129,7 @@ public class XMLParser {
 	private static Runway unmarshallRunway(Node nRunway) throws SAXException {
 		if(nRunway.getNodeType() == Node.ELEMENT_NODE) {
 			Element eRunway = (Element) nRunway;
-			Runway runway = new Runway(eRunway.getAttribute("name"), -1, -1);
+			Runway runway = new Runway(eRunway.getAttribute("name"), -1, -1, -1);
 			
 			//Build Thresholds
 			NodeList thresholds = eRunway.getElementsByTagName("threshold");
@@ -161,7 +161,7 @@ public class XMLParser {
 			if(logicalRunwayDesignator.isEmpty())
 				throw new SAXException("Invalid file format: Threshold Designator undefined.");
 
-			int tora, toda, asda, lda, displacedThreshold, stopwayLength, clearwayLength;
+			int tora, toda, asda, lda, displacedThreshold, stopwayLength;
 			
 			try {
 				tora = getAttributeValue(eLogicalRunway.getElementsByTagName("tora"));
@@ -199,13 +199,7 @@ public class XMLParser {
 				throw new SAXException("Stopway Length value not specified.");
 			}
 			
-			try {
-				clearwayLength = getAttributeValue(eLogicalRunway.getElementsByTagName("clearwayLength"));
-			} catch(AttributeNotFoundException e) {
-				throw new SAXException("Clearway Length value not specified.");
-			}
-			
-			return new LogicalRunway(logicalRunwayDesignator, parentRunway, tora, toda, asda, lda, displacedThreshold, stopwayLength, clearwayLength);
+			return new LogicalRunway(logicalRunwayDesignator, parentRunway, tora, toda, asda, lda, displacedThreshold, stopwayLength);
 		}
 		else
 			throw new SAXException("Invalid file format.");
@@ -238,10 +232,6 @@ public class XMLParser {
 		Element stopwayLength = doc.createElement("stopwayLength");
 		stopwayLength.setTextContent("" + logicalRunway.stopwayLength);
 		nThreshold.appendChild(stopwayLength);
-		
-		Element clearwayLength = doc.createElement("clearwayLength");
-		clearwayLength.setTextContent("" + logicalRunway.clearwayLength);
-		nThreshold.appendChild(clearwayLength);
 		
 		return nThreshold;
 	}

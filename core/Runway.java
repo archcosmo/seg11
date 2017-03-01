@@ -6,12 +6,14 @@ import java.util.List;
 	public class Runway {
 		String name;
 		List<LogicalRunway> logicalRunways;
-		int RESA;
-		int blastAllowance;
+		int RESA, blastAllowance, stripEnd;
 
 		//TODO: where should runway RESA and blast allowance be stored?
-		public Runway(String name, int RESA, int blastAllowance) {
+		public Runway(String name, int RESA, int blastAllowance, int stripEnd) {
 			this.name = name;
+			this.RESA = RESA;
+			this.blastAllowance = blastAllowance;
+			this.stripEnd = stripEnd;
 			logicalRunways = new ArrayList<LogicalRunway>();
 		}
 

@@ -5,7 +5,7 @@ public class LogicalRunway {
 	String designator;
 	public Runway runway;
     int stopwayLength, clearwayLength;
-    public int tora, toda, asda, lda, displacedThreshold,stripEnd;
+    public int tora, toda, asda, lda, displacedThreshold;
 
     public LogicalRunway(String designator, Runway runway, int tora, int toda, int asda, int lda, int displacedThreshold, int stopwayLength) {
         this.designator = designator;
@@ -16,11 +16,18 @@ public class LogicalRunway {
         this.displacedThreshold = displacedThreshold;
         this.stopwayLength = stopwayLength;
         this.clearwayLength = toda - tora;
-        this.stripEnd = 60;
 		//TODO: calculate lengths
     }
     
-    public void setStripEnd(int length) {
-    	this.stripEnd = length;
+    public int getRESA() {
+    	return runway.RESA;
+    }
+    
+    public int getBlastAllowance() {
+    	return runway.blastAllowance;
+    }
+    
+    public int getStripEnd() {
+    	return runway.stripEnd;
     }
 }
