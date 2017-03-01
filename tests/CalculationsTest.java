@@ -17,6 +17,12 @@ public class CalculationsTest {
 
 	@Test
 	public void testScenario1AwayOver() {
+		/*
+		 * Scenario 1
+		 *	12m tall obstacle, on the centreline, 50m before the 09L threshold, i.e. to the west 
+		 *	of the threshold. The same obstacle is 3646m from the 27R threshold
+		 * 
+		 */
 		Obstacle obstacle = new Obstacle("Test Object", -50, -50, 12, -10, 10);
 		
 		ArrayList<Integer> thresholds = calc.calculateDistances(nineL, obstacle, 300);
@@ -35,7 +41,7 @@ public class CalculationsTest {
 //	public void testScenario1Toward() {
 //		Obstacle obstacle = new Obstacle("Test Object", 50 ,50,12, -10, 10);
 //		
-//		ArrayList<Integer> thresholds = calc.calculateDistances(nineL, obstacle, 300);
+//		ArrayList<Integer> thresholds = calc.calculateDistances(twentySevenR, obstacle, 300);
 //		System.out.println("TORA (2986): " + thresholds.get(0));
 //		System.out.println("TODA (2986): " + thresholds.get(1));
 //		System.out.println("ASDA (2986): " + thresholds.get(2));
