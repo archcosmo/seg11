@@ -137,7 +137,7 @@ public class Model
 				return false;
 			}
 		}
-		objects.add(new Obstacle(height, width, length, name));
+		objects.add(new Obstacle(name, height, width, length));
 		return true;
 	}
 
