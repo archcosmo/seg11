@@ -8,17 +8,17 @@ import org.junit.Test;
 public class CalculationsTest {
 	Calculations calc = new Calculations();
 	Runway testRunway = new Runway("Test Runway", 240, 300, 60); //Using default values - changeable!
-	LogicalRunway nineR = new LogicalRunway("09R", testRunway, 3660, 3660, 3660, 3353, 307, 0);
-	LogicalRunway twentySevenL = new LogicalRunway("27L", testRunway, 3660, 3660 ,3660, 3660, 0, 0);
-	LogicalRunway nineL = new LogicalRunway("09L", testRunway, 3902, 3902, 3902, 3595, 306, 0);
-	LogicalRunway twentySevenR = new LogicalRunway("27R", testRunway, 3884, 3962, 3884 , 3884, 0, 0);
+	LogicalRunway nineR = new LogicalRunway("09R", testRunway, 3660, 3660, 3660, 3353, 0);
+	LogicalRunway twentySevenL = new LogicalRunway("27L", testRunway, 3660, 3660 ,3660, 3660, 0);
+	LogicalRunway nineL = new LogicalRunway("09L", testRunway, 3902, 3902, 3902, 3595, 0);
+	LogicalRunway twentySevenR = new LogicalRunway("27R", testRunway, 3884, 3962, 3884 , 3884, 0);
 
 	@Test
 	public void testTORA() {
 		Obstacle scen1 = new Obstacle("Test Object", 50, 50, 12);
 		scen1.setFrom(0, -50, 3646);
 		int tora = calc.calculateDistances(nineL, scen1, 300, "away").get(0);
-		assertEquals(3346,tora);
+		assertEquals(3345,tora);
 		tora = calc.calculateDistances(twentySevenR, scen1, 300, "towards").get(0);
 		assertEquals(2986,tora);
 
@@ -41,7 +41,7 @@ public class CalculationsTest {
 		Obstacle scen4 = new Obstacle("Test Object", 50, 50, 20);
 		scen4.setFrom(20, 3546, 50);
 		tora = calc.calculateDistances(nineL, scen4, 300, "Towards").get(0);
-		assertEquals(2792,tora);
+		assertEquals(2793,tora);
 		tora = calc.calculateDistances(twentySevenR, scen4, 300, "away").get(0);
 		assertEquals(3534,tora);
 	}
@@ -51,7 +51,7 @@ public class CalculationsTest {
 		Obstacle scen1 = new Obstacle("Test Object", 50, 50, 12);
 		scen1.setFrom(0, -50, 3646);
 		int toda = calc.calculateDistances(nineL, scen1, 300, "away").get(1);
-		assertEquals(3346,toda);
+		assertEquals(3345,toda);
 		toda = calc.calculateDistances(twentySevenR, scen1, 300, "towards").get(1);
 		assertEquals(2986,toda);
 
@@ -74,7 +74,7 @@ public class CalculationsTest {
 		Obstacle scen4 = new Obstacle("Test Object", 50, 50, 20);
 		scen4.setFrom(20, 3546, 50);
 		toda = calc.calculateDistances(nineL, scen4, 300, "Towards").get(1);
-		assertEquals(2792,toda);
+		assertEquals(2793,toda);
 		toda = calc.calculateDistances(twentySevenR, scen4, 300, "away").get(1);
 		assertEquals(3612,toda);
 	}
@@ -84,7 +84,7 @@ public class CalculationsTest {
 		Obstacle scen1 = new Obstacle("Test Object", 50, 50, 12);
 		scen1.setFrom(0, -50, 3646);
 		int asda = calc.calculateDistances(nineL, scen1, 300, "away").get(0);
-		assertEquals(3346,asda);
+		assertEquals(3345,asda);
 		asda = calc.calculateDistances(twentySevenR, scen1, 300, "towards").get(0);
 		assertEquals(2986,asda);
 
@@ -107,7 +107,7 @@ public class CalculationsTest {
 		Obstacle scen4 = new Obstacle("Test Object", 50, 50, 20);
 		scen4.setFrom(20, 3546, 50);
 		asda = calc.calculateDistances(nineL, scen4, 300, "Towards").get(0);
-		assertEquals(2792,asda);
+		assertEquals(2793,asda);
 		asda = calc.calculateDistances(twentySevenR, scen4, 300, "away").get(0);
 		assertEquals(3534,asda);
 	}

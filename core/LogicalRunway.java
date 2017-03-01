@@ -7,14 +7,14 @@ public class LogicalRunway {
     int stopwayLength, clearwayLength;
     public int tora, toda, asda, lda, displacedThreshold;
 
-    public LogicalRunway(String designator, Runway runway, int tora, int toda, int asda, int lda, int displacedThreshold, int stopwayLength) {
+    public LogicalRunway(String designator, Runway runway, int tora, int toda, int asda, int lda, int stopwayLength) {
     	this.runway = runway;
         this.designator = designator;
         this.tora = tora;
         this.toda = toda;
         this.asda = asda;
         this.lda = lda;
-        this.displacedThreshold = displacedThreshold;
+        this.displacedThreshold = tora - lda;
         this.stopwayLength = stopwayLength;
         this.clearwayLength = toda - tora;
 		//TODO: calculate lengths

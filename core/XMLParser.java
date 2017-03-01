@@ -199,7 +199,7 @@ public class XMLParser {
 				throw new SAXException("Stopway Length value not specified.");
 			}
 			
-			return new LogicalRunway(logicalRunwayDesignator, parentRunway, tora, toda, asda, lda, displacedThreshold, stopwayLength);
+			return new LogicalRunway(logicalRunwayDesignator, parentRunway, tora, toda, asda, lda, stopwayLength);
 		}
 		else
 			throw new SAXException("Invalid file format.");
