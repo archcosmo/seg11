@@ -18,4 +18,11 @@ public class Obstacle {
 		this.xPos = xPos;
 		this.yPos = yPos;
 	}
+	
+	int fromC, fromL, fromR;
+	public void setFrom(int c, int l, int r) {
+		this.fromC = c;
+		this.fromL = l;
+		this.fromR = r;
+	}
 }

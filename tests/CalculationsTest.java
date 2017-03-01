@@ -5,52 +5,143 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
-
 public class CalculationsTest {
 	Calculations calc = new Calculations();
 	Runway testRunway = new Runway("Test Runway", 240, 300); //Using default values - changeable!
-	LogicalRunway nineR = new LogicalRunway("09R", testRunway, 3660, 3660, 3660, 3353);
-	LogicalRunway twentySevenL = new LogicalRunway("27L", testRunway, 3660, 3660 ,3660, 3660);
-	LogicalRunway nineL = new LogicalRunway("09L", testRunway, 3902, 3902, 3902, 3595);
-	LogicalRunway twentySevenR = new LogicalRunway("27R", testRunway, 3884, 3962, 3884 , 3884);
+	LogicalRunway nineR = new LogicalRunway("09R", testRunway, 3660, 3660, 3660, 3353, 307, 0);
+	LogicalRunway twentySevenL = new LogicalRunway("27L", testRunway, 3660, 3660 ,3660, 3660, 0, 0);
+	LogicalRunway nineL = new LogicalRunway("09L", testRunway, 3902, 3902, 3902, 3595, 306, 0);
+	LogicalRunway twentySevenR = new LogicalRunway("27R", testRunway, 3884, 3962, 3884 , 3884, 0, 0);
 
 	@Test
-	public void testScenario1AwayOver() {
-		/*
-		 * Scenario 1
-		 *	12m tall obstacle, on the centreline, 50m before the 09L threshold, i.e. to the west 
-		 *	of the threshold. The same obstacle is 3646m from the 27R threshold
-		 * 
-		 */
-		Obstacle obstacle = new Obstacle("Test Object", -50, -50, 12);
-		obstacle.setPos(-10, 10);
+	public void testTORA() {
+		Obstacle scen1 = new Obstacle("Test Object", 50, 50, 12);
+		scen1.setFrom(0, -50, 3646);
+		int tora = calc.calculateDistances(nineL, scen1, 300, "away").get(0);
+		assertEquals(3346,tora);
+		tora = calc.calculateDistances(twentySevenR, scen1, 300, "towards").get(0);
+		assertEquals(2986,tora);
+
+		Obstacle scen2 = new Obstacle("Test Object", 50, 50, 25);
+		scen2.setFrom(20, 500, 2853);
+		tora = calc.calculateDistances(nineR, scen2, 300, "Towards").get(0);
+		assertEquals(1850,tora);
+		tora = calc.calculateDistances(twentySevenL, scen2, 300, "away").get(0);
+		assertEquals(2860,tora);
 		
-		ArrayList<Integer> thresholds = calc.calculateDistances(nineL, obstacle, 300);
-		System.out.println("TORA (3346): " + thresholds.get(0));
-		System.out.println("TODA (3346): " + thresholds.get(1));
-		System.out.println("ASDA (3346): " + thresholds.get(2));
-		System.out.println("LDA (2985): " + thresholds.get(3));
-		assertEquals("09L Away/Over TORA", 3346, (int) thresholds.get(0));
-		assertEquals("09L Away/Over TODA", 3346, (int) thresholds.get(1));
-		assertEquals("09L Away/Over ASDA", 3346, (int) thresholds.get(2));
-		assertEquals("09L Away/Over LDA", 2985, (int) thresholds.get(3));
+
+		Obstacle scen3 = new Obstacle("Test Object", 50, 50, 15);
+		scen3.setFrom(60, 3203, 150);
+		tora = calc.calculateDistances(nineR, scen3, 300, "away").get(0);
+		assertEquals(2903,tora);
+		tora = calc.calculateDistances(twentySevenL, scen3, 300, "towards").get(0);
+		assertEquals(2393,tora);
 		
+
+		Obstacle scen4 = new Obstacle("Test Object", 50, 50, 20);
+		scen4.setFrom(20, 3546, 50);
+		tora = calc.calculateDistances(nineL, scen4, 300, "Towards").get(0);
+		assertEquals(2792,tora);
+		tora = calc.calculateDistances(twentySevenR, scen4, 300, "away").get(0);
+		assertEquals(3534,tora);
 	}
-//	
-//	@Test
-//	public void testScenario1Toward() {
-//		Obstacle obstacle = new Obstacle("Test Object", 50 ,50,12, -10, 10);
-//		
-//		ArrayList<Integer> thresholds = calc.calculateDistances(twentySevenR, obstacle, 300);
-//		System.out.println("TORA (2986): " + thresholds.get(0));
-//		System.out.println("TODA (2986): " + thresholds.get(1));
-//		System.out.println("ASDA (2986): " + thresholds.get(2));
-//		System.out.println("LDA (3346): " + thresholds.get(3));
-//		assertEquals("09L Away/Over TORA", 2984, (int) thresholds.get(0));
-//		assertEquals("09L Away/Over TODA", 2984, (int) thresholds.get(1));
-//		assertEquals("09L Away/Over ASDA", 2984, (int) thresholds.get(2));
-//		assertEquals("09L Away/Over LDA", 3346, (int) thresholds.get(3));
-//		
-//	}
+	
+	@Test
+	public void testTODA() {
+		Obstacle scen1 = new Obstacle("Test Object", 50, 50, 12);
+		scen1.setFrom(0, -50, 3646);
+		int toda = calc.calculateDistances(nineL, scen1, 300, "away").get(1);
+		assertEquals(3346,toda);
+		toda = calc.calculateDistances(twentySevenR, scen1, 300, "towards").get(1);
+		assertEquals(2986,toda);
+
+		Obstacle scen2 = new Obstacle("Test Object", 50, 50, 25);
+		scen2.setFrom(20, 500, 2853);
+		toda = calc.calculateDistances(nineR, scen2, 300, "TowArds").get(1);
+		assertEquals(1850,toda);
+		toda = calc.calculateDistances(twentySevenL, scen2, 300, "away").get(1);
+		assertEquals(2860,toda);
+		
+
+		Obstacle scen3 = new Obstacle("Test Object", 50, 50, 15);
+		scen3.setFrom(60, 3203, 150);
+		toda = calc.calculateDistances(nineR, scen3, 300, "away").get(1);
+		assertEquals(2903,toda);
+		toda = calc.calculateDistances(twentySevenL, scen3, 300, "towards").get(1);
+		assertEquals(2393,toda);
+		
+
+		Obstacle scen4 = new Obstacle("Test Object", 50, 50, 20);
+		scen4.setFrom(20, 3546, 50);
+		toda = calc.calculateDistances(nineL, scen4, 300, "Towards").get(1);
+		assertEquals(2792,toda);
+		toda = calc.calculateDistances(twentySevenR, scen4, 300, "away").get(1);
+		assertEquals(3612,toda);
+	}
+	
+	@Test
+	public void testASDA() {
+		Obstacle scen1 = new Obstacle("Test Object", 50, 50, 12);
+		scen1.setFrom(0, -50, 3646);
+		int asda = calc.calculateDistances(nineL, scen1, 300, "away").get(0);
+		assertEquals(3346,asda);
+		asda = calc.calculateDistances(twentySevenR, scen1, 300, "towards").get(0);
+		assertEquals(2986,asda);
+
+		Obstacle scen2 = new Obstacle("Test Object", 50, 50, 25);
+		scen2.setFrom(20, 500, 2853);
+		asda = calc.calculateDistances(nineR, scen2, 300, "Towards").get(0);
+		assertEquals(1850,asda);
+		asda = calc.calculateDistances(twentySevenL, scen2, 300, "away").get(0);
+		assertEquals(2860,asda);
+		
+
+		Obstacle scen3 = new Obstacle("Test Object", 50, 50, 15);
+		scen3.setFrom(60, 3203, 150);
+		asda = calc.calculateDistances(nineR, scen3, 300, "away").get(0);
+		assertEquals(2903,asda);
+		asda = calc.calculateDistances(twentySevenL, scen3, 300, "towards").get(0);
+		assertEquals(2393,asda);
+		
+
+		Obstacle scen4 = new Obstacle("Test Object", 50, 50, 20);
+		scen4.setFrom(20, 3546, 50);
+		asda = calc.calculateDistances(nineL, scen4, 300, "Towards").get(0);
+		assertEquals(2792,asda);
+		asda = calc.calculateDistances(twentySevenR, scen4, 300, "away").get(0);
+		assertEquals(3534,asda);
+	}
+	
+	@Test
+	public void testLDA() {
+		Obstacle scen1 = new Obstacle("Test Object", 50, 50, 12);
+		scen1.setFrom(0, -50, 3646);
+		int lda = calc.calculateDistances(nineL, scen1, 300, "away").get(3);
+		assertEquals(2985,lda);
+		lda = calc.calculateDistances(twentySevenR, scen1, 300, "towards").get(3);
+		assertEquals(3346,lda);
+
+		Obstacle scen2 = new Obstacle("Test Object", 50, 50, 25);
+		scen2.setFrom(20, 500, 2853);
+		lda = calc.calculateDistances(nineR, scen2, 300, "Towards").get(3);
+		assertEquals(2553,lda);
+		lda = calc.calculateDistances(twentySevenL, scen2, 300, "away").get(3);
+		assertEquals(1850,lda);
+		
+
+		Obstacle scen3 = new Obstacle("Test Object", 50, 50, 15);
+		scen3.setFrom(60, 3203, 150);
+		lda = calc.calculateDistances(nineR, scen3, 300, "away").get(3);
+		assertEquals(2393,lda);
+		lda = calc.calculateDistances(twentySevenL, scen3, 300, "towards").get(3);
+		assertEquals(2903,lda);
+		
+
+		Obstacle scen4 = new Obstacle("Test Object", 50, 50, 20);
+		scen4.setFrom(20, 3546, 50);
+		lda = calc.calculateDistances(nineL, scen4, 300, "Towards").get(3);
+		assertEquals(3246,lda);
+		lda = calc.calculateDistances(twentySevenR, scen4, 300, "away").get(3);
+		assertEquals(2774,lda);
+	}
 }
