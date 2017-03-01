@@ -233,8 +233,8 @@ public class Console
 					Integer lda = readInt("Enter LDA value for " + designator);
 					Integer displacedThreshold = readInt("Enter Displaced Threshold value for " + designator);
 					
-					LogicalRunway lr = new LogicalRunway(String.format("%02d" + letter, logicalAngle), runway, runwayLength, (j == 0) ? endStopway : startStopway, (j == 0) ? endClearway : startClearway);
-
+					LogicalRunway lr = new LogicalRunway(String.format("%02d" + letter, logicalAngle), runway, tora, toda, asda, lda, displacedThreshold, (j == 0) ? endStopway : startStopway, (j == 0) ? endClearway : startClearway);
+					runway.addLogicalRunway(lr);
 				}
 			}
 			
