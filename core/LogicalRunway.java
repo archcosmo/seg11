@@ -8,6 +8,7 @@ public class LogicalRunway {
     public int tora, toda, asda, lda, displacedThreshold;
 
     public LogicalRunway(String designator, Runway runway, int tora, int toda, int asda, int lda, int displacedThreshold, int stopwayLength) {
+    	this.runway = runway;
         this.designator = designator;
         this.tora = tora;
         this.toda = toda;
