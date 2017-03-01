@@ -3,20 +3,21 @@ package core;
 public class Obstacle {
 
 	String name;
-	int left; //Distance from start of runway to start of obstacle
-	int right; //Distance from start of runway to end of obstacle
-	int height;
-
-	//Distance from runway centre line to top/bottom of object in birds eye view, can be negative
-	int bottomYPos;
-	int topYPos;
+	int xPos = 0; //Distance from start of runway to start of obstacle
+	//Distance from runway centre line to top of object in birds eye view, can be negative
+	int yPos = 0;
 	
-	public Obstacle(String name, int left, int right, int height, int bottomYPos, int topYPos) {
+	int width, length, height;
+	
+	public Obstacle(String name, int width, int length, int height) {
 		this.name = name;
-		this.left = left;
-		this.right = right;
+		this.width = width;
+		this.length = length;
 		this.height = height;
-		this.bottomYPos = bottomYPos;
-		this.topYPos = topYPos;
+	}
+	
+	public void setPos(int xPos, int yPos) {
+		this.xPos = xPos;
+		this.yPos = yPos;
 	}
 }
