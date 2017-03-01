@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.management.AttributeNotFoundException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -162,33 +163,47 @@ public class XMLParser {
 
 			int tora, toda, asda, lda, displacedThreshold, stopwayLength, clearwayLength;
 			
-			tora = getAttributeValue(eLogicalRunway.getElementsByTagName("tora"));
-			if(tora == -1)
+			try {
+				tora = getAttributeValue(eLogicalRunway.getElementsByTagName("tora"));
+			} catch(AttributeNotFoundException e) {
 				throw new SAXException("TORA value not specified.");
+			}
 			
-			toda = getAttributeValue(eLogicalRunway.getElementsByTagName("toda"));
-			if(toda == -1)
+			try {
+				toda = getAttributeValue(eLogicalRunway.getElementsByTagName("toda"));
+			} catch(AttributeNotFoundException e) {
 				throw new SAXException("TODA value not specified.");
+			}
 			
-			asda = getAttributeValue(eLogicalRunway.getElementsByTagName("asda"));
-			if(asda == -1)
+			try {
+				asda = getAttributeValue(eLogicalRunway.getElementsByTagName("asda"));
+			} catch(AttributeNotFoundException e) {
 				throw new SAXException("ASDA value not specified.");
+			}
 			
-			lda = getAttributeValue(eLogicalRunway.getElementsByTagName("lda"));
-			if(lda == -1)
-				throw new SAXException("value not specified.");
+			try {
+				lda = getAttributeValue(eLogicalRunway.getElementsByTagName("lda"));
+			} catch(AttributeNotFoundException e) {
+				throw new SAXException("LDA value not specified.");
+			}
 			
-			displacedThreshold = getAttributeValue(eLogicalRunway.getElementsByTagName("displacedThreshold"));
-			if(displacedThreshold == -1)
-				throw new SAXException("value not specified.");
+			try {
+				displacedThreshold = getAttributeValue(eLogicalRunway.getElementsByTagName("displacedThreshold"));
+			} catch(AttributeNotFoundException e) {
+				throw new SAXException("Displaced Threshold value not specified.");
+			}
 			
-			stopwayLength = getAttributeValue(eLogicalRunway.getElementsByTagName("stopwayLength"));
-			if(stopwayLength == -1)
-				throw new SAXException("value not specified.");
+			try {
+				stopwayLength = getAttributeValue(eLogicalRunway.getElementsByTagName("stopwayLength"));
+			} catch(AttributeNotFoundException e) {
+				throw new SAXException("Stopway Length value not specified.");
+			}
 			
-			clearwayLength = getAttributeValue(eLogicalRunway.getElementsByTagName("clearwayLength"));
-			if(clearwayLength == -1)
-				throw new SAXException("value not specified.");
+			try {
+				clearwayLength = getAttributeValue(eLogicalRunway.getElementsByTagName("clearwayLength"));
+			} catch(AttributeNotFoundException e) {
+				throw new SAXException("Clearway Length value not specified.");
+			}
 			
 			return new LogicalRunway(logicalRunwayDesignator, parentRunway, tora, toda, asda, lda, displacedThreshold, stopwayLength, clearwayLength);
 		}
@@ -231,15 +246,118 @@ public class XMLParser {
 		return nThreshold;
 	}
 	
+	public static boolean saveObstacleInfoToXML(List<Obstacle> obstacles) throws IOException {
+		DocumentBuilder db;
+		try {
+			db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+
+			Document doc = db.newDocument();
+			Element eObstacleList = doc.createElement("obstaclelist");
+			doc.appendChild(eObstacleList);
+			
+			for(Obstacle obstacle: obstacles)
+				eObstacleList.appendChild(marshallObstacle(obstacle, doc));
+			
+			DOMSource xmlSource = new DOMSource(doc);
+			
+			FileWriter fw = new FileWriter(new File("xml/obstaclelist.xml"));
+			StreamResult outputTarget = new StreamResult(fw);
+			
+			Transformer transformer = TransformerFactory.newInstance().newTransformer();
+			transformer.transform(xmlSource, outputTarget);
+			
+			return true;
+			
+		} catch (ParserConfigurationException | TransformerException e) {
+			return false;
+		}
+	}
+	
+	private static Node marshallObstacle(Obstacle obstacle, Document doc) {
+		Element eObstacle = doc.createElement("obstacle");
+		eObstacle.setAttribute("name", obstacle.name);
+		
+		Element height = doc.createElement("height");
+		height.setTextContent("" + obstacle.height);
+		eObstacle.appendChild(height);
+		
+		Element width = doc.createElement("width");
+		width.setTextContent("" + obstacle.width);
+		eObstacle.appendChild(width);
+		
+		Element length = doc.createElement("length");
+		height.setTextContent("" + obstacle.length);
+		eObstacle.appendChild(length);
+		
+		return eObstacle;
+	}
+	
+	public static List<Obstacle> readObstacleInfoFromXML() throws IOException, SAXException, ParserConfigurationException {
+		//Load and parse XML file
+		DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+		Document doc = db.parse(new File("xml/obstaclelist.xml"));
+		doc.getDocumentElement().normalize();
+
+		Element eObstacleList = doc.getDocumentElement();
+		
+		//Check validity of the file
+		if(!eObstacleList.getNodeName().equals("obstaclelist"))
+			throw new SAXException("Misnamed root node, expect obstaclelist.");
+		
+		List<Obstacle> obstacleList = new ArrayList<Obstacle>();
+		NodeList obstacles = eObstacleList.getElementsByTagName("obstacle");
+		
+		for(int i = 0; i < obstacles.getLength(); i++)
+			obstacleList.add(unmarshallObstacle(obstacles.item(i)));
+		
+		return obstacleList;
+	}
+	
+	private static Obstacle unmarshallObstacle(Node nObstacle) throws SAXException {
+		if(nObstacle.getNodeType() == Node.ELEMENT_NODE) {
+			Element eObstacle = (Element) nObstacle;
+			String obstacleName = eObstacle.getAttribute("name");
+			
+			//Designator is an important attribute and must be checked for file validity
+			if(obstacleName.isEmpty())
+				throw new SAXException("Invalid file format: Obstacle name undefined.");
+			
+			int width, length, height;
+			
+			try {
+				width = getAttributeValue(eObstacle.getElementsByTagName("width"));
+			} catch(AttributeNotFoundException e) {
+				throw new SAXException("Width value not specified.");
+			}
+			
+			try {
+				length = getAttributeValue(eObstacle.getElementsByTagName("length"));
+			} catch(AttributeNotFoundException e) {
+				throw new SAXException("Length value not specified.");
+			}
+			
+			try {
+				height = getAttributeValue(eObstacle.getElementsByTagName("height"));
+			} catch(AttributeNotFoundException e) {
+				throw new SAXException("Height value not specified.");
+			}
+			
+			return new Obstacle(obstacleName, width, length, height);
+		}
+		else
+			throw new SAXException("Invalid file format.");
+	}
+	
 	/**
 	 * 
 	 * @param nodeList
 	 * @return Value of given attribute, -1 if attribute not specified in XML document.
 	 * @throws SAXException - when attribute has been defined more than once.
+	 * @throws AttributeNotFoundException - when attribute not found.
 	 */
-	private static int getAttributeValue(NodeList nodeList) throws SAXException {
+	private static int getAttributeValue(NodeList nodeList) throws SAXException, AttributeNotFoundException {
 		if(nodeList.getLength() == 0)
-			return -1;
+			throw new AttributeNotFoundException();
 
 		Node node = nodeList.item(0);
 

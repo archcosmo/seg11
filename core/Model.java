@@ -16,6 +16,12 @@ public class Model
 	Runway selectedRunway;
 	List<Obstacle> objects;
 
+	
+	
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//TODO: NEED TO HANDLE EXCEPTIONS IN A WAY WHICH DOESN'T DISRUPT PROGRAM FLOW AND GIVES USEFUL FEEDBACK TO THE USER//
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	public Model(Console view) 
 	{
 		this.view = view;
@@ -27,13 +33,24 @@ public class Model
 		this.objects = new ArrayList<Obstacle>();
 	}
 	
+	public boolean saveObjectInfoToFile() {
+		try {
+			XMLParser.saveObstacleInfoToXML(objects);
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	 
 	public boolean airportXMLInfoExists() {
 		return XMLParser.defaultXMLFileExists();
 	}
 	
 	public boolean saveAirportInfoToFile() {
 		try {
-			XMLParser.saveAirportInfoToXML(airports.get(0));
+			for(Airport airport : airports)
+				XMLParser.saveAirportInfoToXML(airport);
 			return true;
 		} catch (IOException e) {
 			e.printStackTrace();
