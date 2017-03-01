@@ -7,7 +7,7 @@ import org.junit.Test;
 
 public class CalculationsTest {
 	Calculations calc = new Calculations();
-	Runway testRunway = new Runway("Test Runway", 240, 300); //Using default values - changeable!
+	Runway testRunway = new Runway("Test Runway", 240, 300, 60); //Using default values - changeable!
 	LogicalRunway nineR = new LogicalRunway("09R", testRunway, 3660, 3660, 3660, 3353, 307, 0);
 	LogicalRunway twentySevenL = new LogicalRunway("27L", testRunway, 3660, 3660 ,3660, 3660, 0, 0);
 	LogicalRunway nineL = new LogicalRunway("09L", testRunway, 3902, 3902, 3902, 3595, 306, 0);
@@ -89,7 +89,7 @@ public class CalculationsTest {
 		assertEquals(2986,asda);
 
 		Obstacle scen2 = new Obstacle("Test Object", 50, 50, 25);
-		scen2.setFrom(20, 500, 2853);
+		scen2.setFrom(-20, 500, 2853);
 		asda = calc.calculateDistances(nineR, scen2, 300, "Towards").get(0);
 		assertEquals(1850,asda);
 		asda = calc.calculateDistances(twentySevenL, scen2, 300, "away").get(0);
