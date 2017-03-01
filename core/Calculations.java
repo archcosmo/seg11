@@ -25,26 +25,26 @@ public class Calculations {
 
 		//TODO: displaced thresholds
 		//TODO: obstacle distance: from which end of runway?
-		double obstacleMidXPosition = obstacle.left + ((obstacle.right - obstacle.left) / 2.0);
+		double obstacleMidXPosition = obstacle.xPos + ((obstacle.width) / 2.0);
         //Calculate which half of runway, the obstacle is on
         if (obstacleMidXPosition > (logicalRunway.tora / 2.0)) {
             //Take off / land before obstacle
             int ALSWidth = DEFAULT_ANGLE_OF_DESCENT * obstacle.height;
-            int ALSDistance = logicalRunway.tora - obstacle.left - ALSWidth;
+            int ALSDistance = logicalRunway.tora - obstacle.xPos - ALSWidth;
             newTora = logicalRunway.tora - logicalRunway.stopwayLength - Math.max(DEFAULT_RESA, ALSDistance);
             newToda = newTora;
             newAsda = newTora;
-            newLda = obstacle.left -(DEFAULT_RESA + logicalRunway.stopwayLength);
+            newLda = obstacle.xPos -(DEFAULT_RESA + logicalRunway.stopwayLength);
         } else {
             //Take off / land after obstacle
             if (blastAllowance == -1) {
                 blastAllowance = DEFAULT_BLAST_ALLOWANCE;
             }
-            newTora = logicalRunway.tora - obstacle.left;
-            newToda = logicalRunway.toda - obstacle.left - logicalRunway.clearwayLength;
-            newAsda = logicalRunway.asda - obstacle.left - logicalRunway.stopwayLength;
+            newTora = logicalRunway.tora - obstacle.xPos;
+            newToda = logicalRunway.toda - obstacle.xPos - logicalRunway.clearwayLength;
+            newAsda = logicalRunway.asda - obstacle.xPos - logicalRunway.stopwayLength;
             int ALSWidth = DEFAULT_ANGLE_OF_DESCENT * obstacle.height;
-            newLda = logicalRunway.tora - obstacle.left - Math.max(blastAllowance, logicalRunway.stopwayLength + Math.max(DEFAULT_RESA, ALSWidth));
+            newLda = logicalRunway.tora - obstacle.xPos - Math.max(blastAllowance, logicalRunway.stopwayLength + Math.max(DEFAULT_RESA, ALSWidth));
         }
         //TODO: return new Threshold Class
         ArrayList<Integer> thresholds = new ArrayList<>();

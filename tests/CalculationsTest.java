@@ -23,7 +23,8 @@ public class CalculationsTest {
 		 *	of the threshold. The same obstacle is 3646m from the 27R threshold
 		 * 
 		 */
-		Obstacle obstacle = new Obstacle("Test Object", -50, -50, 12, -10, 10);
+		Obstacle obstacle = new Obstacle("Test Object", -50, -50, 12);
+		obstacle.setPos(-10, 10);
 		
 		ArrayList<Integer> thresholds = calc.calculateDistances(nineL, obstacle, 300);
 		System.out.println("TORA (3346): " + thresholds.get(0));

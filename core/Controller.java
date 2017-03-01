@@ -1,5 +1,7 @@
 package core;
 
+import sun.rmi.runtime.Log;
+
 import java.util.List;
 
 public class Controller 
@@ -63,7 +65,7 @@ public class Controller
 		}
 	}
 	
-	public boolean addThreshold(Integer airportId, Integer runwayId, Threshold threshold) {
+	public boolean addLogicalRunway(Integer airportId, Integer runwayId, LogicalRunway logicalRunway) {
 		try {
 			Airport airport = model.getAirports().get(airportId);
 			if(airport == null)
@@ -73,7 +75,7 @@ public class Controller
 			if(runway == null)
 				return false;
 
-			runway.addThreshold(threshold);
+			runway.addLogicalRunway(logicalRunway);
 			model.saveAirportInfoToFile();
 			return true;
 		} catch(IndexOutOfBoundsException e) {

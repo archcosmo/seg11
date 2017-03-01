@@ -128,12 +128,12 @@ public class XMLParser {
 	private static Runway unmarshallRunway(Node nRunway) throws SAXException {
 		if(nRunway.getNodeType() == Node.ELEMENT_NODE) {
 			Element eRunway = (Element) nRunway;
-			Runway runway = new Runway(eRunway.getAttribute("name"));
+			Runway runway = new Runway(eRunway.getAttribute("name"), -1, -1);
 			
 			//Build Thresholds
 			NodeList thresholds = eRunway.getElementsByTagName("threshold");
 			for(int j = 0; j < thresholds.getLength(); j++)
-				runway.addThreshold(unmarshallThreshold(thresholds.item(j)));
+				runway.addLogicalRunway(unmarshallLogicalRunway(thresholds.item(j)));
 			
 			return runway;
 		}
@@ -145,63 +145,67 @@ public class XMLParser {
 		Element nRunway = doc.createElement("runway");
 		nRunway.setAttribute("name", runway.name);
 		
-		for(Threshold threshold : runway.thresholds)
-			nRunway.appendChild(marshallThreshold(threshold, doc));
+		for(LogicalRunway logicalRunway: runway.logicalRunways)
+			nRunway.appendChild(marshallLogicalRunway(logicalRunway, doc));
 		
 		return nRunway;
 	}
 	
-	private static Threshold unmarshallThreshold(Node nThreshold) throws SAXException {
-		if(nThreshold.getNodeType() == Node.ELEMENT_NODE) {
-			Element eThreshold = (Element) nThreshold;
-			String thresholdDesignator = eThreshold.getAttribute("designator");
+	private static LogicalRunway unmarshallLogicalRunway(Node nLogicalRunway) throws SAXException {
+		if(nLogicalRunway.getNodeType() == Node.ELEMENT_NODE) {
+			Element eLogicalRunway = (Element) nLogicalRunway;
+			String logicalRunwayDesignator = eLogicalRunway.getAttribute("designator");
 			
 			//Designator is an important attribute and must be checked for file validity
-			if(thresholdDesignator.isEmpty())
+			if(logicalRunwayDesignator.isEmpty())
 				throw new SAXException("Invalid file format: Threshold Designator undefined.");
-			
+
+			Runway runway;
 			int tora, toda, asda, lda;
+
+			//TODO: get Runway and throw SAXException (might have to pass runway into method?)
+			runway = getAttributeValue(eLogicalRunway.getElementsByTagName("runway"));
 			
-			tora = getAttributeValue(eThreshold.getElementsByTagName("tora"));
+			tora = getAttributeValue(eLogicalRunway.getElementsByTagName("tora"));
 			if(tora == -1)
 				throw new SAXException("TORA value not specified.");
 			
-			toda = getAttributeValue(eThreshold.getElementsByTagName("toda"));
+			toda = getAttributeValue(eLogicalRunway.getElementsByTagName("toda"));
 			if(toda == -1)
 				throw new SAXException("TODA value not specified.");
 			
-			asda = getAttributeValue(eThreshold.getElementsByTagName("asda"));
+			asda = getAttributeValue(eLogicalRunway.getElementsByTagName("asda"));
 			if(asda == -1)
 				throw new SAXException("ASDA value not specified.");
 			
-			lda = getAttributeValue(eThreshold.getElementsByTagName("lda"));
+			lda = getAttributeValue(eLogicalRunway.getElementsByTagName("lda"));
 			if(lda == -1)
 				throw new SAXException("value not specified.");
 			
-			return new Threshold(thresholdDesignator, tora, toda, asda, lda);
+			return new LogicalRunway(logicalRunwayDesignator, runway, tora, toda, asda, lda);
 		}
 		else
 			throw new SAXException("Invalid file format.");
 	}
 	
-	private static Node marshallThreshold(Threshold threshold, Document doc) {
+	private static Node marshallLogicalRunway(LogicalRunway logicalRunway, Document doc) {
 		Element nThreshold = doc.createElement("threshold");
-		nThreshold.setAttribute("designator", threshold.designator);
+		nThreshold.setAttribute("designator", logicalRunway.designator);
 		
 		Element tora = doc.createElement("tora");
-		tora.setTextContent("" + threshold.tora);
+		tora.setTextContent("" + logicalRunway.tora);
 		nThreshold.appendChild(tora);
 		
 		Element toda = doc.createElement("toda");
-		toda.setTextContent("" + threshold.toda);
+		toda.setTextContent("" + logicalRunway.toda);
 		nThreshold.appendChild(toda);
 		
 		Element asda = doc.createElement("asda");
-		asda.setTextContent("" + threshold.asda);
+		asda.setTextContent("" + logicalRunway.asda);
 		nThreshold.appendChild(asda);
 		
 		Element lda = doc.createElement("lda");
-		lda.setTextContent("" + threshold.lda);
+		lda.setTextContent("" + logicalRunway.lda);
 		nThreshold.appendChild(lda);
 		
 		return nThreshold;
