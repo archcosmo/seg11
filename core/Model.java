@@ -104,7 +104,7 @@ public class Model
 				if (r.name.equals((name)))
 					return false;
 			}
-			selectedAirport.runways.add(new Runway(name));
+			selectedAirport.runways.add(new Runway(name, -1, -1));
 			return true;
 		}
 		return false;
@@ -137,7 +137,7 @@ public class Model
 				return false;
 			}
 		}
-		objects.add(new Obstacle(height, width, length, name));
+		objects.add(new Obstacle(name, width, length, height));
 		return true;
 	}
 

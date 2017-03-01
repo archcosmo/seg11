@@ -196,7 +196,7 @@ public class Console
 				continue;
 			}
 
-			Runway runway = new Runway(runwayName);
+			Runway runway = new Runway(runwayName, -1, -1);
 			
 			Integer angle = readInt("Enter an angle for the runway", 0, 359);
 			Integer noRunways = readInt("Enter number of logical runways", 1, 3);
@@ -227,7 +227,7 @@ public class Console
 					}
 					
 					Integer logicalAngle = (j == 0) ? angle : 36 - angle;
-					LogicalRunway lr = new LogicalRunway(String.format("%02d" + letter, logicalAngle), runwayLength, (j == 0) ? endStopway : startStopway, (j == 0) ? endClearway : startClearway);
+					LogicalRunway lr = new LogicalRunway(String.format("%02d" + letter, logicalAngle), runway, runwayLength, (j == 0) ? endStopway : startStopway, (j == 0) ? endClearway : startClearway);
 				}
 			}
 			

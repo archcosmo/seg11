@@ -3,7 +3,7 @@ package core;
 public class LogicalRunway {
 
 	String designator;
-	Runway runway;
+	public Runway runway;
     int stopwayLength, clearwayLength;
     public int tora, toda, asda, lda;
 
