@@ -22,8 +22,7 @@ public class Calculations {
 		int newAsda;
 		int newLda;
 
-		if (Math.abs(obstacle.distanceFromThreshold) < 75 &&
-			Math.abs(obstacle.distanceFromThreshold) < 60 ) {
+		if (Math.abs(obstacle.distanceFromThreshold) > 75 && (obstacle.distanceFromThreshold > 60 || obstacle.distanceFromThreshold > logicalRunway.tora + 60)) {
 			ArrayList<Integer> thresholds = new ArrayList<>();
 			thresholds.add(logicalRunway.tora);
 			thresholds.add(logicalRunway.toda);
