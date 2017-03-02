@@ -86,7 +86,6 @@ public class Controller
 		return true;
 	}
 	
-	//TODO: Replace the false return with exceptions so more detailed error messages can be passed back.
 	private boolean addRunway(Integer airportId, Runway runway) {
 		try {
 			Airport airport = model.getAirports().get(airportId);
