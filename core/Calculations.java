@@ -28,6 +28,8 @@ public class Calculations {
 
 		int RESA = logicalRunway.runway.RESA;
 
+		int fromThresh = obstacle.distanceFromThreshold;
+		
 //		double obstacleMidXPosition = obstacle.xPos + ((obstacle.length) / 2.0);
 //		if (obstacleMidXPosition > (logicalRunway.tora / 2.0)) {
 		if (direction.equalsIgnoreCase("towards")){
