@@ -244,11 +244,17 @@ public class Controller
 		if(!model.selectRunway(ID))
 			return false;
 		view.selectThreshold(model.selectedRunway);
+		if(model.selectedObstacle != null)
+			selectObstacle(model.getObjects().indexOf(model.selectedObstacle));
 		return true;
 	}
 	
 	public boolean selectThreshold(int ID) {
-		return model.selectThreshold(ID);
+		if(!model.selectThreshold(ID))
+			return false;
+		if(model.selectedObstacle != null)
+			selectObstacle(model.getObjects().indexOf(model.selectedObstacle));
+		return true;
 	}
 
 	public void deleteAirport(int iD) {}
