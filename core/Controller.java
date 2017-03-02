@@ -1,5 +1,6 @@
 package core;
 
+import java.awt.Point;
 import java.util.List;
 
 public class Controller 
@@ -205,8 +206,11 @@ public class Controller
 //	}
 	
 	public List<Airport> getAirports() { return model.getAirports(); }
+	public Airport getSelectedAirport() { return model.selectedAirport; }
 	public List<Runway> getRunways() { return model.getRunways(); }
+	public LogicalRunway getSelectedLogicalRunway() { return model.selectedLogicalRunway; }
 	public List<Obstacle> getObstacles() { return model.getObjects(); }
+	public Obstacle getSelectedObstacle() { return model.selectedObstacle; }
 
 	/* Safely closes application */
 	private void quit() 
@@ -223,9 +227,29 @@ public class Controller
 	public void getStatus() {}
 
 	/* Return false if ID does not exist */
-	public boolean selectObject(int ID) { return false; }
-	public boolean selectAirport(int ID) { return model.selectAirport(ID);}
-	public boolean selectRunway(int ID) { return false; }
+	public boolean selectObstacle(int ID) {
+		Point p = view.getObstaclePosition();
+		return model.selectObstacle(ID, p.x, p.y);
+	}
+	
+	public void clearObstacle() {
+		model.clearObstacle();
+	}
+	
+	public boolean selectAirport(int ID) {
+		return model.selectAirport(ID);
+	}
+	
+	public boolean selectRunway(int ID) {
+		if(!model.selectRunway(ID))
+			return false;
+		view.selectThreshold(model.selectedRunway);
+		return true;
+	}
+	
+	public boolean selectThreshold(int ID) {
+		return model.selectThreshold(ID);
+	}
 
 	public void deleteAirport(int iD) {}
 	public void deleteRunway(int iD) {}

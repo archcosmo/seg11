@@ -23,13 +23,14 @@ public class Calculations {
 		//TODO: displaced thresholds
 		//TODO: obstacle distance: from which end of runway?
 
-		int fromThresh = (logicalRunway.designator.endsWith("R")) ? obstacle.fromR : obstacle.fromL; //TODO: what about 'C' runways - both directions is C
 		int ALSWidth = DEFAULT_ANGLE_OF_DESCENT * obstacle.height;
 		lastCalculationBreakdown =  new StringBuilder();
 
 		int RESA = logicalRunway.runway.RESA;
 
-		double obstacleMidXPosition = obstacle.xPos + ((obstacle.length) / 2.0);
+		int fromThresh = obstacle.distanceFromThreshold;
+		
+		double obstacleMidXPosition = fromThresh + ((obstacle.length) / 2.0);
 		if (obstacleMidXPosition > (logicalRunway.tora / 2.0)) {
 			//Take off towards/ land towards obstacle
 

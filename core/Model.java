@@ -14,6 +14,8 @@ public class Model
 	List<Airport> airports;
 	Airport selectedAirport;
 	Runway selectedRunway;
+	LogicalRunway selectedLogicalRunway;
+	Obstacle selectedObstacle;
 	List<Obstacle> obstacles;
 
 	
@@ -231,14 +233,33 @@ public class Model
 		}
 		catch(IndexOutOfBoundsException e) { return false; }
 	}
+	
+	public boolean selectThreshold(int id) {
+		try{
+			this.selectedLogicalRunway = selectedRunway.logicalRunways.get(id);
+			return true;
+		}
+		catch(IndexOutOfBoundsException e) { return false; }
+	}
 
 	/* Takes string
 	 * resolves string to object
 	 * returns false if string != object name
 	 */
-	public boolean selectObject(int id) // Add distance values 
+	public boolean selectObstacle(int id, int xPos, int yPos) // Add distance values 
 	{
-		return false;
+		try {
+			this.selectedObstacle = obstacles.get(id);
+			this.selectedObstacle.setPosition(xPos, yPos);
+			return true;
+		} catch(IndexOutOfBoundsException e) {
+			return false;
+		}
+	}
+	
+	public boolean clearObstacle() {
+		this.selectedObstacle = null;
+		return true;
 	}
 
 	/* Removes current object reference

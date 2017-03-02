@@ -1,6 +1,8 @@
 package core;
 
-		/* TODO:
+		import java.awt.Point;
+
+/* TODO:
 		 * list_objects
 		 * printCalculations
 		 * printAnswers
@@ -10,7 +12,6 @@ package core;
 
 import java.util.List;
 import java.util.Scanner;
-import java.util.concurrent.TimeUnit;
 
 public class Console 
 {
@@ -301,7 +302,7 @@ public class Console
 			if ( input.length == 1 ) 
 			{
 				System.out.println("To use the application, use the following commands:"); 
-				System.out.println("** NT: type = airport(s), runway(s), object(s); (Use of plural where appropriate)"); 
+				System.out.println("** NT: type = airport(s), runway(s), threshold(s), obstacle(s); (Use of plural where appropriate)"); 
 				System.out.println("* list (types*)"); 
 				System.out.println("* select (type) (id)");
 				System.out.println("** NT: select object null   -- Clears object");
@@ -329,11 +330,18 @@ public class Console
 				case "runways":
 					list_runways(controller.getRunways());
 					break;
+				case "thresholds":
+					LogicalRunway lr = controller.getSelectedLogicalRunway();
+					if(lr != null)
+						list_thresholds(lr.runway.logicalRunways);
+					else
+						System.out.println("No runway is select, use 'select runway [runway_id]'");
+					break;
 				case "obstacles":
 					list_obstacles(controller.getObstacles());
 					break;
 				default:
-					System.out.println("Invalid argument to command 'list (type)'\n : Valid types are; 'airports', 'runways', 'objects'");
+					System.out.println("Invalid argument to command 'list (type)'\n : Valid types are; 'airports', 'runways', 'thresholds', 'obstacles'");
 					break;
 				}
 			} else { wrong_args(input); }
@@ -367,7 +375,7 @@ public class Console
 					controller.createObstacle();
 					break;
 				default:
-					System.out.println("Invalid argument to command 'list (type)'\n : Valid types are; 'airports', 'runways', 'objects'");
+					System.out.println("Invalid argument to command 'list (type)'\n : Valid types are; 'airports', 'runways', 'obstacles'");
 					break;
 				}
 			} else { wrong_args(input); }
@@ -375,42 +383,81 @@ public class Console
 		case "delete":
 			if ( input.length == 3 && isInt(input[2])) 
 			{
-				int ID = Integer.parseInt(input[2]);
-				switch ( input[1] )
-				{
-				case "airport":
-					controller.deleteAirport(ID);
-					break;
-				case "runway":
-					controller.deleteRunway(ID);
-					break;
-				case "obstacle":
-					controller.deleteObject(ID);
-					break;
-				default:
-					System.out.println("Invalid argument to command 'delete (type) (id)'\n : Valid types are; 'airport', 'runway', 'object'");
-					break;
+				try {
+					int ID = Integer.parseInt(input[2]);
+					switch ( input[1] )
+					{
+					case "airport":
+						controller.deleteAirport(ID);
+						break;
+					case "runway":
+						controller.deleteRunway(ID);
+						break;
+					case "obstacle":
+						controller.deleteObject(ID);
+						break;
+					default:
+						System.out.println("Invalid argument to command 'delete (type) (id)'\n : Valid types are; 'airport', 'runway', 'obstacle'");
+						break;
+					}
+				} catch (NumberFormatException e) {
+					System.out.println("Invalid argument to command 'delete (type) (id)'\n : Expected number for id, but " + input[2] + " was given.");
 				}
 			} else { wrong_args(input); }
 			break;
 		case "select":
-			if ( input.length == 3 && isInt(input[2])) 
+			if ( input.length == 3) 
 			{
-				int ID = Integer.parseInt(input[2]);
-				switch ( input[1] )
-				{
-				case "airport":
-					controller.selectAirport(ID);
-					break;
-				case "runway":
-					controller.selectRunway(ID);
-					break;
-				case "object":
-					controller.selectObject(ID);
-					break;
-				default:
-					System.out.println("Invalid argument to command 'select (type) (id)'\n : Valid types are; 'airport', 'runway', 'object'");
-					break;
+				try {
+					int ID = 0;
+					if(!(input[1].equals("obstacle") && input[2].equals("null")))
+						ID = Integer.parseInt(input[2]);
+					switch ( input[1] )
+					{
+					case "airport":
+						if(controller.selectAirport(ID)) {
+							System.out.println("Selected airport: " + controller.getSelectedAirport().name);
+						}
+						else
+							System.out.println("Invalid airport ID, use 'list airports' to get a list of airport IDs.");
+						break;
+					case "runway":
+						if(controller.selectRunway(ID)) {
+							LogicalRunway selectedLr = controller.getSelectedLogicalRunway();
+							System.out.println(selectedLr.designator + " threshold selected on " + selectedLr.runway.name + ".");
+						}
+						else
+							System.out.println("Invalid runway ID, use 'list runways' to get a list of runway IDs.");
+						break;
+					case "threshold":
+						if(controller.selectThreshold(ID)) {
+							LogicalRunway selectedLr = controller.getSelectedLogicalRunway();
+							System.out.println(selectedLr.designator + " threshold selected on " + selectedLr.runway.name + ".");
+						}
+						else
+							System.out.println("Invalid threshold ID, use 'list thresholds' to get a list of threshold IDs for the currently selected runway.");
+						break;
+					case "obstacle":
+						if(controller.getSelectedLogicalRunway() == null)
+							System.out.println("Select a runway with 'select runway [runway_id]' before adding an obstacle.");
+						else if(input[2].equals("null")) {
+							controller.clearObstacle();
+							System.out.println("Runway is cleared of obstacles.");
+						}
+						else if(controller.selectObstacle(ID)) {
+							Obstacle selectedObstacle = controller.getSelectedObstacle();
+							LogicalRunway selectedLr = controller.getSelectedLogicalRunway();
+							System.out.println("Added " + selectedObstacle.name + " to " + selectedLr.runway.name + " " + Math.abs(selectedObstacle.distanceFromThreshold) + "m " + (selectedObstacle.distanceFromThreshold < 0 ? "before" : "after") + " " + selectedLr.designator + " threshold and " + Math.abs(selectedObstacle.distanceFromCenterline) + "m " + (selectedObstacle.distanceFromCenterline < 0 ? "south" : "north") + " of centerline.");
+						}
+						else
+							System.out.println("Invalid obstacle ID, use 'list obstacles' to get a list of object IDs.");
+						break;
+					default:
+						System.out.println("Invalid argument to command 'select (type) (id)'\n : Valid types are; 'airport', 'runway', 'threshold', 'obstacle'");
+						break;
+					}
+				} catch (NumberFormatException e) {
+					System.out.println("Invalid argument to command 'select (type) (id)'\n : Expected number for id, but " + input[2] + " was given.");
 				}
 			} else { wrong_args(input); }
 			break;
@@ -477,6 +524,16 @@ public class Console
 		}
 	}
 	
+	private void list_thresholds(List<LogicalRunway> lrs) {
+		if(lrs.size() == 0)
+			System.out.println("There are no thresholds configured for this runway. Add a new runway with 'add runway' to set up a new runway with thresholds.");
+		
+		for(int i = 0; i < lrs.size(); i++) {
+			LogicalRunway lr = lrs.get(i);
+			System.out.println("[" + i + "] : " + lr.designator);
+		}
+	}
+	
 	private void list_obstacles(List<Obstacle> obstacles) {
 		if(obstacles.size() == 0)
 			System.out.println("There are no obstacles registered to the system. Add some with 'add obstacle'");
@@ -492,6 +549,21 @@ public class Console
 	{
 		for ( int i = 0; i < input.length; i++) System.out.print(input[i] + " ");
 		System.out.println(" : Invalid number of arguments");
+	}
+	
+	public Point getObstaclePosition() {
+		Integer x = readInt("Enter the obstacle's distance from the " + controller.getSelectedLogicalRunway().designator + " threshold.\n(Negative for before threshold, Positive for after threshold)");
+		Integer y = readInt("Enter the obstacle's distance from the centerline\n(Positive for north of centerline, Negative for south of centerline)");
+		
+		return new Point(x, y);
+	}
+	
+	public void selectThreshold(Runway runway) {
+		String prompt = "Select a threshold to use for " + runway.name + ":\n";
+		for(int i = 0; i < runway.logicalRunways.size(); i++) {
+			prompt += "[" + i + "] : " + runway.logicalRunways.get(i).designator + "\n";
+		}
+		controller.selectThreshold(readInt(prompt, 0, runway.logicalRunways.size() - 1));
 	}
 	
 	/* Displays  sign 
