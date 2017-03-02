@@ -9,7 +9,7 @@ public class Calculations {
 	private static final int DEFAULT_BLAST_ALLOWANCE = 300;
 	private StringBuilder lastCalculationBreakdown;
 
-	public ArrayList<Integer> calculateDistances(LogicalRunway logicalRunway, Obstacle obstacle) {
+	public ArrayList<Integer> calculateDistances(LogicalRunway logicalRunway, Obstacle obstacle, String direction) {
 		int newTora;
 		int newToda;
 		int newAsda;
@@ -29,8 +29,9 @@ public class Calculations {
 
 		int RESA = logicalRunway.runway.RESA;
 
-		double obstacleMidXPosition = obstacle.xPos + ((obstacle.length) / 2.0);
-		if (obstacleMidXPosition > (logicalRunway.tora / 2.0)) {
+//		double obstacleMidXPosition = obstacle.xPos + ((obstacle.length) / 2.0);
+//		if (obstacleMidXPosition > (logicalRunway.tora / 2.0)) {
+		if (direction.equalsIgnoreCase("towards")){
 			//Take off towards/ land towards obstacle
 
 			newTora = fromThresh + logicalRunway.displacedThreshold - ALSWidth - logicalRunway.getStripEnd();
