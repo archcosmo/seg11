@@ -14,6 +14,7 @@ public class Calculations {
 			origValues.add(logicalRunway.toda);
 			origValues.add(logicalRunway.asda);
 			origValues.add(logicalRunway.lda);
+			return origValues;
 		}
 		
 		int newTora;
@@ -26,8 +27,6 @@ public class Calculations {
 		//	return logicalRunway.getThresholdClass
 		//}
 
-		//TODO: displaced thresholds
-		//TODO: obstacle distance: from which end of runway?
 
 		int ALSWidth = DEFAULT_ANGLE_OF_DESCENT * obstacle.height;
 		lastCalculationBreakdown =  new StringBuilder();
