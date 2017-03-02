@@ -13,6 +13,8 @@ package core;
 import java.util.List;
 import java.util.Scanner;
 
+import com.sun.media.sound.InvalidDataException;
+
 
 public class Console 
 {
@@ -354,7 +356,10 @@ public class Console
 				System.out.println("** NT: select object null   -- Clears object");
 				System.out.println("* add (type) (id)");
 				System.out.println("* delete (type) (id)"); 
-				System.out.println("* calculate [-v]"); 
+				System.out.println("* calculate [-v] [T|A]");
+				System.out.println("* | -v : Verbose, prints the calculation breakdown.");
+				System.out.println("* |  T : Take-off/Land towards selected threshold.");
+				System.out.println("* |  A : Take-off/Land away from selected threshold.");
 				System.out.println("* status"); 
 				System.out.println("* quit"); 
 			} else { wrong_args(input); }
@@ -508,14 +513,34 @@ public class Console
 			} else { wrong_args(input); }
 			break;
 		case "calculate":
-			if ( input.length == 1 ) 
+			if (input.length == 2 && (input[1].equalsIgnoreCase("T") || input[1].equalsIgnoreCase("A"))) 
 			{
-				controller.calculate(false);
-			}
-			else if (input[1] == "-v" )
-			{
+				try {
+					List<Integer> newValues = controller.calculate(false, null, input[1].equalsIgnoreCase("T"));
+					System.out.println("TORA: " + newValues.get(0));
+					System.out.println("TODA: " + newValues.get(1));
+					System.out.println("ASDA: " + newValues.get(2));
+					System.out.println("LDA: " + newValues.get(3));
+				} catch (InvalidDataException e) {
+					System.out.println(e.getMessage());
+				}
+			} 
+			else if(input.length == 3 && input[1].equalsIgnoreCase("-v") && (input[2].equalsIgnoreCase("T") || input[2].equalsIgnoreCase("A"))) {
 				//verbose, show calculations
-				controller.calculate(true);
+				try {
+					Calculations.BreakdownWrapper breakdown = new Calculations.BreakdownWrapper();
+					List<Integer> newValues = controller.calculate(true, breakdown, input[2].equalsIgnoreCase("T"));
+					
+					System.out.println("Breakdown\n---------\n" + breakdown.breakdownStr);
+					
+					System.out.println("\nResults\n-------");
+					System.out.println("TORA: " + newValues.get(0));
+					System.out.println("TODA: " + newValues.get(1));
+					System.out.println("ASDA: " + newValues.get(2));
+					System.out.println("LDA: " + newValues.get(3));
+				} catch (InvalidDataException e) {
+					System.out.println(e.getMessage());
+				}
 			} else { wrong_args(input); }
 			break;
 		case "status":
@@ -633,8 +658,8 @@ public class Console
 		if(lr != null) {
 			System.out.println("\nOriginal Values");
 			System.out.println("---------------");
-			System.out.println("TODA: " + lr.toda);
 			System.out.println("TORA: " + lr.tora);
+			System.out.println("TODA: " + lr.toda);
 			System.out.println("ASDA: " + lr.asda);
 			System.out.println("LDA: " + lr.lda);
 			System.out.println("Displaced Threshold: " + lr.displacedThreshold);

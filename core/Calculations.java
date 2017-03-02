@@ -7,7 +7,15 @@ public class Calculations {
 	private static final int DEFAULT_ANGLE_OF_DESCENT = 50; //TODO: given from runway?
 	private StringBuilder lastCalculationBreakdown;
 
-	public ArrayList<Integer> calculateDistances(LogicalRunway logicalRunway, Obstacle obstacle, String direction) {
+	public ArrayList<Integer> calculateDistances(LogicalRunway logicalRunway, Obstacle obstacle, boolean towards) {
+		if(obstacle == null) {
+			ArrayList<Integer> origValues = new ArrayList<Integer>();
+			origValues.add(logicalRunway.tora);
+			origValues.add(logicalRunway.toda);
+			origValues.add(logicalRunway.asda);
+			origValues.add(logicalRunway.lda);
+		}
+		
 		int newTora;
 		int newToda;
 		int newAsda;
@@ -30,7 +38,7 @@ public class Calculations {
 		
 //		double obstacleMidXPosition = obstacle.xPos + ((obstacle.length) / 2.0);
 //		if (obstacleMidXPosition > (logicalRunway.tora / 2.0)) {
-		if (direction.equalsIgnoreCase("towards")){
+		if (towards){
 			//Take off towards/ land towards obstacle
 
 			newTora = fromThresh + logicalRunway.displacedThreshold - ALSWidth - logicalRunway.getStripEnd();
@@ -99,5 +107,9 @@ public class Calculations {
 
 	public String getLastCalculationBreakdown() {
 		return lastCalculationBreakdown.toString();
+	}
+	
+	static class BreakdownWrapper {
+		public String breakdownStr;
 	}
 }

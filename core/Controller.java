@@ -3,6 +3,8 @@ package core;
 import java.awt.Point;
 import java.util.List;
 
+import com.sun.media.sound.InvalidDataException;
+
 public class Controller 
 {
 	Console view;
@@ -223,8 +225,20 @@ public class Controller
 
 	
 	/* Many of these types will have to be changed */
-	public void calculate(boolean b) {}
-	public void getStatus() {}
+	public List<Integer> calculate(boolean verbose, Calculations.BreakdownWrapper breakdown, boolean towards) throws InvalidDataException {
+		LogicalRunway lr = model.selectedLogicalRunway;
+		Obstacle o = model.selectedObstacle;
+		if(lr == null)
+			throw new InvalidDataException("Please select a runway and threshold.");
+		
+		Calculations calc = new Calculations();
+		List<Integer> newValues = calc.calculateDistances(lr, o, towards);
+		
+		if(verbose)
+			breakdown.breakdownStr = calc.getLastCalculationBreakdown();
+		
+		return newValues;
+	}
 
 	/* Return false if ID does not exist */
 	public boolean selectObstacle(int ID) {
