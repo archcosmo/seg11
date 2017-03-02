@@ -13,7 +13,6 @@ package core;
 import java.util.List;
 import java.util.Scanner;
 
-import javax.sound.midi.Synthesizer;
 
 public class Console 
 {
@@ -53,6 +52,28 @@ public class Console
 		
 	}
 	
+	private Integer readInt(String msg, int min, int max, int defaultResponse) {
+		while(true) {
+			String inputStr = prompt(msg + "(" + min + "-" + max + ")(Default: " + defaultResponse + "):");
+			
+			if(inputStr.isEmpty())
+				return defaultResponse;
+			
+			try{
+				Integer intgr = Integer.parseInt(inputStr);
+				
+				if(intgr < min || intgr > max)
+					throw new NumberFormatException();
+				
+				return intgr;
+				
+			} catch(NumberFormatException e) {
+				displayMessage("Expected integer between " + min + " and " + max + ", but " + inputStr + " was given.");
+				continue;
+			}
+		}
+	}
+	
 	private Integer readInt(String msg, int min, int max) {
 		while(true) {
 			String inputStr = prompt(msg + "(" + min + "-" + max + "):");
@@ -67,6 +88,25 @@ public class Console
 				
 			} catch(NumberFormatException e) {
 				displayMessage("Expected integer between " + min + " and " + max + ", but " + inputStr + " was given.");
+				continue;
+			}
+		}
+	}
+	
+	private Integer readInt(String msg, int defaultResponse) {
+		while(true) {
+			String inputStr = prompt(msg + "(Default: " + defaultResponse + "):");
+			
+			if(inputStr.isEmpty())
+				return defaultResponse;
+			
+			try{
+				Integer intgr = Integer.parseInt(inputStr);
+				
+				return intgr;
+				
+			} catch(NumberFormatException e) {
+				displayMessage("Expected integer, but " + inputStr + " was given.");
 				continue;
 			}
 		}
@@ -171,7 +211,11 @@ public class Console
 				continue;
 			}
 
-			Runway runway = new Runway(runwayName, -1, -1, -1);
+			Integer resa = readInt("Enter RESA value for runway", 240);
+			Integer blastAllowance = readInt("Enter blast allowance value for runway.", 300);
+			Integer stripEnd = readInt("Enter strip end value for runway");
+			
+			Runway runway = new Runway(runwayName, resa, blastAllowance, stripEnd);
 			
 			Integer angle = readInt("Enter an angle for the runway", 0, 359);
 			Integer noRunways = readInt("Enter number of logical runways", 1, 3);

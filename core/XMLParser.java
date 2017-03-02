@@ -127,24 +127,31 @@ public class XMLParser {
 	}
 	
 	private static Runway unmarshallRunway(Node nRunway) throws SAXException {
-		if(nRunway.getNodeType() == Node.ELEMENT_NODE) {
-			Element eRunway = (Element) nRunway;
-			Runway runway = new Runway(eRunway.getAttribute("name"), -1, -1, -1);
-			
-			//Build Thresholds
-			NodeList thresholds = eRunway.getElementsByTagName("threshold");
-			for(int j = 0; j < thresholds.getLength(); j++)
-				runway.addLogicalRunway(unmarshallLogicalRunway(runway, thresholds.item(j)));
-			
-			return runway;
-		}
-		else
+		try {
+			if(nRunway.getNodeType() == Node.ELEMENT_NODE) {
+				Element eRunway = (Element) nRunway;
+				Runway runway = new Runway(eRunway.getAttribute("name"), Integer.parseInt(eRunway.getAttribute("resa")), Integer.parseInt(eRunway.getAttribute("blastAllowance")), Integer.parseInt(eRunway.getAttribute("stripEnd")));
+
+				//Build Thresholds
+				NodeList thresholds = eRunway.getElementsByTagName("threshold");
+				for(int j = 0; j < thresholds.getLength(); j++)
+					runway.addLogicalRunway(unmarshallLogicalRunway(runway, thresholds.item(j)));
+
+				return runway;
+			}
+			else
+				throw new SAXException("Invalid file format.");
+		} catch(NumberFormatException e) {
 			throw new SAXException("Invalid file format.");
+		}
 	}
 	
 	private static Node marshallRunway(Runway runway, Document doc) {
 		Element nRunway = doc.createElement("runway");
 		nRunway.setAttribute("name", runway.name);
+		nRunway.setAttribute("resa", "" + runway.RESA);
+		nRunway.setAttribute("blastAllowance", "" + runway.blastAllowance);
+		nRunway.setAttribute("stripEnd", "" + runway.stripEnd);
 		
 		for(LogicalRunway logicalRunway: runway.logicalRunways)
 			nRunway.appendChild(marshallLogicalRunway(logicalRunway, doc));
@@ -161,7 +168,7 @@ public class XMLParser {
 			if(logicalRunwayDesignator.isEmpty())
 				throw new SAXException("Invalid file format: Threshold Designator undefined.");
 
-			int tora, toda, asda, lda, displacedThreshold, stopwayLength;
+			int tora, toda, asda, lda, stopwayLength;
 			
 			try {
 				tora = getAttributeValue(eLogicalRunway.getElementsByTagName("tora"));
@@ -185,12 +192,6 @@ public class XMLParser {
 				lda = getAttributeValue(eLogicalRunway.getElementsByTagName("lda"));
 			} catch(AttributeNotFoundException e) {
 				throw new SAXException("LDA value not specified.");
-			}
-			
-			try {
-				displacedThreshold = getAttributeValue(eLogicalRunway.getElementsByTagName("displacedThreshold"));
-			} catch(AttributeNotFoundException e) {
-				throw new SAXException("Displaced Threshold value not specified.");
 			}
 			
 			try {
@@ -224,10 +225,6 @@ public class XMLParser {
 		Element lda = doc.createElement("lda");
 		lda.setTextContent("" + logicalRunway.lda);
 		nThreshold.appendChild(lda);
-		
-		Element displacedThreshold = doc.createElement("displacedThreshold");
-		displacedThreshold.setTextContent("" + logicalRunway.displacedThreshold);
-		nThreshold.appendChild(displacedThreshold);
 		
 		Element stopwayLength = doc.createElement("stopwayLength");
 		stopwayLength.setTextContent("" + logicalRunway.stopwayLength);

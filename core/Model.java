@@ -135,14 +135,14 @@ public class Model
 	 * return false if runway name taken
 	 * return false if airport not selected
 	 */
-	public boolean addRunway(String name)
+	public boolean addRunway(String name, int resa, int blastAllowance, int stripEnd)
 	{
 		if (selectedAirport != null) {
 			for(Runway r : selectedAirport.runways) {
 				if (r.name.equals((name)))
 					return false;
 			}
-			selectedAirport.runways.add(new Runway(name, -1, -1, -1));
+			selectedAirport.runways.add(new Runway(name, resa, blastAllowance, stripEnd));
 			return true;
 		}
 		return false;

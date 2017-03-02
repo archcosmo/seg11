@@ -4,9 +4,7 @@ import java.util.ArrayList;
 
 public class Calculations {
 
-	private static final int DEFAULT_RESA = 240;
 	private static final int DEFAULT_ANGLE_OF_DESCENT = 50; //TODO: given from runway?
-	private static final int DEFAULT_BLAST_ALLOWANCE = 300;
 	private StringBuilder lastCalculationBreakdown;
 
 	public ArrayList<Integer> calculateDistances(LogicalRunway logicalRunway, Obstacle obstacle, String direction) {
