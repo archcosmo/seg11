@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Calculations {
 
-	private static final int DEFAULT_ANGLE_OF_DESCENT = 50; //TODO: given from runway?
+	private static final int DEFAULT_ANGLE_OF_DESCENT = 50;
 	private StringBuilder lastCalculationBreakdown;
 
 	public ArrayList<Integer> calculateDistances(LogicalRunway logicalRunway, Obstacle obstacle, boolean towards) {
@@ -21,13 +21,18 @@ public class Calculations {
 		int newAsda;
 		int newLda;
 
-		//TODO: if obstacle not inside cleared and graded area, no need to redeclare distances
+		if (Math.abs(obstacle.distanceFromThreshold) < 75 &&
+			Math.abs(obstacle.distanceFromThreshold) < 60 ) {
+			ArrayList<Integer> thresholds = new ArrayList<>();
+			thresholds.add(logicalRunway.tora);
+			thresholds.add(logicalRunway.toda);
+			thresholds.add(logicalRunway.asda);
+			thresholds.add(logicalRunway.lda);
+			return thresholds;
+		}
 		//if (obstacle.bottomYPos > topOfRunway || obstacle.topYPos < bottomOfRunway) {
 		//	return logicalRunway.getThresholdClass
 		//}
-
-		//TODO: displaced thresholds
-		//TODO: obstacle distance: from which end of runway?
 
 		int ALSWidth = DEFAULT_ANGLE_OF_DESCENT * obstacle.height;
 		lastCalculationBreakdown =  new StringBuilder();
