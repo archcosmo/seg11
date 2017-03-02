@@ -13,6 +13,8 @@ package core;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.sound.midi.Synthesizer;
+
 public class Console 
 {
 	Scanner s;
@@ -473,7 +475,7 @@ public class Console
 			} else { wrong_args(input); }
 			break;
 		case "status":
-			controller.getStatus();
+			print_status();
 			break;
 		default:
 			for ( int i = 0; i < input.length; i++) System.out.print(input[i] + " ");
@@ -564,6 +566,40 @@ public class Console
 			prompt += "[" + i + "] : " + runway.logicalRunways.get(i).designator + "\n";
 		}
 		controller.selectThreshold(readInt(prompt, 0, runway.logicalRunways.size() - 1));
+	}
+	
+	private void print_status() {
+		Airport airport = controller.getSelectedAirport();
+		LogicalRunway lr = controller.getSelectedLogicalRunway();
+		Obstacle obstacle = controller.getSelectedObstacle();
+		
+		System.out.println("Airport: " + (airport == null ? "None selected" : airport.name));
+		System.out.println("Runway: " + (lr == null ? "None selected" : lr.runway.name));
+		System.out.println("Threshold: " + (lr == null ? "None selected" : lr.designator));
+		
+		System.out.println("\nObstacle\n--------");
+		if(obstacle == null)
+			System.out.println("None selected.");
+		else {
+			System.out.println("Type: " + obstacle.name);
+			System.out.println("Distance from " + lr.designator + ": " + obstacle.distanceFromThreshold + "m");
+			System.out.println("Distance from centerline: " + obstacle.distanceFromCenterline + "m");
+		}
+		
+		if(lr != null) {
+			System.out.println("\nOriginal Values");
+			System.out.println("---------------");
+			System.out.println("TODA: " + lr.toda);
+			System.out.println("TORA: " + lr.tora);
+			System.out.println("ASDA: " + lr.asda);
+			System.out.println("LDA: " + lr.lda);
+			System.out.println("Displaced Threshold: " + lr.displacedThreshold);
+			System.out.println("Clearway Length: " + lr.clearwayLength);
+			System.out.println("Stopway Length: " + lr.stopwayLength);
+			System.out.println("RESA: " + lr.getRESA());
+			System.out.println("Blast Allowance: " + lr.getBlastAllowance());
+			System.out.println("Strip End: " + lr.getStripEnd());
+		}
 	}
 	
 	/* Displays  sign 
