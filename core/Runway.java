@@ -16,7 +16,6 @@
 			logicalRunways = new ArrayList<LogicalRunway>();
 		}
 
-		//TODO: method to add many Logical Runways
 		public void addLogicalRunway(LogicalRunway logicalRunway) {
 			logicalRunways.add(logicalRunway);
 		}

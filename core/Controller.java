@@ -86,7 +86,6 @@ public class Controller
 		return true;
 	}
 	
-	//TODO: Replace the false return with exceptions so more detailed error messages can be passed back.
 	private boolean addRunway(Integer airportId, Runway runway) {
 		try {
 			Airport airport = model.getAirports().get(airportId);
@@ -258,16 +257,25 @@ public class Controller
 		if(!model.selectRunway(ID))
 			return false;
 		view.selectThreshold(model.selectedRunway);
-		if(model.selectedObstacle != null)
-			selectObstacle(model.getObjects().indexOf(model.selectedObstacle));
 		return true;
 	}
 	
 	public boolean selectThreshold(int ID) {
+//		LogicalRunway oldThresh = model.selectedLogicalRunway;
+		
 		if(!model.selectThreshold(ID))
 			return false;
-		if(model.selectedObstacle != null)
+		
+		if(model.selectedObstacle != null) {
+//			if(model.selectedLogicalRunway.isReciprocalOf(oldThresh.designator)) {
+//				Obstacle selectedObstacle = model.selectedObstacle;
+//				LogicalRunway thresh = model.selectedLogicalRunway;
+//				int selectedObstacleId = model.getObjects().indexOf(model.selectedObstacle);
+//				model.selectObstacle(selectedObstacleId, thresh.tora - selectedObstacle.distanceFromThreshold + selectedObstacle.length, selectedObstacle.distanceFromCenterline);
+//			}
+//			else
 			selectObstacle(model.getObjects().indexOf(model.selectedObstacle));
+		}
 		return true;
 	}
 

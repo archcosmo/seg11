@@ -2,13 +2,6 @@ package core;
 
 		import java.awt.Point;
 
-/* TODO:
-		 * list_objects
-		 * printCalculations
-		 * printAnswers
-		 * printStatus
-		 */
-
 
 import java.util.List;
 import java.util.Scanner;
@@ -25,7 +18,7 @@ public class Console
 	{
 		this.controller = controller;
 		printBar("Runway Re-Declaration Tool");
-		
+		System.out.println("Use 'help' to list available commands.");
 		//System.out.println("Use 'help' to get started.");
 	}
 	
@@ -350,17 +343,21 @@ public class Console
 			if ( input.length == 1 ) 
 			{
 				System.out.println("To use the application, use the following commands:"); 
-				System.out.println("** NT: type = airport(s), runway(s), threshold(s), obstacle(s); (Use of plural where appropriate)"); 
-				System.out.println("* list (types*)"); 
-				System.out.println("* select (type) (id)");
-				System.out.println("** NT: select object null   -- Clears object");
-				System.out.println("* add (type) (id)");
-				System.out.println("* delete (type) (id)"); 
-				System.out.println("* calculate [-v] [T|A]");
+				System.out.println("\n* list (type) : lists airports, runways, thresholds, and obstacles registered to the system.");
+				System.out.println("* | (type) = airports, runways, thresholds, or obstacles");
+				System.out.println("\n* select (type) (id) : selects which airport, runway, theshold, and obstacle to use in calculation.");
+				System.out.println("* | (type) = airport, runway, threshold, or obstacle");
+				System.out.println("* | get (id) using list command.");
+				System.out.println("* | select object (id) : Places object on runway");
+				System.out.println("* | select object null : Removes object from runway");
+				System.out.println("\n* add (type) (id)");
+				System.out.println("* | (type) = airport, runway, or obstacle");
+				System.out.println("* | get (id) using list command.");
+				System.out.println("\n* calculate [-v] [T|A]");
 				System.out.println("* | -v : Verbose, prints the calculation breakdown.");
 				System.out.println("* |  T : Take-off/Land towards selected threshold.");
 				System.out.println("* |  A : Take-off/Land away from selected threshold.");
-				System.out.println("* status"); 
+				System.out.println("\n* status"); 
 				System.out.println("* quit"); 
 			} else { wrong_args(input); }
 			break;
@@ -426,7 +423,7 @@ public class Console
 					controller.createObstacle();
 					break;
 				default:
-					System.out.println("Invalid argument to command 'list (type)'\n : Valid types are; 'airports', 'runways', 'obstacles'");
+					System.out.println("Invalid argument to command 'add (type)'\n : Valid types are; 'airports', 'runways', 'obstacles'");
 					break;
 				}
 			} else { wrong_args(input); }
@@ -651,6 +648,9 @@ public class Console
 			System.out.println("None selected.");
 		else {
 			System.out.println("Type: " + obstacle.name);
+			System.out.println("Width: " + obstacle.width + "m");
+			System.out.println("Height: " + obstacle.height + "m");
+			System.out.println("Length: " + obstacle.length + "m");
 			System.out.println("Distance from " + lr.designator + ": " + obstacle.distanceFromThreshold + "m");
 			System.out.println("Distance from centerline: " + obstacle.distanceFromCenterline + "m");
 		}
