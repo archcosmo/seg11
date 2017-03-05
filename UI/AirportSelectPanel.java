@@ -62,8 +62,9 @@ public class AirportSelectPanel extends JPanel {
 		add(Box.createRigidArea(new Dimension(0, 50)));
 		
 		/* Add a newAirport option */
-		MenuItem newAirport = new MenuItem("or create and use a new airport");
-		JTextField newAirportName = new JTextField("$ New Airport Name");
+		MenuItem newAirport = new MenuItem("or create and use a new airport with name : ");
+		JTextField newAirportName = new JTextField(" ");
+		newAirportName.setPreferredSize(new Dimension(200, 20));
 		newAirport.add(newAirportName);
 		add(newAirport);
 		//Add handler

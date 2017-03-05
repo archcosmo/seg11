@@ -36,8 +36,8 @@ public class Window extends JFrame
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLayout(new BorderLayout());
-		//loadAirportSelectionLayout();
-		loadRunningLayout();
+		loadAirportSelectionLayout();
+		//loadRunningLayout();
 	}
 
 	/* Initial Screen on loadup, 

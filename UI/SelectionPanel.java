@@ -1,14 +1,13 @@
 package UI;
 
-import java.awt.Component;
 import java.awt.Dimension;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSeparator;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import Application.Controller;
@@ -44,18 +43,32 @@ public class SelectionPanel extends JPanel
 		runwaySelection.addComponent(runwayDropdown);
 		add(runwaySelection);
 		
+		/* Horizontal Line */
+		add(new JSeparator(SwingConstants.HORIZONTAL));
+		
+		/* obsacle Selection and Dropdown Menu : No Handler yet */
+		MenuItem obsacleSelection = new MenuItem("Obstacle : ");
+		JComboBox<String> obsacleDropdown = new JComboBox<String>();
+		//Add handler
+		obsacleSelection.addComponent(obsacleDropdown);
+		add(obsacleSelection);
+		
+		/* Obstacle position selection */
+		MenuItem xPosSelection = new MenuItem("Horizontal Displacement : ");
+		MenuItem yPosSelection = new MenuItem("Vertical Displacement : ");
+		JTextField xPosInput = new JTextField("0");
+		JTextField yPosInput = new JTextField("0");
+		xPosInput.setPreferredSize(new Dimension(50, 20));
+		yPosInput.setPreferredSize(new Dimension(50, 20));
+		xPosSelection.add(xPosInput);
+		yPosSelection.add(yPosInput);
+		add(xPosSelection);
+		add(yPosSelection);
+		
+		/* Horizontal Line */
+		add(new JSeparator(SwingConstants.HORIZONTAL));
+		
 		/* Vertical Spacer */
-		add(Box.createRigidArea(new Dimension(0, 50)));
-		
-		/* Horizontal Line */
-		add(new JSeparator(SwingConstants.HORIZONTAL));
-		
-		/* Test label as text output */
-		JLabel test1 = new JLabel("Hello World");
-		test1.setAlignmentX(Component.CENTER_ALIGNMENT);
-		add(test1);
-		
-		/* Horizontal Line */
-		add(new JSeparator(SwingConstants.HORIZONTAL));
+		add(Box.createRigidArea(new Dimension(0, 200)));
 	}
 }
