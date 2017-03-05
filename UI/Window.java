@@ -1,6 +1,7 @@
 package UI;
 
 import java.awt.BorderLayout;
+import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
@@ -37,10 +38,11 @@ public class Window extends JFrame
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLayout(new BorderLayout());
 		loadAirportSelectionLayout();
-		//loadRunningLayout();
+		/* TODO: Remove this line (Testing) */
+		loadRunningLayout(); //*/
 	}
 
-	/* Initial Screen on loadup, 
+	/* Initial Screen on load up, 
 	 * - gets user to choose or make a new airport 
 	 */
 	private void loadAirportSelectionLayout() 
@@ -71,5 +73,11 @@ public class Window extends JFrame
 		SIDE = new TopViewPanel();
 		tabs.addTab("Side View", SIDE);
 		add(tabs, BorderLayout.CENTER);
+		//TODO: New tab: Add Runways + Objects
+	}
+
+	public void updateUI(BufferedImage topView, BufferedImage sideView, String[] Calculations, String[] Answers) 
+	{
+		//TODO: Update panels with information
 	}
 }

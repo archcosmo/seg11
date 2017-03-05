@@ -48,7 +48,7 @@ public class AirportSelectPanel extends JPanel {
 		/* Airport Selection and Dropdown Menu : No Handler yet */
 		MenuItem airportSelection = new MenuItem("Select an Airport : ");
 		JComboBox<String> airportDropdown = new JComboBox<String>();
-		//Add handler
+		//TODO: Add combo list
 		airportSelection.addComponent(airportDropdown);
 		add(airportSelection);
 		
@@ -56,7 +56,7 @@ public class AirportSelectPanel extends JPanel {
 		JButton selectAirport = new JButton("Use this airport");
 		selectAirport.setAlignmentX(Component.CENTER_ALIGNMENT);
 		add(selectAirport);
-		/* Add button handler here */
+		/* TODO: Add button handler here */
 		
 		/* Vertical Spacer */
 		add(Box.createRigidArea(new Dimension(0, 50)));
@@ -67,13 +67,12 @@ public class AirportSelectPanel extends JPanel {
 		newAirportName.setPreferredSize(new Dimension(200, 20));
 		newAirport.add(newAirportName);
 		add(newAirport);
-		//Add handler
 		
 		/* Confirmation button */
 		JButton makeAirport = new JButton("Create and use this airport");
 		makeAirport.setAlignmentX(Component.CENTER_ALIGNMENT);
 		add(makeAirport);
-		/* Add button handler here */
+		/* TODO: Add button handler */
 		
 		/* Vertical Spacer */
 		add(Box.createRigidArea(new Dimension(0, 400)));

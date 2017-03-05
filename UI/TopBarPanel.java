@@ -3,7 +3,7 @@ package UI;
 import java.awt.BorderLayout;
 import java.awt.Color;
 
-import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import Application.Controller;
@@ -29,8 +29,7 @@ public class TopBarPanel extends JPanel
 	private void addComponents() 
 	{
 		/* Exit Button, Event Handler done locally */
-		JButton exitButton = new JButton("QUIT");
-		add(exitButton, BorderLayout.EAST);
-		exitButton.addActionListener( (ActionEvent) -> { System.exit(0); } );
+		JLabel airportName = new JLabel("Selected Airport: " + CONTROLLER.AIRPORT_NAME);
+		add(airportName, BorderLayout.CENTER);
 	}
 }
