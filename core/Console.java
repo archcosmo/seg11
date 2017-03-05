@@ -32,21 +32,7 @@ public class Console
 		System.out.println(str + "\n######################################################################");
 	}
 	
-	public void printCalculations()
-	{
-		/* Takes a structure of calculations, formats and outputs */
-	}
-	
-	public void printAnswers()
-	{
-		
-	}
-	
-	public void printStatus()
-	{
-		
-	}
-	
+	@SuppressWarnings("unused")
 	private Integer readInt(String msg, int min, int max, int defaultResponse) {
 		while(true) {
 			String inputStr = prompt(msg + "(" + min + "-" + max + ")(Default: " + defaultResponse + "):");
@@ -274,48 +260,6 @@ public class Console
 			return obstacle;
 		}
 	}
-	
-//	private Threshold configureThreshold() {
-//		
-//		String thresholdDesignator = prompt("Enter threshold designator: ( ##[LR] )\n(Or enter '!' to cancel)");
-//
-//		if(thresholdDesignator.replaceAll("\\s+", "").equals("!"))
-//			return null;
-//		
-//		while(true) {
-//			String data[] = prompt("Enter TORA,TODA,ASDA,LDA information in order separated by a comma,\ne.g. 3902,3902,3902,3592:").split(",");
-//			if(data.length < 4) {
-//				displayMessage("Not enough information supplied, expected 4 integer values separated by a comma.");
-//				continue;
-//			}
-//
-//			Integer iData[] = new Integer[data.length];
-//
-//			int i = 0;
-//			try {
-//				for(i = 0; i < 4; i++) {
-//					iData[i] = Integer.parseInt(data[i].replaceAll("\\s+", ""));
-//				}
-//			} catch(NumberFormatException e) {
-//				displayMessage("Information in incorrect format, expected number but " + data[i] + " was given.");
-//				continue;
-//			}
-//
-//			while(true) {
-//				String confirm = prompt("Is this correct?\nTORA: " + data[0] + "\nTODA: " + data[1] + "\nASDA: " + data[2] + "\nLDA: " + data[3] + "\n(y/n)");
-//				if(confirm.equalsIgnoreCase("y")) {
-//					return new Threshold(thresholdDesignator, iData[0], iData[1], iData[2], iData[3]);
-//				}
-//				else if(confirm.equalsIgnoreCase("n")) {
-//					break;
-//				}
-//				else {
-//					displayMessage("Expected 'y' or 'n'");
-//					continue;
-//				}
-//			}
-//		}
-//	}
 	
 	/* Gets user input */
 	private String[] getInput()

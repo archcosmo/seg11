@@ -3,7 +3,6 @@ package UI;
 import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import Application.Controller;
@@ -11,9 +10,9 @@ import Application.Controller;
 @SuppressWarnings("serial")
 public class Window extends JFrame 
 {
-	String TITLE = "Runway Re-Declaration Calculator";
+	final static String TITLE = "Runway Re-Declaration Calculator";
 	Controller CONTROLLER;
-	JPanel PANE;
+	
 	TopBarPanel TOP_BAR;
 	SelectionPanel SELECTION;
 	DataPanel DATA;
@@ -37,10 +36,23 @@ public class Window extends JFrame
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLayout(new BorderLayout());
-		addComponents();
+		//loadAirportSelectionLayout();
+		loadRunningLayout();
 	}
 
-	private void addComponents() 
+	/* Initial Screen on loadup, 
+	 * - gets user to choose or make a new airport 
+	 */
+	private void loadAirportSelectionLayout() 
+	{
+		AirportSelectPanel AIRPORT = new AirportSelectPanel(CONTROLLER);
+		add(AIRPORT, BorderLayout.CENTER);
+	}
+
+	/* Main program running screen,
+	 * - Loaded when airport selection successful
+	 */
+	public void loadRunningLayout() 
 	{
 		/* Adding top bar panel */
 		TOP_BAR = new TopBarPanel(CONTROLLER);

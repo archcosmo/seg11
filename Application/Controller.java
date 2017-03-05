@@ -9,6 +9,7 @@ public class Controller
 	/* Reference to each model component */
 	/* Current Program status */
 	Window view;
+	public final static String TITLE = "Runway Re-Declaration Calculator";
 	
 	/* Initialise frame on swing worker thread */
 	public static void main(String[] args)

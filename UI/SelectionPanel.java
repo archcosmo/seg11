@@ -39,7 +39,7 @@ public class SelectionPanel extends JPanel
 		
 		/* Runway Selection and Dropdown Menu : No Handler yet */
 		MenuItem runwaySelection = new MenuItem("Runway : ");
-		JComboBox runwayDropdown = new JComboBox();
+		JComboBox<String> runwayDropdown = new JComboBox<String>();
 		//Add handler
 		runwaySelection.addComponent(runwayDropdown);
 		add(runwaySelection);
