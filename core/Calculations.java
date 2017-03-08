@@ -8,21 +8,8 @@ public class Calculations {
 	private StringBuilder lastCalculationBreakdown;
 
 	public ArrayList<Integer> calculateDistances(LogicalRunway logicalRunway, Obstacle obstacle, boolean towards) {
-		if(obstacle == null) {
-			ArrayList<Integer> origValues = new ArrayList<Integer>();
-			origValues.add(logicalRunway.tora);
-			origValues.add(logicalRunway.toda);
-			origValues.add(logicalRunway.asda);
-			origValues.add(logicalRunway.lda);
-			return origValues;
-		}
-		
-		int newTora;
-		int newToda;
-		int newAsda;
-		int newLda;
 
-		if (Math.abs(obstacle.distanceFromCenterline) > 75 && (obstacle.distanceFromThreshold > 60 || obstacle.distanceFromThreshold > logicalRunway.tora + 60)) {
+		if (obstacle == null || (Math.abs(obstacle.distanceFromCenterline) > 75 && (obstacle.distanceFromThreshold > 60 || obstacle.distanceFromThreshold > logicalRunway.tora + 60))) {
 			ArrayList<Integer> thresholds = new ArrayList<>();
 			thresholds.add(logicalRunway.tora);
 			thresholds.add(logicalRunway.toda);
@@ -30,19 +17,16 @@ public class Calculations {
 			thresholds.add(logicalRunway.lda);
 			return thresholds;
 		}
-		//if (obstacle.bottomYPos > topOfRunway || obstacle.topYPos < bottomOfRunway) {
-		//	return logicalRunway.getThresholdClass
-		//}
 
+		int newTora;
+		int newToda;
+		int newAsda;
+		int newLda;
 		int ALSWidth = DEFAULT_ANGLE_OF_DESCENT * obstacle.height;
 		lastCalculationBreakdown =  new StringBuilder();
-
 		int RESA = logicalRunway.runway.RESA;
-
 		int fromThresh = obstacle.distanceFromThreshold;
-		
-//		double obstacleMidXPosition = obstacle.xPos + ((obstacle.length) / 2.0);
-//		if (obstacleMidXPosition > (logicalRunway.tora / 2.0)) {
+
 		if (towards){
 			//Take off towards/ land towards obstacle
 
@@ -106,7 +90,6 @@ public class Calculations {
 		thresholds.add(newToda);
 		thresholds.add(newAsda);
 		thresholds.add(newLda);
-
 		return thresholds;
 	}
 

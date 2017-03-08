@@ -182,59 +182,59 @@ public class Console
 	
 	public Runway configureRunway(boolean toCancel) {
 		while(true) {
-			String runwayName = prompt("Enter runway name:\n(Or enter to '!' to " + (toCancel ? " cancel)" : " finish entering runways."));
+			//Not sure how to word first prompt.
+			String runwayName = prompt("Press Enter to add runway:\n(Or type '!' to " + (toCancel ? " cancel)" : " finish entering runways."));
 			if(runwayName.replaceAll("\\s+", "").equals("!")) {
 				return null;
-			}
-
-			if(runwayName.replaceAll("\\s+", "").isEmpty()) {
-				displayMessage("A runway name cannot be empty.");
-				continue;
 			}
 
 			Integer resa = readInt("Enter RESA value for runway", 240);
 			Integer blastAllowance = readInt("Enter blast allowance value for runway.", 300);
 			Integer stripEnd = readInt("Enter strip end value for runway");
+			Runway runway = new Runway(resa, blastAllowance, stripEnd);
 			
-			Runway runway = new Runway(runwayName, resa, blastAllowance, stripEnd);
-			
-			Integer angle = readInt("Enter an angle for the runway", 0, 359);
-			Integer noRunways = readInt("Enter number of logical runways", 1, 3);
+			Integer firstAngle = readInt("Enter an angle for the runway", 0, 359);
 			
 			Integer startStopway = readInt("Enter the length of the start stopway");
 			Integer endStopway = readInt("Enter the length of the end stopway");
 			
-			angle /= 10;
-			
-			for(int i = 0; i < noRunways; i++) {
-				for(int j = 0; j < 2; j++) {
-					String letter = "";
-					
-					switch(noRunways) {
-						case 1:
-							letter = "";
-							break;
-						case 2:
-							letter = (i == j) ? "L" : "R";
-							break;
-						case 3:
-							letter = (i == 1) ? "C" : ((i == j) ? "L" : "R");
-							break;
-					}
-					
-					Integer logicalAngle = (j == 0) ? angle : 36 - angle;
-					String designator = String.format("%02d" + letter, logicalAngle);
-					
-					Integer tora = readInt("Enter TORA value for " + designator);
-					Integer toda = readInt("Enter TODA value for " + designator);
-					Integer asda = readInt("Enter ASDA value for " + designator);
-					Integer lda = readInt("Enter LDA value for " + designator);
-					
-					LogicalRunway lr = new LogicalRunway(String.format("%02d" + letter, logicalAngle), runway, tora, toda, asda, lda, (j == 0) ? endStopway : startStopway);
-					runway.addLogicalRunway(lr);
+			firstAngle /= 10;
+			Integer reciprocalAngle = (firstAngle + 18) % 36;
+			LogicalRunway shortAngleLogicalRunway = null; //needs to be initialised for add to runway method
+			LogicalRunway longAngleLogicalRunway = null;
+
+			for(int i = 0; i < 2; i++) {
+				String letter = "";
+				//TODO:letter - find any other runways in airport with same angle
+				/*
+				switch(noRunways) {
+					case 1:
+						letter = "";
+						break;
+					case 2:
+						letter = (i == j) ? "L" : "R";
+						break;
+					case 3:
+						letter = (i == 1) ? "C" : ((i == j) ? "L" : "R");
+						break;
+				}
+				*/
+				int runwayAngle = (i == 0) ? firstAngle : reciprocalAngle;
+				String designator = String.format("%02d" + letter, runwayAngle);
+
+				Integer tora = readInt("Enter TORA value for " + designator);
+				Integer toda = readInt("Enter TODA value for " + designator);
+				Integer asda = readInt("Enter ASDA value for " + designator);
+				Integer lda = readInt("Enter LDA value for " + designator);
+
+				LogicalRunway lr = new LogicalRunway(designator, runway, tora, toda, asda, lda, (i == 0) ? endStopway : startStopway);
+				if (runwayAngle < 18) {
+					shortAngleLogicalRunway = lr;
+				} else {
+					longAngleLogicalRunway = lr;
 				}
 			}
-			
+			runway.setLogicalRunways(shortAngleLogicalRunway, longAngleLogicalRunway);
 			return runway;
 		}
 	}
@@ -324,8 +324,10 @@ public class Console
 					break;
 				case "thresholds":
 					LogicalRunway lr = controller.getSelectedLogicalRunway();
-					if(lr != null)
-						list_thresholds(lr.runway.logicalRunways);
+					if(lr != null) {
+						list_thresholds(lr.runway.shortAngleLogicalRunway);
+						list_thresholds(lr.runway.longAngleLogicalRunway);
+					}
 					else
 						System.out.println("No runway is select, use 'select runway [runway_id]'");
 					break;
@@ -416,7 +418,7 @@ public class Console
 					case "runway":
 						if(controller.selectRunway(ID)) {
 							LogicalRunway selectedLr = controller.getSelectedLogicalRunway();
-							System.out.println(selectedLr.designator + " threshold selected on " + selectedLr.runway.name + ".");
+							System.out.println(selectedLr.designator + " threshold selected on " + selectedLr.runway.designator + ".");
 						}
 						else
 							System.out.println("Invalid runway ID, use 'list runways' to get a list of runway IDs.");
@@ -424,7 +426,7 @@ public class Console
 					case "threshold":
 						if(controller.selectThreshold(ID)) {
 							LogicalRunway selectedLr = controller.getSelectedLogicalRunway();
-							System.out.println(selectedLr.designator + " threshold selected on " + selectedLr.runway.name + ".");
+							System.out.println(selectedLr.designator + " threshold selected on " + selectedLr.runway.designator + ".");
 						}
 						else
 							System.out.println("Invalid threshold ID, use 'list thresholds' to get a list of threshold IDs for the currently selected runway.");
@@ -439,7 +441,7 @@ public class Console
 						else if(controller.selectObstacle(ID)) {
 							Obstacle selectedObstacle = controller.getSelectedObstacle();
 							LogicalRunway selectedLr = controller.getSelectedLogicalRunway();
-							System.out.println("Added " + selectedObstacle.name + " to " + selectedLr.runway.name + " " + Math.abs(selectedObstacle.distanceFromThreshold) + "m " + (selectedObstacle.distanceFromThreshold < 0 ? "before" : "after") + " " + selectedLr.designator + " threshold and " + Math.abs(selectedObstacle.distanceFromCenterline) + "m " + (selectedObstacle.distanceFromCenterline < 0 ? "south" : "north") + " of centerline.");
+							System.out.println("Added " + selectedObstacle.name + " to " + selectedLr.runway.designator + " " + Math.abs(selectedObstacle.distanceFromThreshold) + "m " + (selectedObstacle.distanceFromThreshold < 0 ? "before" : "after") + " " + selectedLr.designator + " threshold and " + Math.abs(selectedObstacle.distanceFromCenterline) + "m " + (selectedObstacle.distanceFromCenterline < 0 ? "south" : "north") + " of centerline.");
 						}
 						else
 							System.out.println("Invalid obstacle ID, use 'list obstacles' to get a list of object IDs.");
@@ -531,19 +533,16 @@ public class Console
 		
 		for(int i = 0; i < runways.size(); i++) {
 			Runway runway = runways.get(i);
-			String name = (runway.name == null || runway.name.isEmpty()) ? ("Runway " + i) : runway.name;
+			String name = (runway.designator == null || runway.designator.isEmpty()) ? ("Runway " + i) : runway.designator;
 			System.out.println("[" + i + "] : " + name);
 		}
 	}
 	
-	private void list_thresholds(List<LogicalRunway> lrs) {
-		if(lrs.size() == 0)
+	private void list_thresholds(LogicalRunway lr) {
+		if(lr == null)
 			System.out.println("There are no thresholds configured for this runway. Add a new runway with 'add runway' to set up a new runway with thresholds.");
-		
-		for(int i = 0; i < lrs.size(); i++) {
-			LogicalRunway lr = lrs.get(i);
-			System.out.println("[" + i + "] : " + lr.designator);
-		}
+
+		System.out.println(lr.designator);
 	}
 	
 	private void list_obstacles(List<Obstacle> obstacles) {
@@ -571,11 +570,10 @@ public class Console
 	}
 	
 	public void selectThreshold(Runway runway) {
-		String prompt = "Select a threshold to use for " + runway.name + ":\n";
-		for(int i = 0; i < runway.logicalRunways.size(); i++) {
-			prompt += "[" + i + "] : " + runway.logicalRunways.get(i).designator + "\n";
-		}
-		controller.selectThreshold(readInt(prompt, 0, runway.logicalRunways.size() - 1));
+		String prompt = "Select a threshold to use for " + runway.designator + ":\n";
+		prompt += "[" + 1 + "] : " + runway.shortAngleLogicalRunway.designator + "\n";
+		prompt += "[" + 2 + "] : " + runway.longAngleLogicalRunway.designator + "\n";
+		controller.selectThreshold(readInt(prompt, 1, 2)); //TODO: not sure if this selects the correct logical runway
 	}
 	
 	private void print_status() {
@@ -584,7 +582,7 @@ public class Console
 		Obstacle obstacle = controller.getSelectedObstacle();
 		
 		System.out.println("Airport: " + (airport == null ? "None selected" : airport.name));
-		System.out.println("Runway: " + (lr == null ? "None selected" : lr.runway.name));
+		System.out.println("Runway: " + (lr == null ? "None selected" : lr.runway.designator));
 		System.out.println("Threshold: " + (lr == null ? "None selected" : lr.designator));
 		
 		System.out.println("\nObstacle\n--------");

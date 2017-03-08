@@ -135,10 +135,10 @@ public class Model
 	{
 		if (selectedAirport != null) {
 			for(Runway r : selectedAirport.runways) {
-				if (r.name.equals((name)))
+				if (r.designator.equals((name)))
 					return false;
 			}
-			selectedAirport.runways.add(new Runway(name, resa, blastAllowance, stripEnd));
+			selectedAirport.runways.add(new Runway(resa, blastAllowance, stripEnd));
 			return true;
 		}
 		return false;
@@ -148,11 +148,11 @@ public class Model
 	 * return false if runway name nonexistant
 	 * return false if airport not selected
 	 */
-	public boolean deleteRunway(String name)
+	public boolean deleteRunway(String designator)
 	{
 		if (selectedAirport != null) {
 			for (Runway r : selectedAirport.runways) {
-				if (r.name.equals(name)) {
+				if (r.designator.equals(designator)) {
 					airports.remove(r);
 					return true;
 				}
@@ -232,7 +232,11 @@ public class Model
 	
 	public boolean selectThreshold(int id) {
 		try{
-			this.selectedLogicalRunway = selectedRunway.logicalRunways.get(id);
+			if (id == 1) {
+				this.selectedLogicalRunway = selectedRunway.shortAngleLogicalRunway;
+			} else { // id == 2
+				this.selectedLogicalRunway = selectedRunway.longAngleLogicalRunway;
+			}
 			return true;
 		}
 		catch(IndexOutOfBoundsException e) { return false; }
