@@ -20,7 +20,7 @@ public class Window extends JFrame
 	SideViewPanel TOP;
 	TopViewPanel SIDE;
 	
-	/* Constructor
+	/* Constor
 	 * - Stores reference to controller for input handler references later
 	 * - Runs initFrame
 	 */

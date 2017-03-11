@@ -1,5 +1,6 @@
 package core;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,7 @@ public class Model
 	LogicalRunway selectedLogicalRunway;
 	Obstacle selectedObstacle;
 	List<Obstacle> obstacles;
+	Draw draw;
 
 	
 
@@ -29,6 +31,7 @@ public class Model
 	private void init() {
 		this.airports = new ArrayList<Airport>();
 		this.obstacles = new ArrayList<Obstacle>();
+		draw = new Draw();
 	}
 	
 	public boolean saveObstacleInfoToFile() {
@@ -111,7 +114,7 @@ public class Model
 		}
 		airports.add(airport);
 		return true;
-	}
+	}// TODO:: Auto-generated method stub
 
 	/* delete airport
 	 * return false if name does not exist
@@ -269,10 +272,16 @@ public class Model
 	{
 		return false;
 	}
-
-	/* Deallocates memory and stores changes before a system shutdown */
-	public void quit() 
+	
+	public BufferedImage getTopView() 
 	{
+		//TODO::Pass which information you need for drawing :: Return null if required selections (eg runway) have not been made
+		return draw.getTopView();
+	}
 
+	public BufferedImage getSideView() 
+	{
+		//TODO::Pass which information you need for drawing :: Return null if required selections (eg runway) have not been made
+		return draw.getSideView();
 	}
 }

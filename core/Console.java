@@ -205,7 +205,7 @@ public class Console
 
 			for(int i = 0; i < 2; i++) {
 				String letter = "";
-				//TODO:letter - find any other runways in airport with same angle
+				//TODO::letter - find any other runways in airport with same angle
 				/*
 				switch(noRunways) {
 					case 1:
@@ -339,6 +339,17 @@ public class Console
 					break;
 				}
 			} else { wrong_args(input); }
+			break;
+		case "draw" :
+				if ( input.length == 1 ) 
+				{
+					controller.draw();
+				}
+				else 
+				{
+					wrong_args(input);
+					System.out.println("Expected 'draw' with no arguments");
+				}
 			break;
 		case "add":
 			if ( input.length >= 2 ) 

@@ -1,5 +1,6 @@
 package core;
 
+import java.awt.EventQueue;
 import java.awt.Point;
 import java.util.List;
 
@@ -9,6 +10,7 @@ public class Controller
 {
 	Console view;
 	Model model;
+	DiagramFrame window;
 	
 	static public void main(String[] args) { new Controller(); } /* Initialise program */
 	
@@ -17,6 +19,13 @@ public class Controller
 		/* Initialise state */
 		view = new Console(this);
 		model = new Model(view);
+		
+		/* Start UI */
+		EventQueue.invokeLater(() -> {
+			window = new DiagramFrame(this);
+			window.setVisible(true);
+        });
+		
 		
 		//Check for XML data and load if exists
 		//Prompt user to configure if not
@@ -123,89 +132,6 @@ public class Controller
 		model.saveAirportInfoToFile();
 	}
 	
-//	private void initialAirportConfiguration() {
-//		String airportName = "";
-//		Airport airport = null;
-//		while(true) {
-//			airportName = view.prompt("Airport Information needs to be configured.\nEnter Airport Name:");
-//			if(airportName.replaceAll("\\s+", "").isEmpty()) {
-//				view.displayMessage("An airport name cannot be empty.");
-//				continue;
-//			}
-//			
-//			airport = new Airport(airportName);
-//			break;
-//		}
-//		boolean finishedRunways = false;
-//		while(!finishedRunways) {
-//			String runwayName = view.prompt("Enter runway name for " + airportName + ",\n"
-//					+ "or enter to '!' to finish entering runways:");
-//			if(runwayName.equals("!")) {
-//				finishedRunways = true;
-//				break;
-//			}
-//
-//			if(runwayName.replaceAll("\\s+", "").isEmpty()) {
-//				view.displayMessage("An runway name cannot be empty.");
-//				continue;
-//			}
-//			
-//			Runway runway = new Runway(runwayName);
-//
-//			boolean finishedThresholds = false;
-//			while(!finishedThresholds) {
-//				String thresholdDesignator = view.prompt("Enter threshold designator for " + runwayName + ",\n"
-//						+ "or enter '!' to finish entering thresholds:");
-//				if(thresholdDesignator.equals("!")) {
-//					finishedThresholds = true;
-//					break;
-//				}
-//
-//				boolean enteringThresholdInfo = true;
-//				while(enteringThresholdInfo) {
-//					String data[] = view.prompt("Enter TORA,TODA,ASDA,LDA information in order separated by a comma,\ne.g. 3902,3902,3902,3592:").split(",");
-//					if(data.length < 4) {
-//						view.displayMessage("Not enough information supplied, expected 4 integer values separated by a comma.");
-//						continue;
-//					}
-//
-//					Integer iData[] = new Integer[data.length];
-//					
-//					int i = 0;
-//					try {
-//						for(i = 0; i < 4; i++) {
-//							iData[i] = Integer.parseInt(data[i]);
-//						}
-//					} catch(NumberFormatException e) {
-//						view.displayMessage("Information in incorrect format, expected number but " + data[i] + " was given.");
-//						continue;
-//					}
-//
-//					while(true) {
-//						String confirm = view.prompt("Is this correct?\nTORA: " + data[0] + "\nTODA: " + data[1] + "\nASDA: " + data[2] + "\nLDA: " + data[3] + "\n(y/n)");
-//						if(confirm.equalsIgnoreCase("y")) {
-//							runway.addThreshold(new Threshold(thresholdDesignator, iData[0], iData[1], iData[2], iData[3]));
-//							break;
-//						}
-//						else if(confirm.equalsIgnoreCase("n")) {
-//							break;
-//						}
-//						else {
-//							view.displayMessage("Expected 'y' or 'n'");
-//							continue;
-//						}
-//					}
-//					
-//					enteringThresholdInfo = false;
-//				}
-//				
-//			}
-//			airport.addRunway(runway);
-//		}
-//		model.addAirport(airport);
-//		model.saveAirportInfoToFile();
-//	}
-	
 	public List<Airport> getAirports() { return model.getAirports(); }
 	public Airport getSelectedAirport() { return model.selectedAirport; }
 	public List<Runway> getRunways() { return model.getRunways(); }
@@ -218,7 +144,6 @@ public class Controller
 	{
 		view.quit();
 		view = null;
-		model.quit();
 		model = null;
 	}
 
@@ -282,4 +207,10 @@ public class Controller
 	public void deleteAirport(int iD) {}
 	public void deleteRunway(int iD) {}
 	public void deleteObject(int iD) {}
+
+	public void draw() {
+		EventQueue.invokeLater(() -> {
+			window.updateUI(model.getTopView(), model.getSideView());
+        });
+	}
 }
