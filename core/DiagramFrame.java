@@ -15,8 +15,11 @@ public class DiagramFrame extends JFrame {
 	SideViewPanel SIDE;
 	TopViewPanel TOP;
 	
-	public DiagramFrame(Controller c) 
+	Draw drawModule;
+	
+	public DiagramFrame(Controller c, Draw drawModule) 
 	{
+		this.drawModule = drawModule;
 		CONTROLLER = c;
 		initFrame();
 	}
@@ -41,7 +44,7 @@ public class DiagramFrame extends JFrame {
 	{
 		/* Adding left side (Data) tabbed panels */
 		JTabbedPane tabs = new JTabbedPane();
-		TOP = new TopViewPanel();
+		TOP = new TopViewPanel(drawModule);
 		tabs.addTab("Top View", TOP);
 		SIDE = new SideViewPanel();
 		tabs.addTab("Side View", SIDE);

@@ -22,7 +22,7 @@ public class Controller
 		
 		/* Start UI */
 		EventQueue.invokeLater(() -> {
-			window = new DiagramFrame(this);
+			window = new DiagramFrame(this, new Draw(model));
 			window.setVisible(true);
         });
 		

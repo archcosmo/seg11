@@ -31,7 +31,7 @@ public class Model
 	private void init() {
 		this.airports = new ArrayList<Airport>();
 		this.obstacles = new ArrayList<Obstacle>();
-		draw = new Draw();
+		draw = new Draw(this);
 	}
 	
 	public boolean saveObstacleInfoToFile() {
@@ -277,7 +277,7 @@ public class Model
 	{
 		//TODO::Pass which information you need for drawing :: Return null if required selections (eg runway) have not been made
 		BufferedImage i = new BufferedImage(0,0, BufferedImage.TYPE_4BYTE_ABGR);
-		draw.drawTopView(i.createGraphics());
+		draw.drawTopView(i.createGraphics(), 0, 0);
 		return i;
 	}
 

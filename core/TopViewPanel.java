@@ -2,6 +2,8 @@ package core;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import javax.swing.Box;
@@ -13,8 +15,9 @@ import javax.swing.JPanel;
 @SuppressWarnings("serial")
 public class TopViewPanel extends JPanel 
 {
+	Draw drawingModule;
 	
-	public TopViewPanel() 
+	public TopViewPanel(Draw drawingModule) 
 	{
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
@@ -27,6 +30,8 @@ public class TopViewPanel extends JPanel
 		add(init1);
 		add(init2);
 		add(init3);
+		
+		this.drawingModule = drawingModule;
 	}
 	
 	public void updateUI(BufferedImage i)
@@ -49,5 +54,10 @@ public class TopViewPanel extends JPanel
 			add(init1);
 			add(init2);
 		}
+	}
+	
+	@Override
+	public void paintComponent(Graphics g) {
+		this.drawingModule.drawTopView((Graphics2D)g, this.getWidth(), this.getHeight());
 	}
 }
