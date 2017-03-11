@@ -134,8 +134,9 @@ public class XMLParser {
 
 				//Build Thresholds
 				NodeList thresholds = eRunway.getElementsByTagName("threshold");
-				runway.shortAngleLogicalRunway = unmarshallLogicalRunway(runway, thresholds.item(0));
-				runway.shortAngleLogicalRunway = unmarshallLogicalRunway(runway, thresholds.item(1));
+				LogicalRunway shortAngleLogicalRunway = unmarshallLogicalRunway(runway, thresholds.item(0));
+				LogicalRunway longAngleLogicalRunway = unmarshallLogicalRunway(runway, thresholds.item(1));
+				runway.setLogicalRunways(shortAngleLogicalRunway, longAngleLogicalRunway);
 				return runway;
 			}
 			else

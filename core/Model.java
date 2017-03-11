@@ -31,7 +31,7 @@ public class Model
 	private void init() {
 		this.airports = new ArrayList<Airport>();
 		this.obstacles = new ArrayList<Obstacle>();
-		draw = new Draw();
+		draw = new Draw(this);
 	}
 	
 	public boolean saveObstacleInfoToFile() {

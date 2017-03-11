@@ -183,8 +183,8 @@ public class Console
 	public Runway configureRunway(boolean toCancel) {
 		while(true) {
 			//Not sure how to word first prompt.
-			String runwayName = prompt("Press Enter to add runway:\n(Or type '!' to " + (toCancel ? " cancel)" : " finish entering runways."));
-			if(runwayName.replaceAll("\\s+", "").equals("!")) {
+			String confirmation = prompt("Press Enter to add runway:\n(Or type '!' to " + (toCancel ? " cancel)" : " finish entering runways."));
+			if(confirmation.replaceAll("\\s+", "").equals("!")) {
 				return null;
 			}
 
