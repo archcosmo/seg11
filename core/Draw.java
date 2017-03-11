@@ -3,9 +3,6 @@ package core;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.*;
-import java.awt.geom.Ellipse2D;
-
-import com.sun.corba.se.impl.protocol.giopmsgheaders.Message;
 
 public class Draw 
 {
@@ -35,7 +32,7 @@ public class Draw
 		drawMeasurement(g2d, scale, 1500, width /2, 600, 90, "TORA");
 	}
 
-	public void drawSideView(Graphics2D g2d) {
+	public void drawSideView(Graphics2D g2d, int width, int height) {
 		//g2d.clearRect(0, 0, 600, 600); //TODO:: need to change to size of panel and not remove text
 		g2d.setColor(Color.green);
 		LogicalRunway lrw = model.selectedLogicalRunway;

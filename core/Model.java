@@ -278,7 +278,7 @@ public class Model
 		//TODO::Pass which information you need for drawing :: Return null if required selections (eg runway) have not been made
 
 		BufferedImage i = new BufferedImage(600, 600, BufferedImage.TYPE_4BYTE_ABGR);
-		draw.drawTopView(i.createGraphics());
+		draw.drawTopView(i.createGraphics(), 600, 600);
 		return i;
 	}
 
@@ -286,7 +286,7 @@ public class Model
 	{
 		//TODO::Pass which information you need for drawing :: Return null if required selections (eg runway) have not been made#
 		BufferedImage i = new BufferedImage(600, 600, BufferedImage.TYPE_4BYTE_ABGR);
-		draw.drawSideView(i.createGraphics());
+		draw.drawSideView(i.createGraphics(), 600, 600);
 		return i;
 	}
 }
