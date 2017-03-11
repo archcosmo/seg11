@@ -114,7 +114,7 @@ public class Model
 		}
 		airports.add(airport);
 		return true;
-	}// TODO:: Auto-generated method stub
+	}
 
 	/* delete airport
 	 * return false if name does not exist
