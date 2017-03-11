@@ -1,18 +1,14 @@
 package core;
 
-import java.awt.image.BufferedImage;
+import java.awt.Graphics2D;
 
 public class Draw 
 {
 
-	public BufferedImage getTopView() {
-		// TODO:: Return TopView as BufferedImage
-		return null;
+	public void getTopView(Graphics2D g2d) {
 	}
 
-	public BufferedImage getSideView() 
+	public void getSideView(Graphics2D g2d) 
 	{
-		// TODO:: Return TopView as BufferedImage
-		return null;
 	}
 }
