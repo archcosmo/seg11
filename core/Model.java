@@ -276,15 +276,16 @@ public class Model
 	public BufferedImage getTopView() 
 	{
 		//TODO::Pass which information you need for drawing :: Return null if required selections (eg runway) have not been made
-		BufferedImage i = new BufferedImage(0,0, BufferedImage.TYPE_4BYTE_ABGR);
-		draw.drawTopView(i.createGraphics(), 0, 0);
+
+		BufferedImage i = new BufferedImage(600, 600, BufferedImage.TYPE_4BYTE_ABGR);
+		draw.drawTopView(i.createGraphics());
 		return i;
 	}
 
 	public BufferedImage getSideView() 
 	{
 		//TODO::Pass which information you need for drawing :: Return null if required selections (eg runway) have not been made#
-		BufferedImage i = new BufferedImage(0,0, BufferedImage.TYPE_4BYTE_ABGR);
+		BufferedImage i = new BufferedImage(600, 600, BufferedImage.TYPE_4BYTE_ABGR);
 		draw.drawSideView(i.createGraphics());
 		return i;
 	}
