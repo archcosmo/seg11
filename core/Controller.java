@@ -209,6 +209,10 @@ public class Controller
 	public void deleteObject(int iD) {}
 
 	public void draw() {
+		if (model.selectedLogicalRunway == null) {
+			System.out.println("Please select a logical runway first.");
+			return;
+		}
 		EventQueue.invokeLater(() -> {
 			window.updateUI(model.getTopView(), model.getSideView());
         });

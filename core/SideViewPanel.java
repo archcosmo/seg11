@@ -18,7 +18,7 @@ public class SideViewPanel extends JPanel
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
 		/* Vertical Spacer */
-		add(Box.createRigidArea(new Dimension(0, 50)));
+		add(Box.createRigidArea(new Dimension(0, 15)));
 		
 		JLabel init1 = new JLabel("Nothing to show here!");
 		JLabel init2 = new JLabel("Use 'draw' command to get input");
@@ -30,23 +30,9 @@ public class SideViewPanel extends JPanel
 	
 	public void updateUI(BufferedImage i)
 	{
-		if (i != null) 
-		{
-			setLayout(new BorderLayout());
-			JLabel picLabel = new JLabel(new ImageIcon(i));
-			add(picLabel, BorderLayout.CENTER);
-		}
-		else
-		{
-			setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-			
-			/* Vertical Spacer */
-			add(Box.createRigidArea(new Dimension(0, 50)));
-			
-			JLabel init1 = new JLabel("Error: Draw Command Failed");
-			JLabel init2 = new JLabel("Make sure you have a runway selected before using draw");
-			add(init1);
-			add(init2);
-		}
+		setLayout(new BorderLayout());
+		//TODO:: how to scale and position image
+		JLabel picLabel = new JLabel(new ImageIcon(i));
+		add(picLabel, BorderLayout.CENTER);
 	}
 }
