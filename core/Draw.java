@@ -1,9 +1,11 @@
 package core;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
-import java.awt.*;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Draw 
 {
@@ -40,6 +42,7 @@ public class Draw
 		
 		
 		drawRunwayTop(g2d, runway, runwayX, adjustedRunwayLength, adjustedRunwayWidth, height/2, scale);
+		drawLogicalRunwayMeasurementsTop(g2d, false, runway.shortAngleLogicalRunway, runwayX, adjustedRunwayLength, adjustedRunwayWidth, height/2, scale);
 		
 		Obstacle ob = model.selectedObstacle;
 		/* Test obstacle */ ob = new Obstacle("Plane", 100, 500, 10); ob.setPosition(760, 20);
@@ -57,10 +60,7 @@ public class Draw
 //			g2d.fillRect(runwayX+adjustedRunwayLength, runwayY, adjustedStopwayLength, adjustedRunwayWidth);
 			
 			//TODO: Fix positioning of arrows
-			drawMeasurement(g2d, scale, logRun.tora, width /2, 600, 90, "TORA", 600 - (height/2 +adjustedRunwayWidth/2), 600 - (height/2 +adjustedRunwayWidth/2));
-			drawMeasurement(g2d, scale, logRun.toda, width /2, 425, 90, "TODA", 10, 10);
-			drawMeasurement(g2d, scale, logRun.asda, width /2, 450, 90, "ASDA", 10, 10);
-			drawMeasurement(g2d, scale, logRun.lda, width /2, 475, 90, "LDA", 10, 10);
+			
 		}
 	}
 	
@@ -158,8 +158,33 @@ public class Draw
 		g2d.setFont(gFont);
 	}
 	
-	private void drawLogicalRunwayMeasurementsTop(Graphics2D g2d, LogicalRunway lr, int runwayX, int runwayLength, int centerlineY, float scale) {
+	private void drawLogicalRunwayMeasurementsTop(Graphics2D g2d, boolean lowAngle, LogicalRunway lr, int runwayX, int runwayLength, int runwayWidth, int centerlineY, float scale) {
+		Set<String> addedLabels = new HashSet<String>();
 		
+		for(int i = 0; i < 4; i++) {
+			String selectedLabel = "";
+			int selectedValue = Integer.MAX_VALUE;
+			if(lr.tora < selectedValue && !addedLabels.contains("TORA")) {
+				selectedValue = lr.tora;
+				selectedLabel = "TORA";
+			}
+			if(lr.toda < selectedValue && !addedLabels.contains("TODA")) {
+				selectedValue = lr.toda;
+				selectedLabel = "TODA";
+			}
+			if(lr.asda < selectedValue && !addedLabels.contains("ASDA")) {
+				selectedValue = lr.asda;
+				selectedLabel = "ASDA";
+			}
+			if(lr.lda < selectedValue && !addedLabels.contains("LDA")) {
+				selectedValue = lr.lda;
+				selectedLabel = "LDA";
+			}
+			addedLabels.add(selectedLabel);
+			int arrowX = lowAngle ? (int)(runwayX + scale*selectedValue/2) : (int)(runwayX+runwayLength - scale*selectedValue/2);
+			int arrowY = (int)(centerlineY + runwayWidth/2 + 150*(i+1)*scale);
+			drawMeasurement(g2d, scale, selectedValue, arrowX, arrowY, 90, selectedLabel, (int)(150*(i+1)*scale), (int)(150*(i+1)*scale));
+		}
 	}
 	
 	private void drawObstacleTop(Graphics2D g2d, Obstacle ob, int runwayX, int centerlineY, float scale) {
