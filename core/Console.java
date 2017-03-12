@@ -120,7 +120,7 @@ public class Console
 	}
 	
 	public void initialAirportConfiguration() {
-		displayMessage("\nNo Airports found in XML files; Airport Information needs to be configured. \nEntering new Airport Configurator:\n");
+		displayMessage("\nNew Airport Information needs to be configured. \nEntering new Airport Configurator:\n");
 		controller.createAirport();
 	}
 	
@@ -316,7 +316,8 @@ public class Console
 				System.out.println("* |  A : Take-off/Land away from selected threshold.");
 				System.out.println("\n* draw");
 				System.out.println("* | No options available, prints current selected system to the diagrams window");			
-				System.out.println("\n* status"); 
+				System.out.println("\n* status");
+				System.out.println("* | No options available, prints current selected system to console view");	
 				System.out.println("* quit"); 
 			} else { wrong_args(input); }
 			break;
