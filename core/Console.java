@@ -484,7 +484,7 @@ public class Console
 					Calculations.BreakdownWrapper breakdown = new Calculations.BreakdownWrapper();
 					List<Integer> newValues = controller.calculate(true, breakdown, input[2].equalsIgnoreCase("T"));
 					
-					System.out.println("Breakdown\n---------\n" + breakdown.breakdownStr);
+					System.out.println("Breakdown\n---------\n" + (breakdown.breakdownStr == null ? "No redeclaration required." : breakdown.breakdownStr));
 					
 					System.out.println("\nResults\n-------");
 					System.out.println("TORA: " + newValues.get(0));

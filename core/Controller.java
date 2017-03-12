@@ -159,7 +159,7 @@ public class Controller
 		Calculations calc = new Calculations();
 		List<Integer> newValues = calc.calculateDistances(lr, o, towards);
 		
-		if(verbose)
+		if(verbose && o != null)
 			breakdown.breakdownStr = calc.getLastCalculationBreakdown();
 		
 		return newValues;
