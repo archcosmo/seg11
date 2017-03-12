@@ -34,13 +34,7 @@ public class Draw
 		Obstacle ob = model.selectedObstacle;
 		/* Test obstacle */ ob = new Obstacle("Plane", 100, 500, 10); ob.setPosition(760, 20);
 		if (ob != null) {
-			g2d.setColor(Color.BLACK);
-			//TODO: Fix positioning of obstacle
-			int obX = runwayX + (int)(scale * ob.distanceFromThreshold);
-			int obY = runwayY + adjustedRunwayWidth/2 - (int)(scale * ob.distanceFromCenterline);
-			int obLength = (int)(scale * ob.length);
-			int obWidth = (int)(scale * ob.width);
-			g2d.fillRect(obX, obY, obLength, obWidth);
+			drawObstacleTop(g2d, ob, runwayX, height/2, scale);
 		}
 		
 //		drawMeasurement(g2d, scale, 1500, width /2, 600, 90, "TORA");
@@ -58,6 +52,24 @@ public class Draw
 			drawMeasurement(g2d, scale, logRun.asda, width /2, 450, 90, "ASDA");
 			drawMeasurement(g2d, scale, logRun.lda, width /2, 475, 90, "LDA");
 		}
+	}
+	
+	private void drawObstacleTop(Graphics2D g2d, Obstacle ob, int runwayX, int centerlineY, float scale) {
+		g2d.setColor(Color.WHITE);
+		//TODO: Fix positioning of obstacle
+		int obX = runwayX + (int)(scale * ob.distanceFromThreshold);
+		int obY = centerlineY - (int)(scale * ob.distanceFromCenterline);
+		int obLength = (int)(scale * ob.length);
+		int obWidth = (int)(scale * ob.width);
+		g2d.fillRect(obX, obY, obLength, obWidth);
+		
+		g2d.setColor(Color.BLACK);
+		g2d.drawRect(obX, obY, obLength, obWidth);
+		
+		int stringWidth = g2d.getFontMetrics().stringWidth(ob.name);
+		int fontHeight = g2d.getFontMetrics().getHeight();
+		
+		g2d.drawChars(ob.name.toCharArray(), 0, ob.name.length(), obX + obLength/2 - stringWidth/2, obY + obWidth/2 + fontHeight/2);
 	}
 
 	public void drawSideView(Graphics2D g2d, int width, int height) {
