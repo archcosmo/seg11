@@ -8,6 +8,7 @@ public class Draw
 {
 	
 	Model model;
+	int lastAngle = 0;
 	
 	public Draw(Model model) {
 		this.model = model;
@@ -47,10 +48,10 @@ public class Draw
 			g2d.fillRect(runwayX+adjustedRunwayLength, runwayY, adjustedStopwayLength, adjustedRunwayWidth);
 			
 			//TODO: Fix positioning of arrows
-			drawMeasurement(g2d, scale, logRun.tora, width /2, 400, 90, "TORA");
-			drawMeasurement(g2d, scale, logRun.toda, width /2, 425, 90, "TODA");
-			drawMeasurement(g2d, scale, logRun.asda, width /2, 450, 90, "ASDA");
-			drawMeasurement(g2d, scale, logRun.lda, width /2, 475, 90, "LDA");
+			drawMeasurement(g2d, scale, logRun.tora, width /2, 600, 90, "TORA", 600 - (height/2 +adjustedRunwayWidth/2), 600 - (height/2 +adjustedRunwayWidth/2));
+			drawMeasurement(g2d, scale, logRun.toda, width /2, 425, 90, "TODA", 10, 10);
+			drawMeasurement(g2d, scale, logRun.asda, width /2, 450, 90, "ASDA", 10, 10);
+			drawMeasurement(g2d, scale, logRun.lda, width /2, 475, 90, "LDA", 10, 10);
 		}
 	}
 	
@@ -102,7 +103,7 @@ public class Draw
 		g2d.dispose();
 	}
 	
-	private void drawMeasurement(Graphics2D g2d, float scale, int measurementLength, int arrowX, int arrowY, int angle, String identifier) {
+	private void drawMeasurement(Graphics2D g2d, float scale, int measurementLength, int arrowX, int arrowY, int angle, String identifier, int extrapolation1, int extrapolation2) {
 		double angleR = angle * Math.PI / 180;
 		int adjustedLength = (int)(scale* measurementLength);
 		int x = (int)(Math.sin(-angleR) * adjustedLength / 2);
@@ -128,8 +129,17 @@ public class Draw
 		g2d.drawLine(arrowX - x, arrowY - y, arrowX - x + headX, arrowY - y - headY);
 		g2d.drawLine(arrowX + x, arrowY + y, arrowX + x - headX, arrowY + y + headY);
 		
-		/*Draw length number*/
+		/*Draw label*/
 		String stringData = new String( ((identifier != null && !identifier.isEmpty()) ? identifier + ": " : "") + measurementLength + "m");
 		g2d.drawChars(stringData.toCharArray(), 0, stringData.length(), arrowX, arrowY-2);
+		
+		/*Draw extrapolation lines*/
+		int e1x = -(int)(Math.cos(-angleR) * extrapolation1);
+		int e1y = -(int)(Math.sin(-angleR) * extrapolation1);
+		g2d.drawLine(arrowX - x, arrowY - y, arrowX - x + e1x, arrowY - y - e1y);
+		
+		int e2x = -(int)(Math.cos(-angleR) * extrapolation2);
+		int e2y = -(int)(Math.sin(-angleR) * extrapolation2);
+		g2d.drawLine(arrowX + x, arrowY + y, arrowX + x + e2x, arrowY + y - e2y);
 	}
 }
