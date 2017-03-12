@@ -48,6 +48,7 @@ public class Controller
 	}
 	
 	private void init() {
+		System.out.println("Before you start; you need to select an airport to use with the application");
 		if(!model.loadAirportInfoFromFile())
 			initialAirportConfiguration();
 

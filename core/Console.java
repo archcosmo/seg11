@@ -19,7 +19,6 @@ public class Console
 		this.controller = controller;
 		printBar("Runway Re-Declaration Tool");
 		System.out.println("Use 'help' to list available commands.");
-		//System.out.println("Use 'help' to get started.");
 	}
 	
 	/* Print formatted bar
@@ -121,14 +120,14 @@ public class Console
 	}
 	
 	public void initialAirportConfiguration() {
-		displayMessage("Airport Information needs to be configured.");
+		displayMessage("\nNo Airports found in XML files; Airport Information needs to be configured. \nEntering new Airport Configurator:\n");
 		controller.createAirport();
 	}
 	
 	public void selectAirports() {
 		while(true) {
 			List<Airport> airports = controller.getAirports();
-			String promptMsg = "Select an Airport:\n";
+			String promptMsg = "\nSelect an Airport: (Type corresponding number)\n";
 			int i;
 			for(i = 0; i < airports.size(); i++) {
 				String name = (airports.get(i).name == null || airports.get(i).name.isEmpty()) ? ("Airport " + i) : airports.get(i).name;
@@ -149,7 +148,7 @@ public class Console
 					controller.selectAirport(result);
 				}
 			} catch(NumberFormatException e) {
-				displayMessage("Number expected between 0 and " + i + ".");
+				displayMessage("Number expected between 0 and " + i + ".\n");
 				continue;
 			}
 			break;
@@ -247,7 +246,7 @@ public class Console
 			}
 			
 			if(obstacleName.replaceAll("\\s+", "").isEmpty()) {
-				displayMessage("An obstacle name cannot be empty.");
+				displayMessage("An obstacle name cannot be blank.");
 				continue;
 			}
 
