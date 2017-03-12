@@ -98,12 +98,42 @@ public class Draw
 		at.setToRotation(0);
 		g2d.setTransform(at);
 		
+		/*Draw Clearways*/
+		g2d.setColor(Color.GRAY);
+		int adjustedLowClearwayLength = 100;//(int) (scale * runway.shortAngleLogicalRunway.clearwayLength);
+		int adjustedHighClearwayLength = 100;//(int) (scale * runway.longAngleLogicalRunway.clearwayLength);
+		int adjustedLowClearwayWidth = 100;	//TOD0:: Fix when clearwayWidth implemented
+		int adjustedHighClearwayWidth = 100; 
+		g2d.drawRect(runwayX -adjustedHighClearwayLength, centerlineY-adjustedHighClearwayWidth/2, adjustedHighClearwayLength, adjustedHighClearwayWidth);
+		g2d.drawRect(runwayX+runwayLength-1, centerlineY-adjustedLowClearwayWidth/2, adjustedLowClearwayLength, adjustedLowClearwayWidth);
+				
 		/*Draw Stopways*/
 		g2d.setColor(Color.LIGHT_GRAY);
 		int adjustedLowStopwayLength = (int) (scale * runway.shortAngleLogicalRunway.stopwayLength);
 		int adjustedHighStopwayLength = (int) (scale * runway.longAngleLogicalRunway.stopwayLength);
 		g2d.fillRect(runwayX - adjustedHighStopwayLength, centerlineY - runwayWidth/2, adjustedHighStopwayLength, runwayWidth);
 		g2d.fillRect(runwayX+runwayLength, centerlineY - runwayWidth/2, adjustedLowStopwayLength, runwayWidth);
+		
+		/*Label Clearway*/
+		g2d.setColor(Color.BLACK);
+		String clearwayLabel = "Clearway";
+		
+		/*Low Angle Clearway*/
+//		g2d.setFont(new Font(gFont.getFontName(), gFont.getStyle(), (int)(runway.shortAngleLogicalRunway.clearwayLength * 60 * scale/300)));
+		g2d.setFont(new Font(gFont.getFontName(), gFont.getStyle(), (int)(500 * 60 * scale/300)));
+		int clearwayLabelWidth = g2d.getFontMetrics().stringWidth(clearwayLabel);
+		int clearwayLabelHeight = g2d.getFontMetrics().getHeight();
+		
+		g2d.drawChars(clearwayLabel.toCharArray(), 0, clearwayLabel.length(), runwayX + runwayLength + adjustedLowClearwayLength/2 - clearwayLabelWidth/2, centerlineY-adjustedHighClearwayWidth/2 + 3*clearwayLabelHeight/4);
+		
+		/*High Angle Clearway*/
+//		g2d.setFont(new Font(gFont.getFontName(), gFont.getStyle(), (int)(runway.longAngleLogicalRunway.clearwayLength * 60 * scale/300)));
+		g2d.setFont(new Font(gFont.getFontName(), gFont.getStyle(), (int)(500 * 60 * scale/300)));
+		clearwayLabelWidth = g2d.getFontMetrics().stringWidth(clearwayLabel);
+		clearwayLabelHeight = g2d.getFontMetrics().getHeight();
+		
+		g2d.drawChars(clearwayLabel.toCharArray(), 0, clearwayLabel.length(), runwayX - adjustedHighClearwayLength/2 - clearwayLabelWidth/2, centerlineY-adjustedLowClearwayWidth/2 + 3*clearwayLabelHeight/4);
+		
 		
 		/*Label Stopways*/
 		g2d.setColor(Color.BLACK);
