@@ -151,6 +151,7 @@ public class Console
 				displayMessage("Number expected between 0 and " + i + ".\n");
 				continue;
 			}
+			displayMessage("\nAirport has been selected.\n\nEntering application: Use 'help' command for a list of commands and tips.");
 			break;
 		}
 	}
@@ -188,14 +189,20 @@ public class Console
 			}
 
 			Integer resa = readInt("Enter RESA value for runway", 240);
+			System.out.println("");;
 			Integer blastAllowance = readInt("Enter blast allowance value for runway.", 300);
+			System.out.println("");;
 			Integer stripEnd = readInt("Enter strip end value for runway");
+			System.out.println("");;
 			Runway runway = new Runway(resa, blastAllowance, stripEnd);
 			
 			Integer firstAngle = readInt("Enter an angle for the runway", 0, 359);
+			System.out.println("");;
 			
 			Integer startStopway = readInt("Enter the length of the start stopway");
+			System.out.println("");;
 			Integer endStopway = readInt("Enter the length of the end stopway");
+			System.out.println("");;
 			
 			firstAngle /= 10;
 			Integer reciprocalAngle = (firstAngle + 18) % 36;
@@ -285,7 +292,14 @@ public class Console
 		case "help":
 			if ( input.length == 1 ) 
 			{
-				System.out.println("To use the application, use the following commands:"); 
+				System.out.println("\nProgram Help:\n\n"
+						+ "In order to use the application, you need to select a runway (and optionally; an object)\n"
+						+ "Once you have the system configured with the runway and objects you want, you can calculate or draw\n\n");
+				System.out.println("To use the application, use the following commands:\n"
+						+ "\t\t Note: commands are listed in unix format.\n"
+						+ "\t\t\t(brackets) - Denote places where you need to replace with a string: Eg.. (type) can be replaced with runway or obstacle\n"
+						+ "\t\t\t[Sq.Brackets] - Denote optional input, eg in \"calculate\" command, there is the option to call \"calculate -v\" for a breakdown of the calculations\n"
+						+ "\t\t\t[option1 | option2] - Denote an optional input where you can select one of multiple options, seperated by a '|' verticle seperator\n\n"); 
 				System.out.println("\n* list (type) : lists airports, runways, thresholds, and obstacles registered to the system.");
 				System.out.println("* | (type) = airports, runways, thresholds, or obstacles");
 				System.out.println("\n* select (type) (id) : selects which airport, runway, theshold, and obstacle to use in calculation.");
@@ -300,6 +314,8 @@ public class Console
 				System.out.println("* | -v : Verbose, prints the calculation breakdown.");
 				System.out.println("* |  T : Take-off/Land towards selected threshold.");
 				System.out.println("* |  A : Take-off/Land away from selected threshold.");
+				System.out.println("\n* draw");
+				System.out.println("* | No options available, prints current selected system to the diagrams window");			
 				System.out.println("\n* status"); 
 				System.out.println("* quit"); 
 			} else { wrong_args(input); }
@@ -334,7 +350,7 @@ public class Console
 					list_obstacles(controller.getObstacles());
 					break;
 				default:
-					System.out.println("Invalid argument to command 'list (type)'\n : Valid types are; 'airports', 'runways', 'thresholds', 'obstacles'");
+					System.out.println("Invalid argument to command 'list (type)'\n : Valid types are; 'airports', 'runways', 'thresholds', 'obstacles'\n");
 					break;
 				}
 			} else { wrong_args(input); }
@@ -363,23 +379,23 @@ public class Console
 						try {
 							Integer airport_id = Integer.parseInt(input[2]);
 							if(airport_id < 0 || airport_id >= controller.getAirports().size())
-								System.out.println("Invalid airport id, use 'list airports' to list valid airport ids.");
+								System.out.println("Invalid airport id, use 'list airports' to list valid airport ids.\n");
 							else
 								controller.createRunway(Integer.parseInt(input[2]));
 							
 						} catch(NumberFormatException e) {
-							System.out.println("Expected number for second argument, but " + input[2] + " was given.");
+							System.out.println("Expected number for second argument, but " + input[2] + " was given.\n");
 						}
 					else {
 						wrong_args(input);
-						System.out.println("Expected 'add runway [airport_id]'");
+						System.out.println("Expected 'add runway [airport_id]'\n");
 					}
 					break;
 				case "obstacle":
 					controller.createObstacle();
 					break;
 				default:
-					System.out.println("Invalid argument to command 'add (type)'\n : Valid types are; 'airports', 'runways', 'obstacles'");
+					System.out.println("Invalid argument to command 'add (type)'\n : Valid types are; 'airports', 'runways', 'obstacles'\n");
 					break;
 				}
 			} else { wrong_args(input); }
@@ -401,11 +417,11 @@ public class Console
 						controller.deleteObject(ID);
 						break;
 					default:
-						System.out.println("Invalid argument to command 'delete (type) (id)'\n : Valid types are; 'airport', 'runway', 'obstacle'");
+						System.out.println("Invalid argument to command 'delete (type) (id)'\n : Valid types are; 'airport', 'runway', 'obstacle'\n");
 						break;
 					}
 				} catch (NumberFormatException e) {
-					System.out.println("Invalid argument to command 'delete (type) (id)'\n : Expected number for id, but " + input[2] + " was given.");
+					System.out.println("Invalid argument to command 'delete (type) (id)'\n : Expected number for id, but " + input[2] + " was given.\n");
 				}
 			} else { wrong_args(input); }
 			break;
@@ -423,20 +439,20 @@ public class Console
 							System.out.println("Selected airport: " + controller.getSelectedAirport().name);
 						}
 						else
-							System.out.println("Invalid airport ID, use 'list airports' to get a list of airport IDs.");
+							System.out.println("Invalid airport ID, use 'list airports' to get a list of airport IDs.\n");
 						break;
 					case "runway":
 						if(controller.selectRunway(ID)) {
 							LogicalRunway selectedLr = controller.getSelectedLogicalRunway();
-							System.out.println(selectedLr.designator + " threshold selected on " + selectedLr.runway.designator + ".");
+							System.out.println(selectedLr.designator + " threshold selected on " + selectedLr.runway.designator + ".\n");
 						}
 						else
-							System.out.println("Invalid runway ID, use 'list runways' to get a list of runway IDs.");
+							System.out.println("Invalid runway ID, use 'list runways' to get a list of runway IDs.\n");
 						break;
 					case "threshold":
 						if(controller.selectThreshold(ID)) {
 							LogicalRunway selectedLr = controller.getSelectedLogicalRunway();
-							System.out.println(selectedLr.designator + " threshold selected on " + selectedLr.runway.designator + ".");
+							System.out.println(selectedLr.designator + " threshold selected on " + selectedLr.runway.designator + ".\n");
 						}
 						else
 							System.out.println("Invalid threshold ID, use 'list thresholds' to get a list of threshold IDs for the currently selected runway.");
@@ -457,11 +473,11 @@ public class Console
 							System.out.println("Invalid obstacle ID, use 'list obstacles' to get a list of object IDs.");
 						break;
 					default:
-						System.out.println("Invalid argument to command 'select (type) (id)'\n : Valid types are; 'airport', 'runway', 'threshold', 'obstacle'");
+						System.out.println("Invalid argument to command 'select (type) (id)'\n : Valid types are; 'airport', 'runway', 'threshold', 'obstacle'\n");
 						break;
 					}
 				} catch (NumberFormatException e) {
-					System.out.println("Invalid argument to command 'select (type) (id)'\n : Expected number for id, but " + input[2] + " was given.");
+					System.out.println("Invalid argument to command 'select (type) (id)'\n : Expected number for id, but " + input[2] + " was given.\n");
 				}
 			} else { wrong_args(input); }
 			break;
@@ -474,6 +490,7 @@ public class Console
 					System.out.println("TODA: " + newValues.get(1));
 					System.out.println("ASDA: " + newValues.get(2));
 					System.out.println("LDA: " + newValues.get(3));
+					System.out.println("");
 				} catch (InvalidDataException e) {
 					System.out.println(e.getMessage());
 				}
@@ -485,12 +502,13 @@ public class Console
 					List<Integer> newValues = controller.calculate(true, breakdown, input[2].equalsIgnoreCase("T"));
 					
 					System.out.println("Breakdown\n---------\n" + (breakdown.breakdownStr == null ? "No redeclaration required." : breakdown.breakdownStr));
-					
+					System.out.println("");;
 					System.out.println("\nResults\n-------");
 					System.out.println("TORA: " + newValues.get(0));
 					System.out.println("TODA: " + newValues.get(1));
 					System.out.println("ASDA: " + newValues.get(2));
 					System.out.println("LDA: " + newValues.get(3));
+					System.out.println("");;
 				} catch (InvalidDataException e) {
 					System.out.println(e.getMessage());
 				}
@@ -524,7 +542,7 @@ public class Console
 
 	private void list_airports(List<Airport> airports) {
 		if(airports.size() == 0)
-			System.out.println("There are currently no airports registered to the system.");
+			System.out.println("There are currently no airports registered to the system.\n");
 		
 		for(int i = 0; i < airports.size(); i++) {
 			Airport airport = airports.get(i);
@@ -535,11 +553,11 @@ public class Console
 	
 	private void list_runways(List<Runway> runways) {
 		if(runways == null) {
-			System.out.println("No airport is currently selected. Please select one with 'select airport'.");
+			System.out.println("No airport is currently selected. Please select one with 'select airport'.\n");
 			return;
 		}
 		if(runways.size() == 0)
-			System.out.println("There are no runways registered to this airport.");
+			System.out.println("There are no runways registered to this airport.\n");
 		
 		for(int i = 0; i < runways.size(); i++) {
 			Runway runway = runways.get(i);
@@ -550,14 +568,14 @@ public class Console
 	
 	private void list_thresholds(LogicalRunway lr) {
 		if(lr == null)
-			System.out.println("There are no thresholds configured for this runway. Add a new runway with 'add runway' to set up a new runway with thresholds.");
+			System.out.println("There are no thresholds configured for this runway. Add a new runway with 'add runway' to set up a new runway with thresholds.\n");
 
 		System.out.println(lr.designator);
 	}
 	
 	private void list_obstacles(List<Obstacle> obstacles) {
 		if(obstacles.size() == 0)
-			System.out.println("There are no obstacles registered to the system. Add some with 'add obstacle'");
+			System.out.println("There are no obstacles registered to the system. Add some with 'add obstacle'\n");
 		
 		for(int i = 0; i < obstacles.size(); i++) {
 			Obstacle obstacle = obstacles.get(i);
@@ -573,8 +591,8 @@ public class Console
 	}
 	
 	public Point getObstaclePosition() {
-		Integer x = readInt("Enter the obstacle's distance from the " + controller.getSelectedLogicalRunway().designator + " threshold.\n(Negative for before threshold, Positive for after threshold)");
-		Integer y = readInt("Enter the obstacle's distance from the centerline\n(Positive for north of centerline, Negative for south of centerline)");
+		Integer x = readInt("Enter the obstacle's distance from the " + controller.getSelectedLogicalRunway().designator + " threshold.\n(Negative for before threshold, Positive for after threshold)\n");
+		Integer y = readInt("Enter the obstacle's distance from the centerline\n(Positive for north of centerline, Negative for south of centerline)\n");
 		
 		return new Point(x, y);
 	}
@@ -599,15 +617,18 @@ public class Console
 		if(obstacle == null)
 			System.out.println("None selected.");
 		else {
+			System.out.println("");;
 			System.out.println("Type: " + obstacle.name);
 			System.out.println("Width: " + obstacle.width + "m");
 			System.out.println("Height: " + obstacle.height + "m");
 			System.out.println("Length: " + obstacle.length + "m");
 			System.out.println("Distance from " + lr.designator + ": " + obstacle.distanceFromThreshold + "m");
 			System.out.println("Distance from centerline: " + obstacle.distanceFromCenterline + "m");
+			System.out.println("");;
 		}
 		
 		if(lr != null) {
+			System.out.println("");;
 			System.out.println("\nOriginal Values");
 			System.out.println("---------------");
 			System.out.println("TORA: " + lr.tora);
@@ -620,6 +641,7 @@ public class Console
 			System.out.println("RESA: " + lr.getRESA());
 			System.out.println("Blast Allowance: " + lr.getBlastAllowance());
 			System.out.println("Strip End: " + lr.getStripEnd());
+			System.out.println("");;
 		}
 	}
 	
