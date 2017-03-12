@@ -46,7 +46,7 @@ public class DiagramFrame extends JFrame {
 		JTabbedPane tabs = new JTabbedPane();
 		TOP = new TopViewPanel(drawModule);
 		tabs.addTab("Top View", TOP);
-		SIDE = new SideViewPanel();
+		SIDE = new SideViewPanel(drawModule);
 		tabs.addTab("Side View", SIDE);
 		add(tabs, BorderLayout.CENTER);
 	}

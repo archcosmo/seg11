@@ -2,6 +2,8 @@ package core;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
 import javax.swing.Box;
@@ -13,7 +15,9 @@ import javax.swing.JPanel;
 @SuppressWarnings("serial")
 public class SideViewPanel extends JPanel 
 {
-	public SideViewPanel() 
+	Draw drawModule;
+	
+	public SideViewPanel(Draw drawModule) 
 	{
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
@@ -26,6 +30,8 @@ public class SideViewPanel extends JPanel
 		add(init1);
 		add(init2);
 		add(init3);
+		
+		this.drawModule = drawModule;
 	}
 	
 	public void updateUI(BufferedImage i)
@@ -34,5 +40,10 @@ public class SideViewPanel extends JPanel
 		//TODO:: how to scale and position image
 		JLabel picLabel = new JLabel(new ImageIcon(i));
 		add(picLabel, BorderLayout.CENTER);
+	}
+	
+	@Override
+	public void paintComponent(Graphics g) {
+		drawModule.drawSideView((Graphics2D) g);
 	}
 }

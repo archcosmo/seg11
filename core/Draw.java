@@ -35,9 +35,9 @@ public class Draw
 		drawMeasurement(g2d, scale, 1500, width /2, 600, 90, "TORA");
 	}
 
-	public void drawSideView(Graphics2D g2d) {
+	public void drawSideView(Graphics2D g) {
 		//g2d.clearRect(0, 0, 600, 600); //TODO:: need to change to size of panel and not remove text
-		g2d.setColor(Color.green);
+		g.setColor(Color.green);
 		LogicalRunway lrw = model.selectedLogicalRunway;
 		int runwayLength = lrw.tora;
 		/*
@@ -53,16 +53,16 @@ public class Draw
 		 */
 		//TODO:: display Runway designator
 
-		g2d.fillRect(20, 150 - 15 - 1, runwayLength, 17);
-		g2d.drawRect(20 + runwayLength, 150 - 10, lrw.stopwayLength, 10);
+		g.fillRect(20, 150 - 15 - 1, runwayLength, 17);
+		g.drawRect(20 + runwayLength, 150 - 10, lrw.stopwayLength, 10);
 		if (lrw.clearwayLength > 0) {
-			g2d.drawRect(20 + runwayLength, 150 - 20, lrw.clearwayLength, 20);
+			g.drawRect(20 + runwayLength, 150 - 20, lrw.clearwayLength, 20);
 		}
-		g2d.setFont(new Font("TimesRoman", Font.PLAIN, 20));
-		g2d.drawString("TORA = " + lrw.tora, 20, 120);
-		g2d.drawString("Stopway = " + lrw.stopwayLength, 20 + runwayLength, 100);
-		g2d.drawString("Clearway = " + lrw.clearwayLength, 20 + runwayLength + lrw.stopwayLength, 80);
-		g2d.dispose();
+		g.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		g.drawString("TORA = " + lrw.tora, 20, 120);
+		g.drawString("Stopway = " + lrw.stopwayLength, 20 + runwayLength, 100);
+		g.drawString("Clearway = " + lrw.clearwayLength, 20 + runwayLength + lrw.stopwayLength, 80);
+		g.dispose();
 	}
 	
 	private void drawMeasurement(Graphics2D g2d, float scale, int measurementLength, int arrowX, int arrowY, int angle, String identifier) {
