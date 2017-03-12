@@ -69,34 +69,9 @@ public class Draw
 		g2d.setColor(Color.gray);
 		g2d.fillRect(runwayX, centerlineY - runwayWidth/2, runwayLength, runwayWidth);
 		
-		/*Draw Runway designators*/
-		String lowDesig = runway.shortAngleLogicalRunway.designator;
-		String highDesig = runway.longAngleLogicalRunway.designator;
-		
-		g2d.setColor(Color.WHITE);
-		
-		AffineTransform at = new AffineTransform();
-		
 		Font gFont = g2d.getFont();
-		/*Scale designator font*/
-		g2d.setFont(new Font(gFont.getFontName(), gFont.getStyle(), (int)(80 * scale)));
 		
-		int lowDesigWidth = g2d.getFontMetrics().stringWidth(lowDesig);
-		int highDesigWidth = g2d.getFontMetrics().stringWidth(highDesig);
 		
-		//Rotate text 90 deg
-		at.setToRotation(90 * Math.PI/180, (int)(runwayX + runwayLength * 0.05), centerlineY - lowDesigWidth/2);
-		g2d.setTransform(at);
-		g2d.drawChars(lowDesig.toCharArray(), 0, lowDesig.length(), (int)(runwayX + runwayLength * 0.05), centerlineY - lowDesigWidth/2);
-		
-		//Rotate text -90 deg
-		at.setToRotation(-90 * Math.PI/180, (int)(runwayX + runwayLength * 0.95), centerlineY + highDesigWidth/2);
-		g2d.setTransform(at);
-		g2d.drawChars(highDesig.toCharArray(), 0, highDesig.length(), (int)(runwayX + runwayLength * 0.95), centerlineY + highDesigWidth/2);
-		
-		//Reset rotation
-		at.setToRotation(0);
-		g2d.setTransform(at);
 		
 		/*Draw Clearways*/
 		g2d.setColor(Color.GRAY);
@@ -153,6 +128,42 @@ public class Draw
 		
 		g2d.drawChars(stopwayLabel.toCharArray(), 0, stopwayLabel.length(), runwayX - adjustedHighStopwayLength/2 - stopwayLabelWidth/2, centerlineY + stopwayLabelHeight/2);
 		
+		
+		/*Displaced Threshold*/
+		int adjustedDisplacement = (int)(scale*runway.shortAngleLogicalRunway.displacedThreshold);
+		int displacedThreshWidth = runwayLength/100;
+		g2d.fillRect(runwayX+adjustedDisplacement-displacedThreshWidth/2, centerlineY - runwayWidth/2, displacedThreshWidth, runwayWidth);
+		String displacedLabel = "Displaced Threshold";
+		g2d.setFont(new Font(gFont.getFontName(), gFont.getStyle(), (int)(60 * scale)));
+		
+		g2d.drawChars(displacedLabel.toCharArray(), 0, displacedLabel.length(), runwayX+adjustedDisplacement-runwayLength/100, centerlineY-runwayWidth/2-5);
+		
+		/*Draw Runway designators*/
+		String lowDesig = runway.shortAngleLogicalRunway.designator;
+		String highDesig = runway.longAngleLogicalRunway.designator;
+		
+		g2d.setColor(Color.WHITE);
+		
+		AffineTransform at = new AffineTransform();
+		/*Scale designator font*/
+		g2d.setFont(new Font(gFont.getFontName(), gFont.getStyle(), (int)(80 * scale)));
+		
+		int lowDesigWidth = g2d.getFontMetrics().stringWidth(lowDesig);
+		int highDesigWidth = g2d.getFontMetrics().stringWidth(highDesig);
+		
+		//Rotate text 90 deg
+		at.setToRotation(90 * Math.PI/180, (int)(runwayX + runwayLength * 0.05), centerlineY - lowDesigWidth/2);
+		g2d.setTransform(at);
+		g2d.drawChars(lowDesig.toCharArray(), 0, lowDesig.length(), (int)(runwayX + runwayLength * 0.05), centerlineY - lowDesigWidth/2);
+		
+		//Rotate text -90 deg
+		at.setToRotation(-90 * Math.PI/180, (int)(runwayX + runwayLength * 0.95), centerlineY + highDesigWidth/2);
+		g2d.setTransform(at);
+		g2d.drawChars(highDesig.toCharArray(), 0, highDesig.length(), (int)(runwayX + runwayLength * 0.95), centerlineY + highDesigWidth/2);
+		
+		//Reset rotation
+		at.setToRotation(0);
+		g2d.setTransform(at);
 		
 		//Reset font
 		g2d.setFont(gFont);
