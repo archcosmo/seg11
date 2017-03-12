@@ -81,7 +81,7 @@ public class Draw
 		g2d.fillRect(20, 150 - 15 - 1, runwayLength, 17);
 		g2d.drawRect(20 + runwayLength, 150 - 10, lrw.stopwayLength, 10);
 		if (lrw.clearwayLength > 0) {
-			g.drawRect(20 + runwayLength, 150 - 20, lrw.clearwayLength, 20);
+			g2d.drawRect(20 + runwayLength, 150 - 20, lrw.clearwayLength, 20);
 		}
 		g2d.setFont(new Font("TimesRoman", Font.PLAIN, 20));
 		g2d.drawString("TORA = " + lrw.tora, 20, 120);

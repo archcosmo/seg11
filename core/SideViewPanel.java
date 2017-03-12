@@ -44,6 +44,6 @@ public class SideViewPanel extends JPanel
 	
 	@Override
 	public void paintComponent(Graphics g) {
-		drawModule.drawSideView((Graphics2D) g);
+		drawModule.drawSideView((Graphics2D) g, this.getWidth(), this.getHeight());
 	}
 }
