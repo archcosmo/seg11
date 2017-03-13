@@ -26,7 +26,7 @@ public class Draw
 //		int runwayWidth = model.selectedRunway.runwayWidth;
 		
 		Runway runway = new Runway(300, 240, 100);
-		runway.setLogicalRunways(new LogicalRunway("09", runway, 3000, 3000, 3000, 2800, 400), new LogicalRunway("27", runway, 3000, 3000, 3000, 2800, 200));
+		runway.setLogicalRunways(new LogicalRunway("09", runway, 3000, 3500, 3000, 2800, 400), new LogicalRunway("27", runway, 3000, 3200, 3000, 2800, 200));
 		
 		
 		int runwayLength = 3000;
@@ -38,29 +38,15 @@ public class Draw
 		int adjustedRunwayWidth = (int)(scale * runwayWidth);
 		
 		int runwayX = width/2 - adjustedRunwayLength/2; 
-		int runwayY = height/2 - adjustedRunwayWidth/2;
 		
 		
 		drawRunwayTop(g2d, runway, runwayX, adjustedRunwayLength, adjustedRunwayWidth, height/2, scale);
-		drawLogicalRunwayMeasurementsTop(g2d, false, runway.shortAngleLogicalRunway, runwayX, adjustedRunwayLength, adjustedRunwayWidth, height/2, scale);
+		drawLogicalRunwayMeasurementsTop(g2d, true, runway, runwayX, adjustedRunwayLength, adjustedRunwayWidth, height/2, scale);
 		
 		Obstacle ob = model.selectedObstacle;
 		/* Test obstacle */ ob = new Obstacle("Plane", 100, 500, 10); ob.setPosition(760, 20);
 		if (ob != null) {
 			drawObstacleTop(g2d, ob, runwayX, height/2, scale);
-		}
-		
-//		drawMeasurement(g2d, scale, 1500, width /2, 600, 90, "TORA");
-		LogicalRunway logRun = model.selectedLogicalRunway;
-		/* Test logRun */ logRun = new LogicalRunway("test", new Runway(240,300,60), 3000, 3000, 3000, 2800, 200);
-		if (logRun != null) {
-			g2d.setColor(Color.LIGHT_GRAY);
-			int adjustedStopwayLength = (int) (scale * logRun.stopwayLength);
-//			g2d.fillRect(runwayX - adjustedStopwayLength, runwayY, adjustedStopwayLength, adjustedRunwayWidth);
-//			g2d.fillRect(runwayX+adjustedRunwayLength, runwayY, adjustedStopwayLength, adjustedRunwayWidth);
-			
-			//TODO: Fix positioning of arrows
-			
 		}
 	}
 	
@@ -75,10 +61,10 @@ public class Draw
 		
 		/*Draw Clearways*/
 		g2d.setColor(Color.GRAY);
-		int adjustedLowClearwayLength = 100;//(int) (scale * runway.shortAngleLogicalRunway.clearwayLength);
-		int adjustedHighClearwayLength = 100;//(int) (scale * runway.longAngleLogicalRunway.clearwayLength);
-		int adjustedLowClearwayWidth = 100;	//TOD0:: Fix when clearwayWidth implemented
-		int adjustedHighClearwayWidth = 100; 
+		int adjustedLowClearwayLength = (int) (scale * runway.shortAngleLogicalRunway.clearwayLength);
+		int adjustedHighClearwayLength = (int) (scale * runway.longAngleLogicalRunway.clearwayLength);
+		int adjustedLowClearwayWidth = (int)(600*scale);	//TOD0:: Fix when clearwayWidth implemented
+		int adjustedHighClearwayWidth = (int)(600*scale); 
 		g2d.drawRect(runwayX -adjustedHighClearwayLength, centerlineY-adjustedHighClearwayWidth/2, adjustedHighClearwayLength, adjustedHighClearwayWidth);
 		g2d.drawRect(runwayX+runwayLength-1, centerlineY-adjustedLowClearwayWidth/2, adjustedLowClearwayLength, adjustedLowClearwayWidth);
 				
@@ -94,16 +80,14 @@ public class Draw
 		String clearwayLabel = "Clearway";
 		
 		/*Low Angle Clearway*/
-//		g2d.setFont(new Font(gFont.getFontName(), gFont.getStyle(), (int)(runway.shortAngleLogicalRunway.clearwayLength * 60 * scale/300)));
-		g2d.setFont(new Font(gFont.getFontName(), gFont.getStyle(), (int)(500 * 60 * scale/300)));
+		g2d.setFont(new Font(gFont.getFontName(), gFont.getStyle(), (int)(runway.shortAngleLogicalRunway.clearwayLength * 60 * scale/300)));
 		int clearwayLabelWidth = g2d.getFontMetrics().stringWidth(clearwayLabel);
 		int clearwayLabelHeight = g2d.getFontMetrics().getHeight();
 		
 		g2d.drawChars(clearwayLabel.toCharArray(), 0, clearwayLabel.length(), runwayX + runwayLength + adjustedLowClearwayLength/2 - clearwayLabelWidth/2, centerlineY-adjustedHighClearwayWidth/2 + 3*clearwayLabelHeight/4);
 		
 		/*High Angle Clearway*/
-//		g2d.setFont(new Font(gFont.getFontName(), gFont.getStyle(), (int)(runway.longAngleLogicalRunway.clearwayLength * 60 * scale/300)));
-		g2d.setFont(new Font(gFont.getFontName(), gFont.getStyle(), (int)(500 * 60 * scale/300)));
+		g2d.setFont(new Font(gFont.getFontName(), gFont.getStyle(), (int)(runway.longAngleLogicalRunway.clearwayLength * 60 * scale/300)));
 		clearwayLabelWidth = g2d.getFontMetrics().stringWidth(clearwayLabel);
 		clearwayLabelHeight = g2d.getFontMetrics().getHeight();
 		
@@ -128,15 +112,6 @@ public class Draw
 		
 		g2d.drawChars(stopwayLabel.toCharArray(), 0, stopwayLabel.length(), runwayX - adjustedHighStopwayLength/2 - stopwayLabelWidth/2, centerlineY + stopwayLabelHeight/2);
 		
-		
-		/*Displaced Threshold*/
-		int adjustedDisplacement = (int)(scale*runway.shortAngleLogicalRunway.displacedThreshold);
-		int displacedThreshWidth = runwayLength/100;
-		g2d.fillRect(runwayX+adjustedDisplacement-displacedThreshWidth/2, centerlineY - runwayWidth/2, displacedThreshWidth, runwayWidth);
-		String displacedLabel = "Displaced Threshold";
-		g2d.setFont(new Font(gFont.getFontName(), gFont.getStyle(), (int)(60 * scale)));
-		
-		g2d.drawChars(displacedLabel.toCharArray(), 0, displacedLabel.length(), runwayX+adjustedDisplacement-runwayLength/100, centerlineY-runwayWidth/2-5);
 		
 		/*Draw Runway designators*/
 		String lowDesig = runway.shortAngleLogicalRunway.designator;
@@ -169,8 +144,10 @@ public class Draw
 		g2d.setFont(gFont);
 	}
 	
-	private void drawLogicalRunwayMeasurementsTop(Graphics2D g2d, boolean lowAngle, LogicalRunway lr, int runwayX, int runwayLength, int runwayWidth, int centerlineY, float scale) {
+	private void drawLogicalRunwayMeasurementsTop(Graphics2D g2d, boolean lowAngle, Runway runway, int runwayX, int runwayLength, int runwayWidth, int centerlineY, float scale) {
 		Set<String> addedLabels = new HashSet<String>();
+		
+		LogicalRunway lr = lowAngle ? runway.shortAngleLogicalRunway : runway.longAngleLogicalRunway;
 		
 		for(int i = 0; i < 4; i++) {
 			String selectedLabel = "";
@@ -193,9 +170,35 @@ public class Draw
 			}
 			addedLabels.add(selectedLabel);
 			int arrowX = lowAngle ? (int)(runwayX + scale*selectedValue/2) : (int)(runwayX+runwayLength - scale*selectedValue/2);
+			
+			/*LDA Positioned from threshold*/
+			if(selectedLabel.equals("LDA")) {
+				int adjustedDisplacement = (int)(scale*lr.displacedThreshold);
+				arrowX = lowAngle ? (int)(runwayX+adjustedDisplacement + scale*selectedValue/2) : (int)(runwayX+runwayLength-adjustedDisplacement - scale*selectedValue/2);
+			}
 			int arrowY = (int)(centerlineY + runwayWidth/2 + 150*(i+1)*scale);
 			drawMeasurement(g2d, scale, selectedValue, arrowX, arrowY, 90, selectedLabel, (int)(150*(i+1)*scale), (int)(150*(i+1)*scale));
 		}
+		
+		/*Displaced Threshold*/
+		int adjustedDisplacement = (int)(scale*lr.displacedThreshold);
+		int displacedThreshWidth = runwayLength/100;
+		int displacementX = lowAngle ? runwayX+adjustedDisplacement-displacedThreshWidth/2 : runwayX+runwayLength-adjustedDisplacement-displacedThreshWidth/2;
+		
+		/*Make transparent so threshold designators can be read*/
+		g2d.setColor(new Color(0, 0, 0, 150));
+		g2d.fillRect(displacementX, centerlineY - runwayWidth/2, displacedThreshWidth, runwayWidth);
+		String displacedLabel = "Displaced Threshold";
+		
+		Font gFont = g2d.getFont();
+		g2d.setColor(Color.BLACK);
+		
+		g2d.setFont(new Font(gFont.getFontName(), gFont.getStyle(), (int)(60 * scale)));
+		
+		g2d.drawChars(displacedLabel.toCharArray(), 0, displacedLabel.length(), displacementX, centerlineY-runwayWidth/2-5);
+		
+		//Reset Font
+		g2d.setFont(gFont);
 	}
 	
 	private void drawObstacleTop(Graphics2D g2d, Obstacle ob, int runwayX, int centerlineY, float scale) {
