@@ -373,20 +373,25 @@ public class Draw
 			g2d.drawRect(20 + lrw.tora, 150 + 13, lrw.clearwayLength, 2);
 		}
 		//TODO:: displaced threshold
-		drawSimpleMeasurement(g2d, 20 + (lrw.tora - lrw.lda), 150 - 15 + 50, lrw.lda, "LDA");
-		drawSimpleMeasurement(g2d, 20, 150 - 15 + 75, lrw.tora, "TORA");
-		drawSimpleMeasurement(g2d, 20, 150 - 15 + 100, lrw.asda, "ASDA");
-		drawSimpleMeasurement(g2d, 20, 150 - 15 + 125, lrw.toda, "TODA");
+		drawSimpleMeasurement(g2d, 20 + (lrw.tora - lrw.lda), -80, lrw.lda, "LDA");
+		drawSimpleMeasurement(g2d, 20, -120, lrw.tora, "TORA");
+		drawSimpleMeasurement(g2d, 20, -160, lrw.asda, "ASDA");
+		drawSimpleMeasurement(g2d, 20, -200, lrw.toda, "TODA");
 		//TODO:: obstacle and gradient
 		g2d.dispose();
 	}
 
-	private void drawSimpleMeasurement(Graphics2D g2d, int xPos, int yPos, int length, String label) {
+	private void drawSimpleMeasurement(Graphics2D g2d, int xPos, int height, int length, String label) {
 		//TODO: add lines from arrow to runway
 		//main line
-		g2d.drawLine(xPos, yPos, xPos + length, yPos);
-		yPos -= 2;
-		g2d.drawString(label, xPos, yPos);
+		int runwayYPos = 150 + 15;
+		g2d.drawLine(xPos, runwayYPos - height, xPos + length, runwayYPos - height);
+		g2d.drawLine(xPos, runwayYPos, xPos, runwayYPos - height);
+		g2d.drawLine(xPos + length, runwayYPos, xPos + length, runwayYPos - height);
+		String measurementText = label + ": " + length + "m";
+		int textWidth = g2d.getFontMetrics().stringWidth(measurementText);
+		int textXPos = (length - textWidth) / 2;
+		g2d.drawString(measurementText, xPos + textXPos, runwayYPos - height - 2);
 		//end lines - todo end at runway
 	}
 }
