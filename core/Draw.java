@@ -339,29 +339,8 @@ public class Draw
 		}
 		LogicalRunway lrw = model.selectedLogicalRunway;
 
-		System.out.println(lrw.runway);
-		System.out.println(lrw.lda);
-		System.out.println(lrw.tora);
-		System.out.println(lrw.asda);
-		System.out.println(lrw.toda);
-		System.out.println(lrw.stopwayLength);
-		System.out.println(lrw.clearwayLength);
-		System.out.println(lrw.displacedThreshold);
-
 		//TODO:: display Runway designator
 		//TODO:: scale by runway length
-		//Draw Runway
-
-		/*
-		LDA
-		TORA
-		ASDA
-		TODA
-		____
-
-		STOPWAYS
-		CLEARWAYS
-		 */
 
 		g2d.setFont(new Font("TimesRoman", Font.PLAIN, 20));
 
@@ -377,6 +356,8 @@ public class Draw
 		drawSimpleMeasurement(g2d, 20, -120, lrw.tora, "TORA");
 		drawSimpleMeasurement(g2d, 20, -160, lrw.asda, "ASDA");
 		drawSimpleMeasurement(g2d, 20, -200, lrw.toda, "TODA");
+		drawSimpleMeasurement(g2d, 20 + lrw.tora, 50, lrw.stopwayLength, "Stopway");
+		drawSimpleMeasurement(g2d, 20 + lrw.tora, 90, lrw.clearwayLength, "Clearway");
 		//TODO:: obstacle and gradient
 		g2d.dispose();
 	}
@@ -385,13 +366,20 @@ public class Draw
 		//TODO: add lines from arrow to runway
 		//main line
 		int runwayYPos = 150 + 15;
-		g2d.drawLine(xPos, runwayYPos - height, xPos + length, runwayYPos - height);
-		g2d.drawLine(xPos, runwayYPos, xPos, runwayYPos - height);
-		g2d.drawLine(xPos + length, runwayYPos, xPos + length, runwayYPos - height);
+		int startX = xPos;
+		int endX = xPos + length;
+		int startY = runwayYPos - height;
+		g2d.drawLine(startX, startY, endX, startY);
+		g2d.drawLine(startX, runwayYPos, startX, startY);
+		g2d.drawLine(startX, startY, startX + 10, startY + 10);
+		g2d.drawLine(startX, startY, startX + 10, startY -10);
+		g2d.drawLine(endX, startY, endX - 10, startY + 10);
+		g2d.drawLine(endX, startY, endX - 10, startY - 10);
+		g2d.drawLine(endX, runwayYPos, endX, startY);
 		String measurementText = label + ": " + length + "m";
 		int textWidth = g2d.getFontMetrics().stringWidth(measurementText);
-		int textXPos = (length - textWidth) / 2;
-		g2d.drawString(measurementText, xPos + textXPos, runwayYPos - height - 2);
+		int textstartX = (length - textWidth) / 2;
+		g2d.drawString(measurementText, startX + textstartX, startY - 2);
 		//end lines - todo end at runway
 	}
 }
