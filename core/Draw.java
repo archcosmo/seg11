@@ -291,46 +291,16 @@ public class Draw
 		g2d.setFont(gFont);
 	}
 
-	public void drawSideView(Graphics2D g2d, int width, int height) {
-		//g2d.clearRect(0, 0, 600, 600); //TODO:: need to change to size of panel and not remove text
-		g2d.setColor(Color.green);
-		LogicalRunway lrw = model.selectedLogicalRunway;
-		int runwayLength = lrw.tora;
-		/*
-		this.runway = runway;
-        this.designator = designator;
-        this.tora = tora;
-        this.toda = toda;
-        this.asda = asda;
-        this.lda = lda;
-        this.displacedThreshold = tora - lda;
-        this.stopwayLength = stopwayLength;
-        this.clearwayLength = toda - tora;
-		 */
-		//TODO:: display Runway designator
-
-		g2d.fillRect(20, 150 - 15 - 1, runwayLength, 17);
-		g2d.drawRect(20 + runwayLength, 150 - 10, lrw.stopwayLength, 10);
-		if (lrw.clearwayLength > 0) {
-			g2d.drawRect(20 + runwayLength, 150 - 20, lrw.clearwayLength, 20);
-		}
-		g2d.setFont(new Font("TimesRoman", Font.PLAIN, 20));
-		g2d.drawString("TORA = " + lrw.tora, 20, 120);
-		g2d.drawString("Stopway = " + lrw.stopwayLength, 20 + runwayLength, 100);
-		g2d.drawString("Clearway = " + lrw.clearwayLength, 20 + runwayLength + lrw.stopwayLength, 80);
-		g2d.dispose();
-	}
-	
 	private void drawMeasurement(Graphics2D g2d, float scale, int measurementLength, int arrowX, int arrowY, int angle, String identifier, int extrapolation1, int extrapolation2) {
 		double angleR = angle * Math.PI / 180;
 		int adjustedLength = (int)(scale* measurementLength);
 		int x = (int)(Math.sin(-angleR) * adjustedLength / 2);
 		int y = (int)(Math.cos(-angleR) * adjustedLength / 2);
-		
+
 		g2d.setColor(Color.BLACK);
-		/*Draw main line*/		
+		/*Draw main line*/
 		g2d.drawLine(arrowX - x, arrowY - y, arrowX + x, arrowY + y);
-		
+
 		/*Draw Arrow Heads*/
 		double headAngleR = (angle + 45) * Math.PI / 180;
 		int headLength = (int)(adjustedLength * 0.025);
@@ -338,26 +308,85 @@ public class Draw
 		int headY = (int)(Math.cos(headAngleR) * headLength);
 		g2d.drawLine(arrowX - x, arrowY - y, arrowX - x - headX, arrowY - y + headY);
 		g2d.drawLine(arrowX + x, arrowY + y, arrowX + x + headX, arrowY + y - headY);
-		
+
 		headAngleR = -(angle + 45) * Math.PI / 180;
 		headLength = (int)(adjustedLength * 0.025);
 		headX = (int)(Math.cos(headAngleR) * headLength);
 		headY = (int)(Math.sin(headAngleR) * headLength);
-		
+
 		g2d.drawLine(arrowX - x, arrowY - y, arrowX - x + headX, arrowY - y - headY);
 		g2d.drawLine(arrowX + x, arrowY + y, arrowX + x - headX, arrowY + y + headY);
-		
+
 		/*Draw label*/
 		String stringData = new String( ((identifier != null && !identifier.isEmpty()) ? identifier + ": " : "") + measurementLength + "m");
 		g2d.drawChars(stringData.toCharArray(), 0, stringData.length(), arrowX, arrowY-2);
-		
+
 		/*Draw extrapolation lines*/
 		int e1x = -(int)(Math.cos(-angleR) * extrapolation1);
 		int e1y = -(int)(Math.sin(-angleR) * extrapolation1);
 		g2d.drawLine(arrowX - x, arrowY - y, arrowX - x + e1x, arrowY - y - e1y);
-		
+
 		int e2x = -(int)(Math.cos(-angleR) * extrapolation2);
 		int e2y = -(int)(Math.sin(-angleR) * extrapolation2);
 		g2d.drawLine(arrowX + x, arrowY + y, arrowX + x + e2x, arrowY + y - e2y);
+	}
+
+	public void drawSideView(Graphics2D g2d, int width, int height) {
+		//g2d.clearRect(0, 0, 600, 600); //TODO:: need to change to size of panel and not remove text
+		//g2d.setColor(Color.green);
+		if (model.selectedLogicalRunway == null) {
+			return;
+		}
+		LogicalRunway lrw = model.selectedLogicalRunway;
+
+		System.out.println(lrw.runway);
+		System.out.println(lrw.lda);
+		System.out.println(lrw.tora);
+		System.out.println(lrw.asda);
+		System.out.println(lrw.toda);
+		System.out.println(lrw.stopwayLength);
+		System.out.println(lrw.clearwayLength);
+		System.out.println(lrw.displacedThreshold);
+
+		//TODO:: display Runway designator
+		//TODO:: scale by runway length
+		//Draw Runway
+
+		/*
+		LDA
+		TORA
+		ASDA
+		TODA
+		____
+
+		STOPWAYS
+		CLEARWAYS
+		 */
+
+		g2d.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+
+		g2d.drawRect(20, 150, lrw.tora, 15);
+		if (lrw.stopwayLength > 0) {
+			g2d.drawRect(20 + lrw.tora, 150 + 5, lrw.stopwayLength, 10);
+		}
+		if (lrw.clearwayLength > 0) {
+			g2d.drawRect(20 + lrw.tora, 150 + 13, lrw.clearwayLength, 2);
+		}
+		//TODO:: displaced threshold
+		drawSimpleMeasurement(g2d, 20 + (lrw.tora - lrw.lda), 150 - 15 + 50, lrw.lda, "LDA");
+		drawSimpleMeasurement(g2d, 20, 150 - 15 + 75, lrw.tora, "TORA");
+		drawSimpleMeasurement(g2d, 20, 150 - 15 + 100, lrw.asda, "ASDA");
+		drawSimpleMeasurement(g2d, 20, 150 - 15 + 125, lrw.toda, "TODA");
+		//TODO:: obstacle and gradient
+		g2d.dispose();
+	}
+
+	private void drawSimpleMeasurement(Graphics2D g2d, int xPos, int yPos, int length, String label) {
+		//TODO: add lines from arrow to runway
+		//main line
+		g2d.drawLine(xPos, yPos, xPos + length, yPos);
+		yPos -= 2;
+		g2d.drawString(label, xPos, yPos);
+		//end lines - todo end at runway
 	}
 }
