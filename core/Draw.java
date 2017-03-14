@@ -79,6 +79,21 @@ public class Draw
 	
 	private void drawRunwayTop(Graphics2D g2d, Runway runway, int runwayX, int runwayLength, int runwayWidth, int centerlineY, float scale) {
 		
+		/*Draw Cleared and Graded*/
+		g2d.setColor(Color.CYAN);
+		g2d.fillRect(runwayX-(int)(scale*60), centerlineY-runwayWidth/2-(int)(scale*75), runwayLength+(int)(scale*120), runwayWidth+(int)(scale*150));
+		g2d.fillRect(runwayX+(int)(scale*300), centerlineY-runwayWidth/2-(int)(scale*105), runwayLength-(int)(scale*600), runwayWidth+(int)(scale*210));
+		
+		int[] triLeftX = new int[] {runwayX+(int)(scale*150), runwayX+(int)(scale*300), runwayX+(int)(scale*300)};
+		int[] triRightX = new int[] {runwayX+runwayLength-(int)(scale*150), runwayX+runwayLength-(int)(scale*300), runwayX+runwayLength-(int)(scale*300)};
+		int[] triBotY = new int[] {centerlineY+runwayWidth/2+(int)(scale*75), centerlineY+runwayWidth/2+(int)(scale*105), centerlineY+runwayWidth/2+(int)(scale*75)};
+		int[] triTopY = new int[] {centerlineY-runwayWidth/2-(int)(scale*75), centerlineY-runwayWidth/2-(int)(scale*105), centerlineY-runwayWidth/2-(int)(scale*75)};
+		 
+		g2d.fillPolygon(triLeftX, triTopY, 3);
+		g2d.fillPolygon(triRightX, triTopY, 3);
+		g2d.fillPolygon(triLeftX, triBotY, 3);
+		g2d.fillPolygon(triRightX, triBotY, 3);
+		
 		g2d.setColor(Color.gray);
 		g2d.fillRect(runwayX, centerlineY - runwayWidth/2, runwayLength, runwayWidth);
 		
