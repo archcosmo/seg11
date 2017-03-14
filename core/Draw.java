@@ -94,8 +94,18 @@ public class Draw
 		g2d.fillPolygon(triLeftX, triBotY, 3);
 		g2d.fillPolygon(triRightX, triBotY, 3);
 		
+		/*Draw runway*/
 		g2d.setColor(Color.gray);
 		g2d.fillRect(runwayX, centerlineY - runwayWidth/2, runwayLength, runwayWidth);
+		
+		g2d.setColor(Color.WHITE);
+		int lineLength = runwayLength/21;
+		int lineWidth = runwayWidth/10;
+		int lineX;
+		for (int i = 1; i<21; i=i+2) {
+			lineX = runwayX+(i*lineLength);
+			g2d.fillRect(lineX, centerlineY-lineWidth/2, lineLength, lineWidth);
+		}
 		
 		Font gFont = g2d.getFont();
 		
