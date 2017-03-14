@@ -14,7 +14,7 @@ public class LogicalRunway {
         this.asda = asda;
         this.lda = lda;
         this.displacedThreshold = tora - lda;
-        this.stopwayLength = stopwayLength;
+        this.stopwayLength = asda - tora;
         this.clearwayLength = toda - tora;
     }
     

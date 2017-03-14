@@ -198,42 +198,78 @@ public class Console
 			
 			Integer firstAngle = readInt("Enter an angle for the runway", 0, 359);
 			System.out.println("");;
-			
+
+			/*
 			Integer startStopway = readInt("Enter the length of the start stopway");
 			System.out.println("");;
 			Integer endStopway = readInt("Enter the length of the end stopway");
 			System.out.println("");;
+			*/
 			
 			firstAngle /= 10;
 			Integer reciprocalAngle = (firstAngle + 18) % 36;
 			LogicalRunway shortAngleLogicalRunway = null; //needs to be initialised for add to runway method
 			LogicalRunway longAngleLogicalRunway = null;
 
+			Integer tora = readInt("Enter TORA value for runway");
+			System.out.println("");;
+
 			for(int i = 0; i < 2; i++) {
 				String letter = "";
 				//TODO::letter - find any other runways in airport with same angle
-				/*
-				switch(noRunways) {
-					case 1:
-						letter = "";
-						break;
-					case 2:
-						letter = (i == j) ? "L" : "R";
-						break;
-					case 3:
-						letter = (i == 1) ? "C" : ((i == j) ? "L" : "R");
-						break;
-				}
-				*/
 				int runwayAngle = (i == 0) ? firstAngle : reciprocalAngle;
 				String designator = String.format("%02d" + letter, runwayAngle);
 
-				Integer tora = readInt("Enter TORA value for " + designator);
-				Integer toda = readInt("Enter TODA value for " + designator);
-				Integer asda = readInt("Enter ASDA value for " + designator);
-				Integer lda = readInt("Enter LDA value for " + designator);
+				//Integer tora = readInt("Enter TORA value for " + designator);
+				/*
+				while(true) {
+					String inputStr = prompt(msg + "(" + min + "-" + max + "):");
 
-				LogicalRunway lr = new LogicalRunway(designator, runway, tora, toda, asda, lda, (i == 0) ? endStopway : startStopway);
+					try{
+						Integer intgr = Integer.parseInt(inputStr);
+
+						if(intgr < min || intgr > max)
+							throw new NumberFormatException();
+
+						return intgr;
+
+					} catch(NumberFormatException e) {
+						displayMessage("Expected integer between " + min + " and " + max + ", but " + inputStr + " was given.");
+						continue;
+					}
+				}
+				 */
+				Integer toda, asda, lda;
+				Boolean acceptedValue;
+				do {
+					lda = readInt("Enter LDA value for " + designator);
+					if (lda > tora) {
+						acceptedValue = false;
+						System.out.println("LDA can't be larger than TORA");
+					} else {
+						acceptedValue = true;
+					}
+				} while (!acceptedValue);
+				do {
+					asda = readInt("Enter ASDA value for " + designator);
+					if (asda < tora) {
+						acceptedValue = false;
+						System.out.println("ASDA can't be less than TORA");
+					} else {
+						acceptedValue = true;
+					}
+				} while (!acceptedValue);
+				do {
+					toda = readInt("Enter TODA value for " + designator);
+					if (toda < tora) {
+						acceptedValue = false;
+						System.out.println("TODA can't be less than TORA");
+					} else {
+						acceptedValue = true;
+					}
+				} while (!acceptedValue);
+
+				LogicalRunway lr = new LogicalRunway(designator, runway, tora, toda, asda, lda, 0);
 				if (runwayAngle < 18) {
 					shortAngleLogicalRunway = lr;
 				} else {
