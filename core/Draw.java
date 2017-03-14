@@ -36,6 +36,34 @@ public class Draw
 		
 		float scale = 0.8F * width / totalLength;
 		
+		
+		/*Draw Compass*/
+		int angle = Integer.parseInt(runway.shortAngleLogicalRunway.designator.substring(0,2)) * 10;
+		
+		double lowAngle = angle - 90;
+		lowAngle = lowAngle * Math.PI / 180;
+		int startX = width-width/10;
+		int startY = height/5;
+		int endX = (int) (startX + scale*250 * Math.sin(lowAngle));
+		int endY = (int) (startY + scale*250 * Math.cos(lowAngle));
+		
+		g2d.drawLine(startX, startY, endX, endY);
+		
+		double headAngle = lowAngle-(135* Math.PI / 180);
+		int startHeadX = endX;
+		int startHeadY = endY;
+		int endHeadX   = (int) (endX + scale*100 * Math.sin(headAngle));
+		int endHeadY   = (int) (endY + scale*100 * Math.cos(headAngle));
+		
+		g2d.drawLine(startHeadX, startHeadY, endHeadX, endHeadY);
+		
+		headAngle = (lowAngle-(225* Math.PI / 180));
+		endHeadX   = (int) (endX + scale*100 * Math.sin(headAngle));
+		endHeadY   = (int) (endY + scale*100 * Math.cos(headAngle));
+		
+		g2d.drawLine(startHeadX, startHeadY, endHeadX, endHeadY);
+		
+		
 		     ////////////////////////////////////////////////////////////////////////////
 		///////Re-adjust scale and width to fit No Clearway/No Stopway labels if needed///////
 		     ////////////////////////////////////////////////////////////////////////////
