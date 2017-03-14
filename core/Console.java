@@ -1,8 +1,7 @@
 package core;
 
 		import java.awt.Point;
-
-
+import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -18,7 +17,6 @@ public class Console
 	{
 		this.controller = controller;
 		printBar("Runway Re-Declaration Tool");
-		System.out.println("Use 'help' to list available commands.");
 	}
 	
 	/* Print formatted bar
@@ -29,29 +27,6 @@ public class Console
 		System.out.println("######################################################################");
 		for (int i = 0; i < (70 - str.length())/2; i++) { System.out.print(" "); }
 		System.out.println(str + "\n######################################################################");
-	}
-	
-	@SuppressWarnings("unused")
-	private Integer readInt(String msg, int min, int max, int defaultResponse) {
-		while(true) {
-			String inputStr = prompt(msg + "(" + min + "-" + max + ")(Default: " + defaultResponse + "):");
-			
-			if(inputStr.isEmpty())
-				return defaultResponse;
-			
-			try{
-				Integer intgr = Integer.parseInt(inputStr);
-				
-				if(intgr < min || intgr > max)
-					throw new NumberFormatException();
-				
-				return intgr;
-				
-			} catch(NumberFormatException e) {
-				displayMessage("Expected integer between " + min + " and " + max + ", but " + inputStr + " was given.");
-				continue;
-			}
-		}
 	}
 	
 	private Integer readInt(String msg, int min, int max) {
@@ -313,6 +288,13 @@ public class Console
 		return input.split(" ");
 	}
 	
+	private void promptNext() 
+	{
+		System.out.print("\n[Press Enter to Continue]");
+		s = new Scanner(System.in);
+		s.nextLine();
+	}
+	
 	/* Public input resolver
 	 * resolves first argument
 	 * checks number of arguments based on function
@@ -328,34 +310,68 @@ public class Console
 		case "help":
 			if ( input.length == 1 ) 
 			{
-				System.out.println("\nProgram Help:\n\n"
-						+ "In order to use the application, you need to select a runway (and optionally; an object)\n"
-						+ "Once you have the system configured with the runway and objects you want, you can calculate or draw\n\n");
-				System.out.println("To use the application, use the following commands:\n"
-						+ "\t\t Note: commands are listed in unix format.\n"
-						+ "\t\t\t(brackets) - Denote places where you need to replace with a string: Eg.. (type) can be replaced with runway or obstacle\n"
-						+ "\t\t\t[Sq.Brackets] - Denote optional input, eg in \"calculate\" command, there is the option to call \"calculate -v\" for a breakdown of the calculations\n"
-						+ "\t\t\t[option1 | option2] - Denote an optional input where you can select one of multiple options, seperated by a '|' verticle seperator\n\n"); 
-				System.out.println("\n* list (type) : lists airports, runways, thresholds, and obstacles registered to the system.");
-				System.out.println("* | (type) = airports, runways, thresholds, or obstacles");
-				System.out.println("\n* select (type) (id) : selects which airport, runway, theshold, and obstacle to use in calculation.");
-				System.out.println("* | (type) = airport, runway, threshold, or obstacle");
-				System.out.println("* | get (id) using list command.");
-				System.out.println("* | select object (id) : Places object on runway");
-				System.out.println("* | select object null : Removes object from runway");
-				System.out.println("\n* add (type) (id)");
-				System.out.println("* | (type) = airport, runway, or obstacle");
-				System.out.println("* | get (id) using list command.");
-				System.out.println("\n* calculate [-v] [T|A]");
-				System.out.println("* | -v : Verbose, prints the calculation breakdown.");
-				System.out.println("* |  T : Take-off/Land towards selected threshold.");
-				System.out.println("* |  A : Take-off/Land away from selected threshold.");
-				System.out.println("\n* draw");
-				System.out.println("* | No options available, prints current selected system to the diagrams window");			
-				System.out.println("\n* status");
-				System.out.println("* | No options available, prints current selected system to console view");	
-				System.out.println("* quit"); 
-			} else { wrong_args(input); }
+				printBar("\nProgram Help:\n"
+						+ "(For a full walkthrough of using the program, use \"help walkthrough\")\n");
+				
+				System.out.println("Commands are written in the UNIX standard notation:\n"
+						+ "\t (bracketed) should be replaced with an input value\n"
+						+ "\t\teg.. list (type) would become \"list airports\"\n"
+						+ "\t [square] bracketed terms are optional inputs\n"
+						+ "\t\teg.. calculate [-v] [T|A] could become \"calculate -v\" or \"calculate\" or \"calculate -v T\" or other combinations\n");
+				System.out.println("\nlist (type) : lists airports, runways, thresholds, and obstacles registered to the system.");
+				System.out.println("  | (type) = airports, runways, thresholds, or obstacles");
+				System.out.println("\nselect (type) (id) : selects which airport, runway, theshold, and obstacle to use in calculation.");
+				System.out.println("  | (type) = airport, runway, threshold, or obstacle");
+				System.out.println("  | get (id) using list command.");
+				System.out.println("  | select obstacle (id) : Places obstacle on runway");
+				System.out.println("  | select obstacle null : Removes obstacle from runway");
+				System.out.println("\nadd (type) (id)");
+				System.out.println("  | (type) = airport, runway, or obstacle");
+				System.out.println("  | get (id) using list command.");
+				System.out.println("\ncalculate [-v] [T|A]");
+				System.out.println("  | -v : Verbose, prints the calculation breakdown.");
+				System.out.println("  |  T : Take-off/Land towards selected threshold.");
+				System.out.println("  |  A : Take-off/Land away from selected threshold.");		
+				System.out.println("\nstatus");
+				System.out.println("  | No options available, prints current selected system to console view");	
+				System.out.println("quit"); 
+			} 
+			else if ( input.length == 2 && input[1].equals("walkthrough")) 
+			{
+				printBar("Program Walkthrough Tutorial:");
+				System.out.println("\nWelcome to the program walkthrough section. This will guide you through your first time using the application");
+				System.out.println("\tThis tutorial will reference several commands, however a short-form detailed list of commands and inputs can be obtained from the 'help' command");
+				promptNext(); 
+				
+				System.out.println("\nWhen you entered the application, you had to select (or configure, then select) an airport.");
+				System.out.println("You can check which airport the program is currently configured to with \"status\" : this command will print everything about the current application state");
+				System.out.println("\nThe application works a lot like a shelf. You must put one of each item on the shelf before you run any calculations.");
+				System.out.println("\tThe application stores the last selected airport, runway and object information for you, and uses that information when you run \"calculate\"");
+				promptNext(); 
+				
+				System.out.println("\nIf you wanted to change the currenly configured airport, you can list the airports avaluable in the system, listed by ID, and then use the corresponding ID to select one"
+						+ "\n\t\"list airports\" : This will return a numbered list of all airports in the system."
+						+ "\n\t\"select airport 0\" : This will select the top airport in the list, which had a [0] next to it in the list.");
+				promptNext(); 
+				
+				System.out.println("\nUsing this same method, you can now select a runway"
+						+ "\n\t\"list runways\" : Prints a list of runways"
+						+ "\n\t\"select runway 0\" : Selects first runway on list"
+						+ "At this point, you will be prompted with further input, asking you to select a logical runway direction, for this runway selection"
+						+ "\n\nWhen doing this for objects, you will be prompted for input of the object position. Input the values as indicated."
+						+ "It is also possible to clear object using \"select object null\" for when you dont want an object in the system\n\n");
+				promptNext();
+				
+				System.out.println("Once you have an airport and runway selected (optionally an object too), you are ready to run any calculations"
+						+ "\n\t\"calculate -v\" : Prints the calculation results, along with a calculation breakdown"
+						+ "\n\tWhile doing these commands, the second window of this application, containing the diagrams, will be updated");
+				System.out.println("Finally, once you are done with the application, you can quit the application safely using the \"quit\" command.");
+				promptNext();
+				
+				printBar("End of tutorial");
+				
+			}
+			else { wrong_args(input); }
 			break;
 		case "quit":
 			if ( input.length == 1 ) 
@@ -391,17 +407,6 @@ public class Console
 					break;
 				}
 			} else { wrong_args(input); }
-			break;
-		case "draw" :
-				if ( input.length == 1 ) 
-				{
-					controller.draw();
-				}
-				else 
-				{
-					wrong_args(input);
-					System.out.println("Expected 'draw' with no arguments");
-				}
 			break;
 		case "add":
 			if ( input.length >= 2 ) 
@@ -507,7 +512,7 @@ public class Console
 							System.out.println("Added " + selectedObstacle.name + " to " + selectedLr.runway.designator + " " + Math.abs(selectedObstacle.distanceFromThreshold) + "m " + (selectedObstacle.distanceFromThreshold < 0 ? "before" : "after") + " " + selectedLr.designator + " threshold and " + Math.abs(selectedObstacle.distanceFromCenterline) + "m " + (selectedObstacle.distanceFromCenterline < 0 ? "south" : "north") + " of centerline.");
 						}
 						else
-							System.out.println("Invalid obstacle ID, use 'list obstacles' to get a list of object IDs.");
+							System.out.println("Invalid obstacle ID, use 'list obstacles' to get a list of obstacle IDs.");
 						break;
 					default:
 						System.out.println("Invalid argument to command 'select (type) (id)'\n : Valid types are; 'airport', 'runway', 'threshold', 'obstacle'\n");
@@ -635,7 +640,7 @@ public class Console
 	}
 	
 	public void selectThreshold(Runway runway) {
-		String prompt = "Select a threshold to use for " + runway.designator + ":\n";
+		String prompt = "Select a logical runway / direction to use for " + runway.designator + ":\n";
 		prompt += "[" + 1 + "] : " + runway.shortAngleLogicalRunway.designator + "\n";
 		prompt += "[" + 2 + "] : " + runway.longAngleLogicalRunway.designator + "\n";
 		controller.selectThreshold(readInt(prompt, 1, 2)); //TODO: not sure if this selects the correct logical runway
