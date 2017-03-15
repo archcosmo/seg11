@@ -162,15 +162,15 @@ public class Console
 				return null;
 			}
 
-			Integer runwayLength = readInt("Enter runway length.", 100, 10000);
+			Integer runwayLength = readInt("Enter runway length in meters", 100, 10000);
 			System.out.println("");
-			Integer runwayWidth = readInt("Enter runway width", 5, 100);
+			Integer runwayWidth = readInt("Enter runway width in meters", 5, 100);
 			System.out.println("");
-			Integer resa = readInt("Enter RESA value for runway", 240);
+			Integer resa = readInt("Enter RESA value for runway in meters", 240);
 			System.out.println("");
-			Integer blastAllowance = readInt("Enter blast allowance value for runway.", 300);
+			Integer blastAllowance = readInt("Enter blast allowance value for runway in meters", 300);
 			System.out.println("");
-			Integer stripEnd = readInt("Enter strip end value for runway");
+			Integer stripEnd = readInt("Enter strip end value for runway in meters");
 			System.out.println("");
 			Runway runway = new Runway(resa, blastAllowance, stripEnd, runwayLength, runwayWidth);
 			
@@ -192,7 +192,7 @@ public class Console
 				Integer tora, toda, asda, lda;
 				Boolean acceptedValue;
 				do {
-					tora = readInt("Enter TORA value for " + designator, 0, 10000);
+					tora = readInt("Enter TORA value in meters for " + designator, 0, 10000);
 					System.out.println("");
 					if (tora > runwayLength) {
 						acceptedValue = false;
@@ -202,7 +202,7 @@ public class Console
 					}
 				} while (!acceptedValue);
 				do {
-					lda = readInt("Enter LDA value for " + designator, 0, 10000);
+					lda = readInt("Enter LDA value in meters for " + designator, 0, 10000);
 					System.out.println("");
 					if (lda > tora) {
 						acceptedValue = false;
@@ -212,7 +212,7 @@ public class Console
 					}
 				} while (!acceptedValue);
 				do {
-					asda = readInt("Enter ASDA value for " + designator, 0, 10000);
+					asda = readInt("Enter ASDA value in meters for " + designator, 0, 10000);
 					System.out.println("");
 					if (asda < tora) {
 						acceptedValue = false;
@@ -222,7 +222,7 @@ public class Console
 					}
 				} while (!acceptedValue);
 				do {
-					toda = readInt("Enter TODA value for " + designator, 0, 10000);
+					toda = readInt("Enter TODA value in meters for " + designator, 0, 10000);
 					System.out.println("");
 					if (toda < tora) {
 						acceptedValue = false;
@@ -256,9 +256,9 @@ public class Console
 				continue;
 			}
 
-			Integer width = readInt("Enter obstacle width", 1, 1000);
-			Integer length = readInt("Enter obstacle length", 1, 5000);
-			Integer height = readInt("Enter obstacle height", 1, 500);
+			Integer width = readInt("Enter obstacle width in meters", 1, 1000);
+			Integer length = readInt("Enter obstacle length in meters", 1, 5000);
+			Integer height = readInt("Enter obstacle height in meters", 1, 500);
 			
 			Obstacle obstacle = new Obstacle(obstacleName, width, length, height);
 			
@@ -526,10 +526,10 @@ public class Console
 			{
 				try {
 					List<Integer> newValues = controller.calculate(false, null, input[1].equalsIgnoreCase("T"));
-					System.out.println("TORA: " + newValues.get(0));
-					System.out.println("TODA: " + newValues.get(1));
-					System.out.println("ASDA: " + newValues.get(2));
-					System.out.println("LDA: " + newValues.get(3));
+					System.out.println("TORA: " + newValues.get(0) + "m");
+					System.out.println("TODA: " + newValues.get(1) + "m");
+					System.out.println("ASDA: " + newValues.get(2) + "m");
+					System.out.println("LDA: " + newValues.get(3) + "m");
 					System.out.println("");
 				} catch (InvalidDataException e) {
 					System.out.println(e.getMessage());
@@ -544,10 +544,10 @@ public class Console
 					System.out.println("Breakdown\n---------\n" + (breakdown.breakdownStr == null ? "No redeclaration required." : breakdown.breakdownStr));
 					System.out.println("");
 					System.out.println("\nResults\n-------");
-					System.out.println("TORA: " + newValues.get(0));
-					System.out.println("TODA: " + newValues.get(1));
-					System.out.println("ASDA: " + newValues.get(2));
-					System.out.println("LDA: " + newValues.get(3));
+					System.out.println("TORA: " + newValues.get(0) + "m");
+					System.out.println("TODA: " + newValues.get(1) + "m");
+					System.out.println("ASDA: " + newValues.get(2) + "m");
+					System.out.println("LDA: " + newValues.get(3) + "m");
 					System.out.println("");
 				} catch (InvalidDataException e) {
 					System.out.println(e.getMessage());
@@ -631,8 +631,8 @@ public class Console
 	}
 	
 	public Point getObstaclePosition() {
-		Integer x = readInt("Enter the obstacle's distance from the " + controller.getSelectedLogicalRunway().designator + " threshold.\n(Negative for before threshold, Positive for after threshold)\n", -1000, 6000);
-		Integer y = readInt("Enter the obstacle's distance from the centerline\n(Positive for north of centerline, Negative for south of centerline)\n", -100, 100);
+		Integer x = readInt("Enter the obstacle's distance from the " + controller.getSelectedLogicalRunway().designator + " designator in meters.\n(Negative for before threshold, Positive for after threshold)\n", -1000, 6000);
+		Integer y = readInt("Enter the obstacle's distance from the centerline in meters\n(Positive for north of centerline, Negative for south of centerline)\n", -100, 100);
 		
 		return new Point(x, y);
 	}
@@ -651,7 +651,7 @@ public class Console
 		
 		System.out.println("Airport: " + (airport == null ? "None selected" : airport.name));
 		System.out.println("Runway: " + (lr == null ? "None selected" : lr.runway.designator));
-		System.out.println("Threshold: " + (lr == null ? "None selected" : lr.designator));
+		System.out.println("Designator: " + (lr == null ? "None selected" : lr.designator));
 		
 		System.out.println("\nObstacle\n--------");
 		if(obstacle == null)
@@ -671,16 +671,16 @@ public class Console
 			System.out.println("");
 			System.out.println("\nOriginal Values");
 			System.out.println("---------------");
-			System.out.println("TORA: " + lr.tora);
-			System.out.println("TODA: " + lr.toda);
-			System.out.println("ASDA: " + lr.asda);
-			System.out.println("LDA: " + lr.lda);
-			System.out.println("Displaced Threshold: " + lr.displacedThreshold);
-			System.out.println("Clearway Length: " + lr.clearwayLength);
-			System.out.println("Stopway Length: " + lr.stopwayLength);
-			System.out.println("RESA: " + lr.getRESA());
-			System.out.println("Blast Allowance: " + lr.getBlastAllowance());
-			System.out.println("Strip End: " + lr.getStripEnd());
+			System.out.println("TORA: " + lr.tora + "m");
+			System.out.println("TODA: " + lr.toda + "m");
+			System.out.println("ASDA: " + lr.asda + "m");
+			System.out.println("LDA: " + lr.lda + "m");
+			System.out.println("Displaced Threshold: " + lr.displacedThreshold + "m");
+			System.out.println("Clearway Length: " + lr.clearwayLength + "m");
+			System.out.println("Stopway Length: " + lr.stopwayLength + "m");
+			System.out.println("RESA: " + lr.getRESA() + "m");
+			System.out.println("Blast Allowance: " + lr.getBlastAllowance() + "m");
+			System.out.println("Strip End: " + lr.getStripEnd() + "m");
 			System.out.println("");
 		}
 	}
