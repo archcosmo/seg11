@@ -395,14 +395,23 @@ public class Draw
 		//TODO:: scale by runway length
 
 		g2d.setFont(new Font("TimesRoman", Font.PLAIN, 20));
-
+		g2d.setColor(Color.orange);
+		g2d.fillRect(20, 150, lrw.tora, 15);
+		g2d.setColor(Color.black);
 		g2d.drawRect(20, 150, lrw.tora, 15);
 		if (lrw.stopwayLength > 0) {
-			g2d.drawRect(20 + lrw.tora, 150 + 5, lrw.stopwayLength, 10);
+			g2d.setColor(Color.orange);
+			g2d.fillRect(20 + lrw.tora, 150, lrw.stopwayLength, 10);
+			g2d.setColor(Color.black);
+			g2d.drawRect(20 + lrw.tora, 150, lrw.stopwayLength, 10);
 		}
 		if (lrw.clearwayLength > 0) {
-			g2d.drawRect(20 + lrw.tora, 150 + 13, lrw.clearwayLength, 2);
+			g2d.setColor(Color.orange);
+			g2d.fillRect(20 + lrw.tora, 150, lrw.clearwayLength, 5);
+			g2d.setColor(Color.black);
+			g2d.drawRect(20 + lrw.tora, 150, lrw.clearwayLength, 5);
 		}
+		g2d.setColor(Color.black);
 		//TODO:: displaced threshold
 		drawSimpleMeasurement(g2d, 20 + (lrw.tora - lrw.lda), -80, lrw.lda, "LDA");
 		drawSimpleMeasurement(g2d, 20, -120, lrw.tora, "TORA");
