@@ -317,7 +317,7 @@ public class Console
 						+ "\t (bracketed) should be replaced with an input value\n"
 						+ "\t\teg.. list (type) would become \"list airports\"\n"
 						+ "\t [square] bracketed terms are optional inputs\n"
-						+ "\t\teg.. calculate [-v] [T|A] could become \"calculate -v\" or \"calculate\" or \"calculate -v T\" or other combinations\n");
+						+ "\t\teg.. calculate [-v] (T|A) could become \"calculate -v T\" or \"calculate T\" or \"calculate -v A\" or other combinations\n");
 				System.out.println("\nlist (type) : lists airports, runways, thresholds, and obstacles registered to the system.");
 				System.out.println("  | (type) = airports, runways, thresholds, or obstacles");
 				System.out.println("\nselect (type) (id) : selects which airport, runway, theshold, and obstacle to use in calculation.");
@@ -363,7 +363,7 @@ public class Console
 				promptNext();
 				
 				System.out.println("Once you have an airport and runway selected (optionally an object too), you are ready to run any calculations"
-						+ "\n\t\"calculate -v\" : Prints the calculation results, along with a calculation breakdown"
+						+ "\n\t\"calculate -v T\" : Prints the calculation results, along with a calculation breakdown. 'T' Indicating takeoff direction as towards the selected threshold"
 						+ "\n\tWhile doing these commands, the second window of this application, containing the diagrams, will be updated");
 				System.out.println("Finally, once you are done with the application, you can quit the application safely using the \"quit\" command.");
 				promptNext();
