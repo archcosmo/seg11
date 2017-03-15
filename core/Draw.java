@@ -164,8 +164,7 @@ public class Draw
 		String noStopwayLabel = "* No stopway";
 		Font noStopwayFont = new Font(gFont.getFontName(), gFont.getStyle(), (int)(60 * scale));
 		g2d.setFont(noClearwayFont);
-		int noStopwayLabelWidth = g2d.getFontMetrics().stringWidth(noStopwayLabel);
-		int noStopwayLabelHeight = g2d.getFontMetrics().getHeight();		
+		int noStopwayLabelWidth = g2d.getFontMetrics().stringWidth(noStopwayLabel);		
 		
 		String stopwayLabel = "Stopway";
 		
@@ -190,7 +189,7 @@ public class Draw
 			g2d.drawChars(stopwayLabel.toCharArray(), 0, stopwayLabel.length(), runwayX - adjustedHighStopwayLength/2 - stopwayLabelWidth/2, centerlineY + stopwayLabelHeight/2);
 		else {
 			g2d.setFont(noStopwayFont);
-			g2d.drawChars(noStopwayLabel.toCharArray(), 0, noStopwayLabel.length(), runwayX - noClearwayLabelWidth - 10, centerlineY-runwayWidth/2 - 3*noClearwayLabelHeight/4 + noClearwayLabelHeight);
+			g2d.drawChars(noStopwayLabel.toCharArray(), 0, noStopwayLabel.length(), runwayX - noStopwayLabelWidth - 10, centerlineY-runwayWidth/2 - 3*noClearwayLabelHeight/4 + noClearwayLabelHeight);
 		}
 		
 		/*Draw Runway designators*/
