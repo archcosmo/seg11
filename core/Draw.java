@@ -421,8 +421,6 @@ public class Draw
 	}
 
 	public void drawSideView(Graphics2D g2d, int width, int height) {
-		//g2d.clearRect(0, 0, 600, 600); //TODO:: need to change to size of panel and not remove text
-		//g2d.setColor(Color.green);
 		if (model.getSelectedLogicalRunway() == null) {
 			return;
 		}
@@ -435,9 +433,6 @@ public class Draw
 			g2d.setColor(Color.black);
 			g2d.drawRect(obstacle.distanceFromThreshold, 100, obstacle.length, obstacle.height);
 		}
-
-		//TODO:: display Runway designator
-		//TODO:: scale by runway length
 		
 		g2d.setFont(new Font(g2d.getFont().getFontName(), Font.PLAIN, 20));
 		int totalRunwayLength = Math.max(lrw.toda, lrw.asda);
@@ -486,7 +481,7 @@ public class Draw
 		drawSimpleMeasurement(g2d, 50, -200, lrw.toda, drawToda, "TODA");
 		drawSimpleMeasurement(g2d, 50 + drawTora, 50, lrw.stopwayLength, drawStopwayLength, "Stopway");
 		drawSimpleMeasurement(g2d, 50 + drawTora, 90, lrw.clearwayLength, drawClearwayLength, "Clearway");
-		//TODO:: obstacle and gradient
+		//TODO:: obstacle gradient
 		g2d.dispose();
 	}
 

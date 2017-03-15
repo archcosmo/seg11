@@ -1,6 +1,6 @@
 package core;
 
-		import java.awt.Point;
+import java.awt.Point;
 import java.util.List;
 import java.util.Scanner;
 
@@ -162,31 +162,26 @@ public class Console
 				return null;
 			}
 
+			Integer runwayLength = readInt("Enter runway length.", 100, 10000);
+			System.out.println("");
+			Integer runwayWidth = readInt("Enter runway width", 5, 100);
+			System.out.println("");
 			Integer resa = readInt("Enter RESA value for runway", 240);
-			System.out.println("");;
+			System.out.println("");
 			Integer blastAllowance = readInt("Enter blast allowance value for runway.", 300);
-			System.out.println("");;
+			System.out.println("");
 			Integer stripEnd = readInt("Enter strip end value for runway");
-			System.out.println("");;
-			Runway runway = new Runway(resa, blastAllowance, stripEnd);
+			System.out.println("");
+			Runway runway = new Runway(resa, blastAllowance, stripEnd, runwayLength, runwayWidth);
 			
 			Integer firstAngle = readInt("Enter an angle for the runway", 0, 359);
-			System.out.println("");;
-
-			/*
-			Integer startStopway = readInt("Enter the length of the start stopway");
-			System.out.println("");;
-			Integer endStopway = readInt("Enter the length of the end stopway");
-			System.out.println("");;
-			*/
-			
+			System.out.println("");
 			firstAngle /= 10;
 			Integer reciprocalAngle = (firstAngle + 18) % 36;
+
 			LogicalRunway shortAngleLogicalRunway = null; //needs to be initialised for add to runway method
 			LogicalRunway longAngleLogicalRunway = null;
-
-			Integer tora = readInt("Enter TORA value for runway");
-			System.out.println("");;
+			System.out.println("");
 
 			for(int i = 0; i < 2; i++) {
 				String letter = "";
@@ -194,29 +189,21 @@ public class Console
 				int runwayAngle = (i == 0) ? firstAngle : reciprocalAngle;
 				String designator = String.format("%02d" + letter, runwayAngle);
 
-				//Integer tora = readInt("Enter TORA value for " + designator);
-				/*
-				while(true) {
-					String inputStr = prompt(msg + "(" + min + "-" + max + "):");
-
-					try{
-						Integer intgr = Integer.parseInt(inputStr);
-
-						if(intgr < min || intgr > max)
-							throw new NumberFormatException();
-
-						return intgr;
-
-					} catch(NumberFormatException e) {
-						displayMessage("Expected integer between " + min + " and " + max + ", but " + inputStr + " was given.");
-						continue;
-					}
-				}
-				 */
-				Integer toda, asda, lda;
+				Integer tora, toda, asda, lda;
 				Boolean acceptedValue;
 				do {
-					lda = readInt("Enter LDA value for " + designator);
+					tora = readInt("Enter TORA value for " + designator, 0, 10000);
+					System.out.println("");
+					if (tora > runwayLength) {
+						acceptedValue = false;
+						System.out.println("TORA can't be larger than runway length");
+					} else {
+						acceptedValue = true;
+					}
+				} while (!acceptedValue);
+				do {
+					lda = readInt("Enter LDA value for " + designator, 0, 10000);
+					System.out.println("");
 					if (lda > tora) {
 						acceptedValue = false;
 						System.out.println("LDA can't be larger than TORA");
@@ -225,7 +212,8 @@ public class Console
 					}
 				} while (!acceptedValue);
 				do {
-					asda = readInt("Enter ASDA value for " + designator);
+					asda = readInt("Enter ASDA value for " + designator, 0, 10000);
+					System.out.println("");
 					if (asda < tora) {
 						acceptedValue = false;
 						System.out.println("ASDA can't be less than TORA");
@@ -234,7 +222,8 @@ public class Console
 					}
 				} while (!acceptedValue);
 				do {
-					toda = readInt("Enter TODA value for " + designator);
+					toda = readInt("Enter TODA value for " + designator, 0, 10000);
+					System.out.println("");
 					if (toda < tora) {
 						acceptedValue = false;
 						System.out.println("TODA can't be less than TORA");
@@ -543,13 +532,13 @@ public class Console
 					List<Integer> newValues = controller.calculate(true, breakdown, input[2].equalsIgnoreCase("T"));
 					
 					System.out.println("Breakdown\n---------\n" + (breakdown.breakdownStr == null ? "No redeclaration required." : breakdown.breakdownStr));
-					System.out.println("");;
+					System.out.println("");
 					System.out.println("\nResults\n-------");
 					System.out.println("TORA: " + newValues.get(0));
 					System.out.println("TODA: " + newValues.get(1));
 					System.out.println("ASDA: " + newValues.get(2));
 					System.out.println("LDA: " + newValues.get(3));
-					System.out.println("");;
+					System.out.println("");
 				} catch (InvalidDataException e) {
 					System.out.println(e.getMessage());
 				}
@@ -658,18 +647,18 @@ public class Console
 		if(obstacle == null)
 			System.out.println("None selected.");
 		else {
-			System.out.println("");;
+			System.out.println("");
 			System.out.println("Type: " + obstacle.name);
 			System.out.println("Width: " + obstacle.width + "m");
 			System.out.println("Height: " + obstacle.height + "m");
 			System.out.println("Length: " + obstacle.length + "m");
 			System.out.println("Distance from " + lr.designator + ": " + obstacle.distanceFromThreshold + "m");
 			System.out.println("Distance from centerline: " + obstacle.distanceFromCenterline + "m");
-			System.out.println("");;
+			System.out.println("");
 		}
 		
 		if(lr != null) {
-			System.out.println("");;
+			System.out.println("");
 			System.out.println("\nOriginal Values");
 			System.out.println("---------------");
 			System.out.println("TORA: " + lr.tora);
@@ -682,7 +671,7 @@ public class Console
 			System.out.println("RESA: " + lr.getRESA());
 			System.out.println("Blast Allowance: " + lr.getBlastAllowance());
 			System.out.println("Strip End: " + lr.getStripEnd());
-			System.out.println("");;
+			System.out.println("");
 		}
 	}
 	
