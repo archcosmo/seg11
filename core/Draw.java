@@ -40,21 +40,21 @@ public class Draw
 
 			Font gFont = g2d.getFont();
 			g2d.setFont(new Font(gFont.getFontName(), gFont.getStyle(), 20));
+			g2d.setFont(new Font(g2d.getFont().getFontName(), Font.PLAIN, 20));
 			g2d.drawString("Logical Runway Selected: "+selectedLogRun, width/10, height/5);
-			g2d.setFont(gFont);
-
+			
 			/*Draw Compass*/
 			int angle = Integer.parseInt(runway.shortAngleLogicalRunway.designator.substring(0,2)) * 10;
-
+			
 			double lowAngle = angle - 90;
 			lowAngle = lowAngle * Math.PI / 180;
 			int startX = width-width/10;
 			int startY = height/5;
 			int endX = (int) (startX + scale*250 * Math.sin(lowAngle));
 			int endY = (int) (startY + scale*250 * Math.cos(lowAngle));
-
+			
 			g2d.drawLine(startX, startY, endX, endY);
-
+			
 			double headAngle = lowAngle-(135* Math.PI / 180);
 			int startHeadX = endX;
 			int startHeadY = endY;
@@ -315,9 +315,7 @@ public class Draw
 		
 		Font gFont = g2d.getFont();
 		g2d.setColor(Color.BLACK);
-		
 		g2d.setFont(new Font(gFont.getFontName(), Font.PLAIN, (int)(60 * scale)));
-		//System.out.println(scale + "  " + g2d.getFont().getSize());
 		
 		g2d.drawChars(displacedLabel.toCharArray(), 0, displacedLabel.length(), displacementX, centerlineY-runwayWidth/2-5);
 		
@@ -425,7 +423,7 @@ public class Draw
 		//TODO:: display Runway designator
 		//TODO:: scale by runway length
 		
-		g2d.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		g2d.setFont(new Font(g2d.getFont().getFontName(), Font.PLAIN, 20));
 		int totalRunwayLength = Math.max(lrw.toda, lrw.asda);
 		float scale = 0.8F * width / totalRunwayLength;
 		g2d.drawString("Runway Designator: " + lrw.designator, 10, 30);
