@@ -442,8 +442,18 @@ public class Draw
 		g2d.setFont(new Font(g2d.getFont().getFontName(), Font.PLAIN, 20));
 		int totalRunwayLength = Math.max(lrw.toda, lrw.asda);
 		float scale = 0.8F * width / totalRunwayLength;
-		g2d.drawString("Runway Designator: " + lrw.designator, 10, 30);
+		g2d.drawString("Runway Designator: " + lrw.designator, width/10, height/5);
 
+		g2d.drawString("Landing/Take-Off Direction: ", width/10, height/5 + g2d.getFontMetrics().getHeight());
+		int dirAngle = model.towardsSelectedLR && model.highAngleLRSelected 
+						? 90
+						: (!model.towardsSelectedLR && model.highAngleLRSelected)
+							? -90
+							: (model.towardsSelectedLR && !model.highAngleLRSelected)
+								? -90 : 90;
+		
+		drawArrow(g2d, dirAngle, scale, width/10 + g2d.getFontMetrics().stringWidth("Landing/Take-Off Direction: ") + (dirAngle == -90 ? (int)(scale*250) : 0), height/5 + g2d.getFontMetrics().getHeight(), 250);
+		
 		//Drawing Values
 		int drawLda = (int) (lrw.lda * scale);
 		int drawTora = (int) (lrw.tora * scale);
