@@ -38,7 +38,7 @@ public class Draw
 			selectedLogRun = model.selectedLogicalRunway.designator;
 		}
 
-		g2d.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		g2d.setFont(new Font(g2d.getFont().getFontName(), Font.PLAIN, 20));
 		g2d.drawString("Logical Runway Selected: "+selectedLogRun, width/10, height/5);
 		
 		/*Draw Compass*/
@@ -313,9 +313,7 @@ public class Draw
 		
 		Font gFont = g2d.getFont();
 		g2d.setColor(Color.BLACK);
-		
 		g2d.setFont(new Font(gFont.getFontName(), Font.PLAIN, (int)(60 * scale)));
-		//System.out.println(scale + "  " + g2d.getFont().getSize());
 		
 		g2d.drawChars(displacedLabel.toCharArray(), 0, displacedLabel.length(), displacementX, centerlineY-runwayWidth/2-5);
 		
@@ -423,7 +421,7 @@ public class Draw
 		//TODO:: display Runway designator
 		//TODO:: scale by runway length
 		
-		g2d.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		g2d.setFont(new Font(g2d.getFont().getFontName(), Font.PLAIN, 20));
 		int totalRunwayLength = Math.max(lrw.toda, lrw.asda);
 		float scale = 0.8F * width / totalRunwayLength;
 		g2d.drawString("Runway Designator: " + lrw.designator, 10, 30);

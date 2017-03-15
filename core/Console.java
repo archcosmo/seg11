@@ -268,9 +268,9 @@ public class Console
 				continue;
 			}
 
-			Integer width = readInt("Enter obstacle width");
-			Integer length = readInt("Enter obstacle length");
-			Integer height = readInt("Enter obstacle height");
+			Integer width = readInt("Enter obstacle width", 1, 1000);
+			Integer length = readInt("Enter obstacle length", 1, 5000);
+			Integer height = readInt("Enter obstacle height", 1, 500);
 			
 			Obstacle obstacle = new Obstacle(obstacleName, width, length, height);
 			
@@ -633,8 +633,8 @@ public class Console
 	}
 	
 	public Point getObstaclePosition() {
-		Integer x = readInt("Enter the obstacle's distance from the " + controller.getSelectedLogicalRunway().designator + " threshold.\n(Negative for before threshold, Positive for after threshold)\n");
-		Integer y = readInt("Enter the obstacle's distance from the centerline\n(Positive for north of centerline, Negative for south of centerline)\n");
+		Integer x = readInt("Enter the obstacle's distance from the " + controller.getSelectedLogicalRunway().designator + " threshold.\n(Negative for before threshold, Positive for after threshold)\n", -1000, 6000);
+		Integer y = readInt("Enter the obstacle's distance from the centerline\n(Positive for north of centerline, Negative for south of centerline)\n", -100, 100);
 		
 		return new Point(x, y);
 	}
