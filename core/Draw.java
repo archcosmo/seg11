@@ -403,8 +403,15 @@ public class Draw
 		}
 		LogicalRunway lrw = model.selectedLogicalRunway;
 
+		Obstacle obstacle = model.selectedObstacle; //Can be null
+		if (obstacle != null) {
+
+		}
+
 		//TODO:: display Runway designator
 		//TODO:: scale by runway length
+
+		g2d.drawString(lrw.designator, 0, 150 + 15);
 
 		g2d.setFont(new Font("TimesRoman", Font.PLAIN, 20));
 		g2d.setColor(Color.orange);
@@ -436,8 +443,6 @@ public class Draw
 	}
 
 	private void drawSimpleMeasurement(Graphics2D g2d, int xPos, int height, int length, String label) {
-		//TODO: add lines from arrow to runway
-		//main line
 		int runwayYPos = 150 + 15;
 		int startX = xPos;
 		int endX = xPos + length;
@@ -451,8 +456,7 @@ public class Draw
 		g2d.drawLine(endX, runwayYPos, endX, startY);
 		String measurementText = label + ": " + length + "m";
 		int textWidth = g2d.getFontMetrics().stringWidth(measurementText);
-		int textstartX = (length - textWidth) / 2;
-		g2d.drawString(measurementText, startX + textstartX, startY - 2);
-		//end lines - todo end at runway
+		int textstartX = startX + (length - textWidth) / 2;
+		g2d.drawString(measurementText, textstartX, startY - 2);
 	}
 }

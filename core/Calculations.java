@@ -90,6 +90,13 @@ public class Calculations {
 		thresholds.add(newToda);
 		thresholds.add(newAsda);
 		thresholds.add(newLda);
+
+		//Prevent negative numbers
+		for (int i = 0; i < 4; i++) {
+			if (thresholds.get(i) < 0) {
+				thresholds.set(i, 0);
+			}
+		}
 		return thresholds;
 	}
 
