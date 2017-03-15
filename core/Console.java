@@ -306,10 +306,10 @@ public class Console
 						+ "\t\teg.. list (type) would become \"list airports\"\n"
 						+ "\t [square] bracketed terms are optional inputs\n"
 						+ "\t\teg.. calculate [-v] (T|A) could become \"calculate -v T\" or \"calculate T\" or \"calculate -v A\" or other combinations\n");
-				System.out.println("\nlist (type) : lists airports, runways, thresholds, and obstacles registered to the system.");
+				System.out.println("\nlist (type) : lists airports, runways, designators, and obstacles registered to the system.");
 				System.out.println("  | (type) = airports, runways, thresholds, or obstacles");
-				System.out.println("\nselect (type) (id) : selects which airport, runway, theshold, and obstacle to use in calculation.");
-				System.out.println("  | (type) = airport, runway, threshold, or obstacle");
+				System.out.println("\nselect (type) (id) : selects which airport, runway, designator, and obstacle to use in calculation.");
+				System.out.println("  | (type) = airport, runway, designator, or obstacle");
 				System.out.println("  | get (id) using list command.");
 				System.out.println("  | select obstacle (id) : Places obstacle on runway");
 				System.out.println("  | select obstacle null : Removes obstacle from runway");
@@ -318,8 +318,8 @@ public class Console
 				System.out.println("  | get (id) using list command.");
 				System.out.println("\ncalculate [-v] [T|A]");
 				System.out.println("  | -v : Verbose, prints the calculation breakdown.");
-				System.out.println("  |  T : Take-off/Land towards selected threshold.");
-				System.out.println("  |  A : Take-off/Land away from selected threshold.");		
+				System.out.println("  |  T : Take-off/Land towards selected designator.");
+				System.out.println("  |  A : Take-off/Land away from selected designator.");		
 				System.out.println("\nstatus");
 				System.out.println("  | No options available, prints current selected system to console view");	
 				System.out.println("quit"); 
@@ -378,10 +378,12 @@ public class Console
 				case "runways":
 					list_runways(controller.getRunways());
 					break;
-				case "thresholds":
+				case "designators":
 					LogicalRunway lr = controller.getSelectedLogicalRunway();
 					if(lr != null) {
+						System.out.print("[1]: ");
 						list_thresholds(lr.runway.shortAngleLogicalRunway);
+						System.out.print("[2]: ");
 						list_thresholds(lr.runway.longAngleLogicalRunway);
 					}
 					else
@@ -391,10 +393,12 @@ public class Console
 					list_obstacles(controller.getObstacles());
 					break;
 				default:
-					System.out.println("Invalid argument to command 'list (type)'\n : Valid types are; 'airports', 'runways', 'thresholds', 'obstacles'\n");
+					System.out.println("Invalid argument to command 'list (type)'\n : Valid types are; 'airports', 'runways', 'designators', 'obstacles'\n");
 					break;
 				}
-			} else { wrong_args(input); }
+			} else { 
+				System.out.println("Invalid argument to command 'list (type)'\n : Valid types are; 'airports', 'runways', 'designators', 'obstacles'\n");
+			}
 			break;
 		case "add":
 			if ( input.length >= 2 ) 
@@ -414,7 +418,7 @@ public class Console
 								controller.createRunway(Integer.parseInt(input[2]));
 							
 						} catch(NumberFormatException e) {
-							System.out.println("Expected number for second argument, but " + input[2] + " was given.\n");
+							System.out.println("Expected number for second argument, but \"" + input[2] + "\" was given.\n");
 						}
 					else {
 						wrong_args(input);
@@ -425,10 +429,12 @@ public class Console
 					controller.createObstacle();
 					break;
 				default:
-					System.out.println("Invalid argument to command 'add (type)'\n : Valid types are; 'airports', 'runways', 'obstacles'\n");
+					System.out.println("Invalid argument to command 'add (type)'\n : Valid types are; 'airport', 'runway', 'obstacle'\n");
 					break;
 				}
-			} else { wrong_args(input); }
+			} else { 
+				System.out.println("Invalid argument to command 'add (type)'\n : Valid types are; 'airport', 'runway', 'obstacle'\n");
+			}
 			break;
 		case "delete":
 			if ( input.length == 3 && isInt(input[2])) 
@@ -451,9 +457,11 @@ public class Console
 						break;
 					}
 				} catch (NumberFormatException e) {
-					System.out.println("Invalid argument to command 'delete (type) (id)'\n : Expected number for id, but " + input[2] + " was given.\n");
+					System.out.println("Invalid argument to command 'delete (type) (id)'\n : Expected number for id, but \"" + input[2] + "\" was given.\n");
 				}
-			} else { wrong_args(input); }
+			} else { 
+				System.out.println("Invalid argument to command 'delete (type) (id)'\n : Valid types are; 'airport', 'runway', 'obstacle'\n");
+			}
 			break;
 		case "select":
 			if ( input.length == 3) 
@@ -474,18 +482,18 @@ public class Console
 					case "runway":
 						if(controller.selectRunway(ID)) {
 							LogicalRunway selectedLr = controller.getSelectedLogicalRunway();
-							System.out.println(selectedLr.designator + " threshold selected on " + selectedLr.runway.designator + ".\n");
+							System.out.println(selectedLr.designator + " designator selected on " + selectedLr.runway.designator + ".\n");
 						}
 						else
 							System.out.println("Invalid runway ID, use 'list runways' to get a list of runway IDs.\n");
 						break;
-					case "threshold":
+					case "designator":
 						if(controller.selectThreshold(ID)) {
 							LogicalRunway selectedLr = controller.getSelectedLogicalRunway();
-							System.out.println(selectedLr.designator + " threshold selected on " + selectedLr.runway.designator + ".\n");
+							System.out.println(selectedLr.designator + " designator selected on " + selectedLr.runway.designator + ".\n");
 						}
 						else
-							System.out.println("Invalid threshold ID, use 'list thresholds' to get a list of threshold IDs for the currently selected runway.");
+							System.out.println("Invalid threshold ID, use 'list designators' to get a list of designator IDs for the currently selected runway.");
 						break;
 					case "obstacle":
 						if(controller.getSelectedLogicalRunway() == null)
@@ -503,13 +511,15 @@ public class Console
 							System.out.println("Invalid obstacle ID, use 'list obstacles' to get a list of obstacle IDs.");
 						break;
 					default:
-						System.out.println("Invalid argument to command 'select (type) (id)'\n : Valid types are; 'airport', 'runway', 'threshold', 'obstacle'\n");
+						System.out.println("Invalid argument to command 'select (type) (id)'\n : Valid types are; 'airport', 'runway', 'designator', 'obstacle'\n");
 						break;
 					}
 				} catch (NumberFormatException e) {
-					System.out.println("Invalid argument to command 'select (type) (id)'\n : Expected number for id, but " + input[2] + " was given.\n");
+					System.out.println("Invalid argument to command 'select (type) (id)'\n : Expected number for id, but \"" + input[2] + "\" was given.\n");
 				}
-			} else { wrong_args(input); }
+			} else { 
+				System.out.println("Invalid argument to command 'select (type) (id)'\n : Valid types are; 'airport', 'runway', 'designator', 'obstacle'\n");
+			}
 			break;
 		case "calculate":
 			if (input.length == 2 && (input[1].equalsIgnoreCase("T") || input[1].equalsIgnoreCase("A"))) 
@@ -598,7 +608,7 @@ public class Console
 	
 	private void list_thresholds(LogicalRunway lr) {
 		if(lr == null)
-			System.out.println("There are no thresholds configured for this runway. Add a new runway with 'add runway' to set up a new runway with thresholds.\n");
+			System.out.println("There are no designators configured for this runway. Add a new runway with 'add runway' to set up a new runway with designators.\n");
 
 		System.out.println(lr.designator);
 	}
