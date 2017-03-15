@@ -15,10 +15,17 @@ public class Model
 	List<Airport> airports;
 	Airport selectedAirport;
 	Runway selectedRunway;
-	LogicalRunway selectedLogicalRunway;
+	//LogicalRunway selectedLogicalRunway;
+	boolean highAngleLRSelected;
+	boolean towardsSelectedLR;
 	Obstacle selectedObstacle;
 	List<Obstacle> obstacles;
 	Draw draw;
+	
+	//Calculations result
+	private Calculations calculator;
+	ArrayList<Integer> recalculatedValues;
+	String calcBreakdown;
 
 	
 
@@ -31,7 +38,15 @@ public class Model
 	private void init() {
 		this.airports = new ArrayList<Airport>();
 		this.obstacles = new ArrayList<Obstacle>();
-		draw = new Draw(this);
+		this.highAngleLRSelected = true;
+		this.towardsSelectedLR = true;
+		this.calculator = new Calculations();
+		this.draw = new Draw(this);
+	}
+	
+	private void recalculateValues() {
+		recalculatedValues = calculator.calculateDistances(getSelectedLogicalRunway(), selectedObstacle, towardsSelectedLR);
+		calcBreakdown = calculator.getLastCalculationBreakdown();
 	}
 	
 	public boolean saveObstacleInfoToFile() {
@@ -228,18 +243,26 @@ public class Model
 	{
 		try {
 			this.selectedRunway = selectedAirport.runways.get(id);
+			this.recalculateValues();
 			return true;
 		}
 		catch(IndexOutOfBoundsException e) { return false; }
 	}
 	
+	public LogicalRunway getSelectedLogicalRunway() {
+		if(selectedRunway == null)
+			return null;
+		return highAngleLRSelected ? selectedRunway.longAngleLogicalRunway : selectedRunway.shortAngleLogicalRunway;
+	}
+	
 	public boolean selectThreshold(int id) {
 		try{
 			if (id == 1) {
-				this.selectedLogicalRunway = selectedRunway.shortAngleLogicalRunway;
+				this.highAngleLRSelected = false;
 			} else { // id == 2
-				this.selectedLogicalRunway = selectedRunway.longAngleLogicalRunway;
+				this.highAngleLRSelected = true;
 			}
+			this.recalculateValues();
 			return true;
 		}
 		catch(IndexOutOfBoundsException e) { return false; }
@@ -254,6 +277,7 @@ public class Model
 		try {
 			this.selectedObstacle = obstacles.get(id);
 			this.selectedObstacle.setPosition(xPos, yPos);
+			this.recalculateValues();
 			return true;
 		} catch(IndexOutOfBoundsException e) {
 			return false;
@@ -262,6 +286,7 @@ public class Model
 	
 	public boolean clearObstacle() {
 		this.selectedObstacle = null;
+		this.recalculateValues();
 		return true;
 	}
 

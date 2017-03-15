@@ -6,6 +6,10 @@ public class Calculations {
 
 	private static final int DEFAULT_ANGLE_OF_DESCENT = 50;
 	private StringBuilder lastCalculationBreakdown;
+	
+	public Calculations() {
+		lastCalculationBreakdown =  new StringBuilder();
+	}
 
 	public ArrayList<Integer> calculateDistances(LogicalRunway logicalRunway, Obstacle obstacle, boolean towards) {
 

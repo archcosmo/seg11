@@ -9,9 +9,9 @@ import java.util.Set;
 
 public class Draw 
 {
-	
+
 	Model model;
-	
+
 	public Draw(Model model) {
 		this.model = model;
 	}
@@ -20,92 +20,95 @@ public class Draw
 		/*Initial rotation to 0 so runway doesn't become unaligned*/
 		AffineTransform at = new AffineTransform();
 		g2d.setTransform(at);
-		
-		Runway runway = new Runway(300, 240, 100);
-		runway.setLogicalRunways(new LogicalRunway("09", runway, 3000, 3000, 3200, 2800, 200), new LogicalRunway("27", runway, 3000, 3500, 3000, 2800, 0));
-		
-		int runwayLength = 3000;
-		int runwayWidth = 200;
-		int totalLength = Math.max(
-								Math.max(runway.shortAngleLogicalRunway.asda, runway.shortAngleLogicalRunway.toda),
-								Math.max(runway.longAngleLogicalRunway.asda, runway.longAngleLogicalRunway.toda));
-		
-		float scale = 0.8F * width / totalLength;
-		
-		/*Show selected logical runway*/
-		String selectedLogRun = "None";
-		if (model.selectedLogicalRunway != null) {
-			selectedLogRun = model.selectedLogicalRunway.designator;
-		}
 
-		g2d.setFont(new Font(g2d.getFont().getFontName(), Font.PLAIN, 20));
-		g2d.drawString("Logical Runway Selected: "+selectedLogRun, width/10, height/5);
-		
-		/*Draw Compass*/
-		int angle = Integer.parseInt(runway.shortAngleLogicalRunway.designator.substring(0,2)) * 10;
-		
-		double lowAngle = angle - 90;
-		lowAngle = lowAngle * Math.PI / 180;
-		int startX = width-width/10;
-		int startY = height/5;
-		int endX = (int) (startX + scale*250 * Math.sin(lowAngle));
-		int endY = (int) (startY + scale*250 * Math.cos(lowAngle));
-		
-		g2d.drawLine(startX, startY, endX, endY);
-		
-		double headAngle = lowAngle-(135* Math.PI / 180);
-		int startHeadX = endX;
-		int startHeadY = endY;
-		int endHeadX   = (int) (endX + scale*100 * Math.sin(headAngle));
-		int endHeadY   = (int) (endY + scale*100 * Math.cos(headAngle));
-		
-		g2d.drawLine(startHeadX, startHeadY, endHeadX, endHeadY);
-		
-		headAngle = (lowAngle-(225* Math.PI / 180));
-		endHeadX   = (int) (endX + scale*100 * Math.sin(headAngle));
-		endHeadY   = (int) (endY + scale*100 * Math.cos(headAngle));
-		
-		g2d.drawLine(startHeadX, startHeadY, endHeadX, endHeadY);
+		Runway runway = model.selectedRunway;
 		
 		
-		     ////////////////////////////////////////////////////////////////////////////
-		///////Re-adjust scale and width to fit No Clearway/No Stopway labels if needed///////
-		     ////////////////////////////////////////////////////////////////////////////
-		
-		Font tempFont = g2d.getFont();
-		g2d.setFont(new Font(tempFont.getFontName(), tempFont.getStyle(), (int)(60 * scale)));
-		int noClearwayLabelWidth = g2d.getFontMetrics().stringWidth("* No clearway");
-		g2d.setFont(tempFont);
-		
-		if(runway.shortAngleLogicalRunway.stopwayLength < 10+noClearwayLabelWidth && runway.shortAngleLogicalRunway.clearwayLength < 10+noClearwayLabelWidth) {
-			if(runway.longAngleLogicalRunway.stopwayLength < 10+noClearwayLabelWidth && runway.longAngleLogicalRunway.clearwayLength < 10+noClearwayLabelWidth)
-				totalLength = runwayLength + 2*(10+noClearwayLabelWidth);
-			else
+		if(runway!=null) {
+			int runwayLength = 3902;
+			int runwayWidth = 200;
+			int totalLength = runwayLength + Math.max(runway.shortAngleLogicalRunway.stopwayLength, runway.shortAngleLogicalRunway.clearwayLength)
+										   + Math.max(runway.longAngleLogicalRunway.stopwayLength, runway.longAngleLogicalRunway.clearwayLength);
+
+			float scale = 0.8F * width / totalLength;
+
+			/*Show selected logical runway*/
+			String selectedLogRun = "None";
+			if (model.getSelectedLogicalRunway() != null) {
+				selectedLogRun = model.getSelectedLogicalRunway().designator;
+			}
+
+			Font gFont = g2d.getFont();
+			g2d.setFont(new Font(gFont.getFontName(), gFont.getStyle(), 20));
+			g2d.setFont(new Font(g2d.getFont().getFontName(), Font.PLAIN, 20));
+			g2d.drawString("Logical Runway Selected: "+selectedLogRun, width/10, height/5);
+			
+			/*Draw Compass*/
+			int angle = Integer.parseInt(runway.shortAngleLogicalRunway.designator.substring(0,2)) * 10;
+			
+			double lowAngle = angle - 90;
+			lowAngle = lowAngle * Math.PI / 180;
+			int startX = width-width/10;
+			int startY = height/5;
+			int endX = (int) (startX + scale*250 * Math.sin(lowAngle));
+			int endY = (int) (startY + scale*250 * Math.cos(lowAngle));
+			
+			g2d.drawLine(startX, startY, endX, endY);
+			
+			double headAngle = lowAngle-(135* Math.PI / 180);
+			int startHeadX = endX;
+			int startHeadY = endY;
+			int endHeadX   = (int) (endX + scale*100 * Math.sin(headAngle));
+			int endHeadY   = (int) (endY + scale*100 * Math.cos(headAngle));
+
+			g2d.drawLine(startHeadX, startHeadY, endHeadX, endHeadY);
+
+			headAngle = (lowAngle-(225* Math.PI / 180));
+			endHeadX   = (int) (endX + scale*100 * Math.sin(headAngle));
+			endHeadY   = (int) (endY + scale*100 * Math.cos(headAngle));
+
+			g2d.drawLine(startHeadX, startHeadY, endHeadX, endHeadY);
+
+
+			////////////////////////////////////////////////////////////////////////////
+			///////Re-adjust scale and width to fit No Clearway/No Stopway labels if needed///////
+			////////////////////////////////////////////////////////////////////////////
+
+			Font tempFont = g2d.getFont();
+			g2d.setFont(new Font(tempFont.getFontName(), tempFont.getStyle(), (int)(60 * scale)));
+			int noClearwayLabelWidth = g2d.getFontMetrics().stringWidth("* No clearway");
+			g2d.setFont(tempFont);
+
+			if(runway.shortAngleLogicalRunway.stopwayLength < 10+noClearwayLabelWidth && runway.shortAngleLogicalRunway.clearwayLength < 10+noClearwayLabelWidth) {
+				if(runway.longAngleLogicalRunway.stopwayLength < 10+noClearwayLabelWidth && runway.longAngleLogicalRunway.clearwayLength < 10+noClearwayLabelWidth)
+					totalLength = runwayLength + 2*(10+noClearwayLabelWidth);
+				else
+					totalLength = runwayLength + 10+noClearwayLabelWidth +
+					(runway.longAngleLogicalRunway.stopwayLength > runway.longAngleLogicalRunway.clearwayLength ? runway.longAngleLogicalRunway.stopwayLength : runway.longAngleLogicalRunway.clearwayLength);
+			}
+			else if(runway.longAngleLogicalRunway.stopwayLength < 10+noClearwayLabelWidth && runway.longAngleLogicalRunway.clearwayLength < 10+noClearwayLabelWidth)
 				totalLength = runwayLength + 10+noClearwayLabelWidth +
-						(runway.longAngleLogicalRunway.stopwayLength > runway.longAngleLogicalRunway.clearwayLength ? runway.longAngleLogicalRunway.stopwayLength : runway.longAngleLogicalRunway.clearwayLength);
-		}
-		else if(runway.longAngleLogicalRunway.stopwayLength < 10+noClearwayLabelWidth && runway.longAngleLogicalRunway.clearwayLength < 10+noClearwayLabelWidth)
-				totalLength = runwayLength + 10+noClearwayLabelWidth +
-						(runway.shortAngleLogicalRunway.stopwayLength > runway.shortAngleLogicalRunway.clearwayLength ? runway.shortAngleLogicalRunway.stopwayLength : runway.shortAngleLogicalRunway.clearwayLength);
-		
-		scale = 0.8F * width / totalLength;
-		
-		//////////////////////////////////////////////////////////////////////////////////////
-		
-		
-		int adjustedRunwayLength = (int)(scale * runwayLength);
-		int adjustedRunwayWidth = (int)(scale * runwayWidth);
-		
-		int runwayX = width/2 - adjustedRunwayLength/2; 
-		
-		
-		drawRunwayTop(g2d, runway, runwayX, adjustedRunwayLength, adjustedRunwayWidth, height/2, scale);
-		drawLogicalRunwayMeasurementsTop(g2d, true, runway, runwayX, adjustedRunwayLength, adjustedRunwayWidth, height/2, scale);
-		
-		Obstacle ob = model.selectedObstacle;
-		/* Test obstacle */ ob = new Obstacle("Plaaaaaaaaaaaaaaaaaaaane", 100, 500, 10); ob.setPosition(760, 20);
-		if (ob != null) {
-			drawObstacleTop(g2d, ob, runwayX, height/2, scale);
+				(runway.shortAngleLogicalRunway.stopwayLength > runway.shortAngleLogicalRunway.clearwayLength ? runway.shortAngleLogicalRunway.stopwayLength : runway.shortAngleLogicalRunway.clearwayLength);
+
+			scale = 0.8F * width / totalLength;
+
+			//////////////////////////////////////////////////////////////////////////////////////
+
+
+			int adjustedRunwayLength = (int)(scale * runwayLength);
+			int adjustedRunwayWidth = (int)(scale * runwayWidth);
+
+			int runwayX = width/2 - adjustedRunwayLength/2; 
+
+
+			drawRunwayTop(g2d, runway, runwayX, adjustedRunwayLength, adjustedRunwayWidth, height/2, scale);
+			drawLogicalRunwayMeasurementsTop(g2d, true, runway, runwayX, adjustedRunwayLength, adjustedRunwayWidth, height/2, scale);
+
+			Obstacle ob = model.selectedObstacle;
+			/* Test obstacle */ ob = new Obstacle("Plaaaaaaaaaaaaaaaaaaaane", 100, 500, 10); ob.setPosition(760, 20);
+			if (ob != null) {
+				drawObstacleTop(g2d, ob, runwayX, height/2, scale);
+			}
 		}
 	}
 	
@@ -162,8 +165,7 @@ public class Draw
 		
 		/*Label Clearway*/
 		g2d.setColor(Color.BLACK);
-		Font startFont = g2d.getFont();
-		g2d.setFont(new Font(startFont.getFontName(), Font.BOLD, startFont.getSize()));
+
 		Font gFont = g2d.getFont();
 		
 		/*Label used if no clearway:*/
@@ -262,7 +264,7 @@ public class Draw
 		g2d.setTransform(at);
 		
 		//Reset font
-		g2d.setFont(startFont);
+		g2d.setFont(gFont);
 	}
 	
 	private void drawLogicalRunwayMeasurementsTop(Graphics2D g2d, boolean lowAngle, Runway runway, int runwayX, int runwayLength, int runwayWidth, int centerlineY, float scale) {
@@ -403,10 +405,10 @@ public class Draw
 	}
 
 	public void drawSideView(Graphics2D g2d, int width, int height) {
-		if (model.selectedLogicalRunway == null) {
+		if (model.getSelectedLogicalRunway() == null) {
 			return;
 		}
-		LogicalRunway lrw = model.selectedLogicalRunway;
+		LogicalRunway lrw = model.getSelectedLogicalRunway();
 
 		Obstacle obstacle = model.selectedObstacle; //Can be null
 		if (obstacle != null) {

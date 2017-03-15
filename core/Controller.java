@@ -136,7 +136,7 @@ public class Controller
 	public List<Airport> getAirports() { return model.getAirports(); }
 	public Airport getSelectedAirport() { return model.selectedAirport; }
 	public List<Runway> getRunways() { return model.getRunways(); }
-	public LogicalRunway getSelectedLogicalRunway() { return model.selectedLogicalRunway; }
+	public LogicalRunway getSelectedLogicalRunway() { return model.getSelectedLogicalRunway(); }
 	public List<Obstacle> getObstacles() { return model.getObjects(); }
 	public Obstacle getSelectedObstacle() { return model.selectedObstacle; }
 
@@ -152,7 +152,7 @@ public class Controller
 	
 	/* Many of these types will have to be changed */
 	public List<Integer> calculate(boolean verbose, Calculations.BreakdownWrapper breakdown, boolean towards) throws InvalidDataException {
-		LogicalRunway lr = model.selectedLogicalRunway;
+		LogicalRunway lr = model.getSelectedLogicalRunway();
 		Obstacle o = model.selectedObstacle;
 		if(lr == null)
 			throw new InvalidDataException("Please select a runway and threshold.");
@@ -169,15 +169,20 @@ public class Controller
 	/* Return false if ID does not exist */
 	public boolean selectObstacle(int ID) {
 		Point p = view.getObstaclePosition();
-		return model.selectObstacle(ID, p.x, p.y);
+		boolean res = model.selectObstacle(ID, p.x, p.y);
+		window.repaint();
+		return res;
 	}
 	
 	public void clearObstacle() {
 		model.clearObstacle();
+		window.repaint();
 	}
 	
 	public boolean selectAirport(int ID) {
-		return model.selectAirport(ID);
+		boolean res = model.selectAirport(ID);
+		window.repaint();
+		return res;
 	}
 	
 	public boolean selectRunway(int ID) {
@@ -203,6 +208,7 @@ public class Controller
 //			else
 			selectObstacle(model.getObjects().indexOf(model.selectedObstacle));
 		}
+		window.repaint();
 		return true;
 	}
 
@@ -211,7 +217,7 @@ public class Controller
 	public void deleteObject(int iD) {}
 
 	public void draw() {
-		if (model.selectedLogicalRunway == null) {
+		if (model.getSelectedLogicalRunway() == null) {
 			System.out.println("Please select a logical runway first.");
 			return;
 		}
