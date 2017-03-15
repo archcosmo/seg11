@@ -386,6 +386,8 @@ public class Draw
 		g2d.drawLine(arrowX + x, arrowY + y, arrowX + x - headX, arrowY + y + headY);
 
 		/*Draw label*/
+		Font gFont = g2d.getFont();
+		g2d.setFont(new Font(gFont.getFontName(), gFont.getStyle(), (int)(scale*80)));
 		String stringData = new String( ((identifier != null && !identifier.isEmpty()) ? identifier + ": " : "") + measurementLength + "m");
 		g2d.drawChars(stringData.toCharArray(), 0, stringData.length(), arrowX, arrowY-2);
 
@@ -397,6 +399,9 @@ public class Draw
 		int e2x = -(int)(Math.cos(-angleR) * extrapolation2);
 		int e2y = -(int)(Math.sin(-angleR) * extrapolation2);
 		g2d.drawLine(arrowX + x, arrowY + y, arrowX + x + e2x, arrowY + y - e2y);
+		
+		//Reset font
+		g2d.setFont(gFont);
 	}
 
 	public void drawSideView(Graphics2D g2d, int width, int height) {
