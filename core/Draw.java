@@ -26,7 +26,7 @@ public class Draw
 //		int runwayWidth = model.selectedRunway.runwayWidth;
 		
 		Runway runway = new Runway(300, 240, 100);
-		runway.setLogicalRunways(new LogicalRunway("09", runway, 3000, 3000, 3000, 2800, 200), new LogicalRunway("27", runway, 3000, 3500, 3000, 2800, 0));
+		runway.setLogicalRunways(new LogicalRunway("09", runway, 3000, 3000, 3200, 2800, 200), new LogicalRunway("27", runway, 3000, 3500, 3000, 2800, 0));
 		
 		int runwayLength = 3000;
 		int runwayWidth = 200;
@@ -158,12 +158,19 @@ public class Draw
 		
 		if(adjustedLowClearwayLength > 0 && adjustedLowClearwayWidth > 0)
 			g2d.drawRect(runwayX+runwayLength-1, centerlineY-adjustedLowClearwayWidth/2, adjustedLowClearwayLength, adjustedLowClearwayWidth);
-				
+		
+		/*Draw Stopways*/
+		g2d.setColor(Color.LIGHT_GRAY);
+		int adjustedLowStopwayLength = (int) (scale * runway.shortAngleLogicalRunway.stopwayLength);
+		int adjustedHighStopwayLength = (int) (scale * runway.longAngleLogicalRunway.stopwayLength);
+		g2d.fillRect(runwayX - adjustedHighStopwayLength, centerlineY - runwayWidth/2, adjustedHighStopwayLength, runwayWidth);
+		g2d.fillRect(runwayX+runwayLength, centerlineY - runwayWidth/2, adjustedLowStopwayLength, runwayWidth);
+		
 		/*Label Clearway*/
 		g2d.setColor(Color.BLACK);
 		
 		/*Label used if no clearway:*/
-		String noClearwayLabel = "* No clearway";
+		String noClearwayLabel = "No clearway";
 		Font noClearwayFont = new Font(gFont.getFontName(), gFont.getStyle(), (int)(60 * scale));
 		g2d.setFont(noClearwayFont);
 		int noClearwayLabelWidth = g2d.getFontMetrics().stringWidth(noClearwayLabel);
@@ -180,7 +187,7 @@ public class Draw
 			g2d.drawChars(clearwayLabel.toCharArray(), 0, clearwayLabel.length(), runwayX + runwayLength + adjustedLowClearwayLength/2 - clearwayLabelWidth/2, centerlineY-adjustedHighClearwayWidth/2 + 3*clearwayLabelHeight/4);
 		else {
 			g2d.setFont(noClearwayFont);
-			g2d.drawChars(noClearwayLabel.toCharArray(), 0, noClearwayLabel.length(), runwayX + runwayLength + 10, centerlineY-runwayWidth/2 - 3*noClearwayLabelHeight/4);
+			g2d.drawChars(noClearwayLabel.toCharArray(), 0, noClearwayLabel.length(), runwayX + runwayLength + 10 + adjustedLowStopwayLength, centerlineY-runwayWidth/2 + noClearwayLabelHeight);
 		}
 		
 		/*High Angle Clearway*/
@@ -192,21 +199,14 @@ public class Draw
 			g2d.drawChars(clearwayLabel.toCharArray(), 0, clearwayLabel.length(), runwayX - adjustedHighClearwayLength/2 - clearwayLabelWidth/2, centerlineY-adjustedLowClearwayWidth/2 + 3*clearwayLabelHeight/4);
 		else {
 			g2d.setFont(noClearwayFont);
-			g2d.drawChars(noClearwayLabel.toCharArray(), 0, noClearwayLabel.length(), runwayX - noClearwayLabelWidth - 10, centerlineY-runwayWidth/2 - 3*noClearwayLabelHeight/4);
+			g2d.drawChars(noClearwayLabel.toCharArray(), 0, noClearwayLabel.length(), runwayX - noClearwayLabelWidth - 10 - adjustedHighStopwayLength, centerlineY-runwayWidth/2 + noClearwayLabelHeight);
 		}
-		
-		/*Draw Stopways*/
-		g2d.setColor(Color.LIGHT_GRAY);
-		int adjustedLowStopwayLength = (int) (scale * runway.shortAngleLogicalRunway.stopwayLength);
-		int adjustedHighStopwayLength = (int) (scale * runway.longAngleLogicalRunway.stopwayLength);
-		g2d.fillRect(runwayX - adjustedHighStopwayLength, centerlineY - runwayWidth/2, adjustedHighStopwayLength, runwayWidth);
-		g2d.fillRect(runwayX+runwayLength, centerlineY - runwayWidth/2, adjustedLowStopwayLength, runwayWidth);
 		
 		/*Label Stopways*/
 		g2d.setColor(Color.BLACK);
 		
 		/*Label used if no stopway:*/
-		String noStopwayLabel = "* No stopway";
+		String noStopwayLabel = "No stopway";
 		Font noStopwayFont = new Font(gFont.getFontName(), gFont.getStyle(), (int)(60 * scale));
 		g2d.setFont(noClearwayFont);
 		int noStopwayLabelWidth = g2d.getFontMetrics().stringWidth(noStopwayLabel);		
@@ -222,7 +222,7 @@ public class Draw
 			g2d.drawChars(stopwayLabel.toCharArray(), 0, stopwayLabel.length(), runwayX + runwayLength + adjustedLowStopwayLength/2 - stopwayLabelWidth/2, centerlineY + stopwayLabelHeight/2);
 		else {
 			g2d.setFont(noStopwayFont);
-			g2d.drawChars(noStopwayLabel.toCharArray(), 0, noStopwayLabel.length(), runwayX + runwayLength + 10, centerlineY-runwayWidth/2 - 3*noClearwayLabelHeight/4 + noClearwayLabelHeight);
+			g2d.drawChars(noStopwayLabel.toCharArray(), 0, noStopwayLabel.length(), runwayX + runwayLength + 10 + adjustedLowStopwayLength, centerlineY-runwayWidth/2 + 2*noClearwayLabelHeight);
 		}
 		
 		/*High Angle Stopway*/
@@ -234,7 +234,7 @@ public class Draw
 			g2d.drawChars(stopwayLabel.toCharArray(), 0, stopwayLabel.length(), runwayX - adjustedHighStopwayLength/2 - stopwayLabelWidth/2, centerlineY + stopwayLabelHeight/2);
 		else {
 			g2d.setFont(noStopwayFont);
-			g2d.drawChars(noStopwayLabel.toCharArray(), 0, noStopwayLabel.length(), runwayX - noStopwayLabelWidth - 10, centerlineY-runwayWidth/2 - 3*noClearwayLabelHeight/4 + noClearwayLabelHeight);
+			g2d.drawChars(noStopwayLabel.toCharArray(), 0, noStopwayLabel.length(), runwayX - noStopwayLabelWidth - 10 - adjustedHighStopwayLength, centerlineY-runwayWidth/2 + 2*noClearwayLabelHeight);
 		}
 		
 		/*Draw Runway designators*/
