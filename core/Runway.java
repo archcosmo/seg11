@@ -11,12 +11,6 @@ public class Runway {
 	int RESA, blastAllowance, stripEnd;
 	int width, length;
 
-	public Runway(int RESA, int blastAllowance, int stripEnd) {
-		this.RESA = RESA;
-		this.blastAllowance = blastAllowance;
-		this.stripEnd = stripEnd;
-	}
-
 	public Runway(int RESA, int blastAllowance, int stripEnd, int length, int width) {
 		this.RESA = RESA;
 		this.blastAllowance = blastAllowance;

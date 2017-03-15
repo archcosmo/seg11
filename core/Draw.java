@@ -23,11 +23,11 @@ public class Draw
 		g2d.setTransform(at);
 
 		Runway runway = model.selectedRunway;
-		
+		Obstacle ob = model.selectedObstacle;
 		
 		if(runway!=null) {
-			int runwayLength = 3902;
-			int runwayWidth = 200;
+			int runwayLength = runway.length;
+			int runwayWidth = runway.width;
 			int totalLength = runwayLength + Math.max(runway.shortAngleLogicalRunway.stopwayLength, runway.shortAngleLogicalRunway.clearwayLength)
 										   + Math.max(runway.longAngleLogicalRunway.stopwayLength, runway.longAngleLogicalRunway.clearwayLength);
 
@@ -64,9 +64,9 @@ public class Draw
 			drawArrow(g2d, lowAngle, scale, startX, startY, 250);
 
 
-			////////////////////////////////////////////////////////////////////////////
+				 ////////////////////////////////////////////////////////////////////////////
 			///////Re-adjust scale and width to fit No Clearway/No Stopway labels if needed///////
-			////////////////////////////////////////////////////////////////////////////
+				 ////////////////////////////////////////////////////////////////////////////
 
 			Font tempFont = g2d.getFont();
 			g2d.setFont(new Font(tempFont.getFontName(), tempFont.getStyle(), (int)(60 * scale)));
@@ -95,11 +95,19 @@ public class Draw
 			int runwayX = width/2 - adjustedRunwayLength/2; 
 
 
+			if (ob != null) {
+				Runway recalculatedRunway = new Runway(runway.RESA, runway.blastAllowance, runway.stripEnd, runway.length, runway.width);
+				if(model.highAngleLRSelected)
+					recalculatedRunway.setLogicalRunways(runway.shortAngleLogicalRunway, new LogicalRunway(runway.longAngleLogicalRunway.designator, recalculatedRunway, model.recalculatedValues.get(0), model.recalculatedValues.get(1), model.recalculatedValues.get(2), model.recalculatedValues.get(3), 0));
+				else
+					recalculatedRunway.setLogicalRunways(new LogicalRunway(runway.shortAngleLogicalRunway.designator, recalculatedRunway, model.recalculatedValues.get(0), model.recalculatedValues.get(1), model.recalculatedValues.get(2), model.recalculatedValues.get(3), 0), runway.longAngleLogicalRunway);
+				runway = recalculatedRunway;
+			}
+			
 			drawRunwayTop(g2d, runway, runwayX, adjustedRunwayLength, adjustedRunwayWidth, height/2, scale);
 			drawLogicalRunwayMeasurementsTop(g2d, true, runway, runwayX, adjustedRunwayLength, adjustedRunwayWidth, height/2, scale);
 
-			Obstacle ob = model.selectedObstacle;
-			/* Test obstacle */ ob = new Obstacle("Plaaaaaaaaaaaaaaaaaaaane", 100, 500, 10); ob.setPosition(760, 20);
+			
 			if (ob != null) {
 				drawObstacleTop(g2d, ob, runwayX, height/2, scale);
 			}

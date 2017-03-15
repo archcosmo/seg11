@@ -130,7 +130,7 @@ public class XMLParser {
 		try {
 			if(nRunway.getNodeType() == Node.ELEMENT_NODE) {
 				Element eRunway = (Element) nRunway;
-				Runway runway = new Runway(Integer.parseInt(eRunway.getAttribute("resa")), Integer.parseInt(eRunway.getAttribute("blastAllowance")), Integer.parseInt(eRunway.getAttribute("stripEnd")));
+				Runway runway = new Runway(Integer.parseInt(eRunway.getAttribute("resa")), Integer.parseInt(eRunway.getAttribute("blastAllowance")), Integer.parseInt(eRunway.getAttribute("stripEnd")), Integer.parseInt(eRunway.getAttribute("length")), Integer.parseInt(eRunway.getAttribute("width")));
 
 				//Build Thresholds
 				NodeList thresholds = eRunway.getElementsByTagName("threshold");
@@ -152,6 +152,8 @@ public class XMLParser {
 		nRunway.setAttribute("resa", "" + runway.RESA);
 		nRunway.setAttribute("blastAllowance", "" + runway.blastAllowance);
 		nRunway.setAttribute("stripEnd", "" + runway.stripEnd);
+		nRunway.setAttribute("length", "" + runway.length);
+		nRunway.setAttribute("width", "" + runway.width);
 
 		nRunway.appendChild(marshallLogicalRunway(runway.shortAngleLogicalRunway, doc));
 		nRunway.appendChild(marshallLogicalRunway(runway.longAngleLogicalRunway, doc));
