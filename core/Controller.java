@@ -143,6 +143,7 @@ public class Controller
 	/* Safely closes application */
 	private void quit() 
 	{
+		window.quit();
 		view.quit();
 		view = null;
 		model = null;

@@ -50,4 +50,9 @@ public class DiagramFrame extends JFrame {
 		tabs.addTab("Side View", SIDE);
 		add(tabs, BorderLayout.CENTER);
 	}
+
+	public void quit() 
+	{
+		this.dispose();
+	}
 }
