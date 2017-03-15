@@ -36,6 +36,12 @@ public class Draw
 		
 		float scale = 0.8F * width / totalLength;
 		
+		/*Show selected logical runway*/
+		String selectedLogRun = "None";
+		if (model.selectedLogicalRunway != null) {
+			selectedLogRun = model.selectedLogicalRunway.designator;
+		}
+		g2d.drawString("Logical Runway Selected: "+selectedLogRun, width/10, height/5);
 		
 		/*Draw Compass*/
 		int angle = Integer.parseInt(runway.shortAngleLogicalRunway.designator.substring(0,2)) * 10;
