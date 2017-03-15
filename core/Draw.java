@@ -1,5 +1,6 @@
 package core;
 
+import javax.swing.plaf.basic.BasicSliderUI;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -137,8 +138,8 @@ public class Draw
 		int lineLength = runwayLength/21;
 		int lineWidth = runwayWidth/10;
 		int lineX;
-		for (int i = 1; i<21; i=i+2) {
-			lineX = runwayX+(i*lineLength);
+		for (int i = 1; i<19; i=i+2) {
+			lineX = (int)(runwayX + runwayLength * 0.05)+(i*lineLength);
 			g2d.fillRect(lineX, centerlineY-lineWidth/2, lineLength, lineWidth);
 		}
 		
@@ -416,42 +417,52 @@ public class Draw
 
 		//TODO:: display Runway designator
 		//TODO:: scale by runway length
-
-		g2d.drawString(lrw.designator, 0, 150 + 15);
-
+		
 		g2d.setFont(new Font("TimesRoman", Font.PLAIN, 20));
+		int totalRunwayLength = Math.max(lrw.toda, lrw.asda);
+		float scale = 0.8F * width / totalRunwayLength;
+		g2d.drawString("Runway Designator: " + lrw.designator, 10, 30);
+
+		//Drawing Values
+		int drawLda = (int) (lrw.lda * scale);
+		int drawTora = (int) (lrw.tora * scale);
+		int drawAsda = (int) (lrw.asda * scale);
+		int drawToda = (int) (lrw.toda * scale);
+		int drawStopwayLength = (int) (lrw.stopwayLength * scale);
+		int drawClearwayLength = (int) (lrw.clearwayLength * scale);
+
 		g2d.setColor(Color.orange);
-		g2d.fillRect(20, 150, lrw.tora, 15);
+		g2d.fillRect(50, 100, drawTora, 15);
 		g2d.setColor(Color.black);
-		g2d.drawRect(20, 150, lrw.tora, 15);
-		if (lrw.stopwayLength > 0) {
+		g2d.drawRect(50, 100, drawTora, 15);
+		if (drawStopwayLength > 0) {
 			g2d.setColor(Color.orange);
-			g2d.fillRect(20 + lrw.tora, 150, lrw.stopwayLength, 10);
+			g2d.fillRect(50 + drawTora, 100, drawStopwayLength, 10);
 			g2d.setColor(Color.black);
-			g2d.drawRect(20 + lrw.tora, 150, lrw.stopwayLength, 10);
+			g2d.drawRect(50 + drawTora, 100, drawStopwayLength, 10);
 		}
-		if (lrw.clearwayLength > 0) {
+		if (drawClearwayLength > 0) {
 			g2d.setColor(Color.orange);
-			g2d.fillRect(20 + lrw.tora, 150, lrw.clearwayLength, 5);
+			g2d.fillRect(50 + drawTora, 100, drawClearwayLength, 5);
 			g2d.setColor(Color.black);
-			g2d.drawRect(20 + lrw.tora, 150, lrw.clearwayLength, 5);
+			g2d.drawRect(50 + drawTora, 100, drawClearwayLength, 5);
 		}
 		g2d.setColor(Color.black);
-		//TODO:: displaced threshold
-		drawSimpleMeasurement(g2d, 20 + (lrw.tora - lrw.lda), -80, lrw.lda, "LDA");
-		drawSimpleMeasurement(g2d, 20, -120, lrw.tora, "TORA");
-		drawSimpleMeasurement(g2d, 20, -160, lrw.asda, "ASDA");
-		drawSimpleMeasurement(g2d, 20, -200, lrw.toda, "TODA");
-		drawSimpleMeasurement(g2d, 20 + lrw.tora, 50, lrw.stopwayLength, "Stopway");
-		drawSimpleMeasurement(g2d, 20 + lrw.tora, 90, lrw.clearwayLength, "Clearway");
+		//TODO:: draw displaced threshold?
+		drawSimpleMeasurement(g2d, 50 + (drawTora - drawLda), -80, lrw.lda, drawLda, "LDA");
+		drawSimpleMeasurement(g2d, 50, -120, lrw.tora, drawTora, "TORA");
+		drawSimpleMeasurement(g2d, 50, -160, lrw.asda, drawAsda, "ASDA");
+		drawSimpleMeasurement(g2d, 50, -200, lrw.toda, drawToda, "TODA");
+		drawSimpleMeasurement(g2d, 50 + drawTora, 50, lrw.stopwayLength, drawStopwayLength, "Stopway");
+		drawSimpleMeasurement(g2d, 50 + drawTora, 90, lrw.clearwayLength, drawClearwayLength, "Clearway");
 		//TODO:: obstacle and gradient
 		g2d.dispose();
 	}
 
-	private void drawSimpleMeasurement(Graphics2D g2d, int xPos, int height, int length, String label) {
-		int runwayYPos = 150 + 15;
+	private void drawSimpleMeasurement(Graphics2D g2d, int xPos, int height, int length, int scaleLength, String label) {
+		int runwayYPos = 100 + 15;
 		int startX = xPos;
-		int endX = xPos + length;
+		int endX = xPos + scaleLength;
 		int startY = runwayYPos - height;
 		g2d.drawLine(startX, startY, endX, startY);
 		g2d.drawLine(startX, runwayYPos, startX, startY);
@@ -462,7 +473,7 @@ public class Draw
 		g2d.drawLine(endX, runwayYPos, endX, startY);
 		String measurementText = label + ": " + length + "m";
 		int textWidth = g2d.getFontMetrics().stringWidth(measurementText);
-		int textstartX = startX + (length - textWidth) / 2;
+		int textstartX = startX + (scaleLength - textWidth) / 2;
 		g2d.drawString(measurementText, textstartX, startY - 2);
 	}
 }
