@@ -25,11 +25,9 @@ public class TopViewPanel extends JPanel
 		add(Box.createRigidArea(new Dimension(0, 50)));
 		
 		JLabel init1 = new JLabel("Nothing to show here!");
-		JLabel init2 = new JLabel("Use 'draw' command to get input");
-		JLabel init3 = new JLabel("(You will need to have selected an airport and runway before you do this)");
+		JLabel init2 = new JLabel("System needs to be configured with things to draw. Use \"help\" or \"help walkthrough\" for more information");
 		add(init1);
 		add(init2);
-		add(init3);
 		
 		this.drawingModule = drawingModule;
 	}
