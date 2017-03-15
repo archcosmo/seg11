@@ -99,7 +99,7 @@ public class Draw
 		drawLogicalRunwayMeasurementsTop(g2d, true, runway, runwayX, adjustedRunwayLength, adjustedRunwayWidth, height/2, scale);
 		
 		Obstacle ob = model.selectedObstacle;
-		/* Test obstacle */ ob = new Obstacle("Plane", 100, 500, 10); ob.setPosition(760, 20);
+		/* Test obstacle */ ob = new Obstacle("Plaaaaaaaaaaaaaaaaaaaane", 100, 500, 10); ob.setPosition(760, 20);
 		if (ob != null) {
 			drawObstacleTop(g2d, ob, runwayX, height/2, scale);
 		}
@@ -126,7 +126,8 @@ public class Draw
 		g2d.setColor(Color.gray);
 		g2d.fillRect(runwayX, centerlineY - runwayWidth/2, runwayLength, runwayWidth);
 		
-		g2d.setColor(Color.WHITE);
+		/*Draw centerline*/
+		g2d.setColor(new Color(220, 220, 220));
 		int lineLength = runwayLength/21;
 		int lineWidth = runwayWidth/10;
 		int lineX;
@@ -334,10 +335,21 @@ public class Draw
 		Font gFont = g2d.getFont();
 		g2d.setFont(new Font(gFont.getFontName(), gFont.getStyle(), (int)(ob.width * 60 * scale/100)));
 		
-		int stringWidth = g2d.getFontMetrics().stringWidth(ob.name);
-		int fontHeight = g2d.getFontMetrics().getHeight();
+		String planeLabel = ob.name;
 		
-		g2d.drawChars(ob.name.toCharArray(), 0, ob.name.length(), obX + obLength/2 - stringWidth/2, obY + obWidth/2 + fontHeight/2);
+		int stringWidth = g2d.getFontMetrics().stringWidth(planeLabel);
+		int fontHeight = g2d.getFontMetrics().getHeight();
+		boolean shortenedLabel = false;
+				
+		while(stringWidth > obLength) {
+			shortenedLabel = true;
+			planeLabel = planeLabel.substring(0, planeLabel.length()-1);
+			stringWidth = g2d.getFontMetrics().stringWidth(planeLabel + "......");
+		}
+		
+		if(shortenedLabel) planeLabel += "...";
+		
+		g2d.drawChars(planeLabel.toCharArray(), 0, planeLabel.length(), obX + obLength/2 - stringWidth/2, obY + obWidth/2 + fontHeight/2);
 		
 		//Reset font
 		g2d.setFont(gFont);
