@@ -138,8 +138,8 @@ public class Draw
 		int lineLength = runwayLength/21;
 		int lineWidth = runwayWidth/10;
 		int lineX;
-		for (int i = 1; i<21; i=i+2) {
-			lineX = runwayX+(i*lineLength);
+		for (int i = 1; i<19; i=i+2) {
+			lineX = (int)(runwayX + runwayLength * 0.05)+(i*lineLength);
 			g2d.fillRect(lineX, centerlineY-lineWidth/2, lineLength, lineWidth);
 		}
 		
