@@ -11,7 +11,8 @@ public class Draw
 {
 
 	Model model;
-
+	
+	
 	public Draw(Model model) {
 		this.model = model;
 	}
@@ -43,31 +44,24 @@ public class Draw
 			g2d.setFont(new Font(g2d.getFont().getFontName(), Font.PLAIN, 20));
 			g2d.drawString("Logical Runway Selected: "+selectedLogRun, width/10, height/5);
 			
+			g2d.drawString("Landing/Take-Off Direction: ", width/10, height/5 + g2d.getFontMetrics().getHeight());
+			int dirAngle = model.towardsSelectedLR && model.highAngleLRSelected 
+							? 90
+							: (!model.towardsSelectedLR && model.highAngleLRSelected)
+								? -90
+								: (model.towardsSelectedLR && !model.highAngleLRSelected)
+									? -90 : 90;
+			
+			drawArrow(g2d, dirAngle, scale, width/10 + g2d.getFontMetrics().stringWidth("Landing/Take-Off Direction: ") + (dirAngle == -90 ? (int)(scale*250) : 0), height/5 + g2d.getFontMetrics().getHeight(), 250);
+			
 			/*Draw Compass*/
 			int angle = Integer.parseInt(runway.shortAngleLogicalRunway.designator.substring(0,2)) * 10;
 			
-			double lowAngle = angle - 90;
-			lowAngle = lowAngle * Math.PI / 180;
+			int lowAngle = -90 - angle;
+
 			int startX = width-width/10;
 			int startY = height/5;
-			int endX = (int) (startX + scale*250 * Math.sin(lowAngle));
-			int endY = (int) (startY + scale*250 * Math.cos(lowAngle));
-			
-			g2d.drawLine(startX, startY, endX, endY);
-			
-			double headAngle = lowAngle-(135* Math.PI / 180);
-			int startHeadX = endX;
-			int startHeadY = endY;
-			int endHeadX   = (int) (endX + scale*100 * Math.sin(headAngle));
-			int endHeadY   = (int) (endY + scale*100 * Math.cos(headAngle));
-
-			g2d.drawLine(startHeadX, startHeadY, endHeadX, endHeadY);
-
-			headAngle = (lowAngle-(225* Math.PI / 180));
-			endHeadX   = (int) (endX + scale*100 * Math.sin(headAngle));
-			endHeadY   = (int) (endY + scale*100 * Math.cos(headAngle));
-
-			g2d.drawLine(startHeadX, startHeadY, endHeadX, endHeadY);
+			drawArrow(g2d, lowAngle, scale, startX, startY, 250);
 
 
 			////////////////////////////////////////////////////////////////////////////
@@ -110,6 +104,28 @@ public class Draw
 				drawObstacleTop(g2d, ob, runwayX, height/2, scale);
 			}
 		}
+	}
+
+	private void drawArrow(Graphics2D g2d, int angle, float scale, int startX, int startY, int length) {
+		double angleR = angle * Math.PI / 180;
+		int endX = (int) (startX + scale*length * Math.sin(angleR));
+		int endY = (int) (startY - scale*length * Math.cos(angleR));
+
+		g2d.drawLine(startX, startY, endX, endY);
+
+		double headAngle = angleR-(135* Math.PI / 180);
+		int startHeadX = endX;
+		int startHeadY = endY;
+		int endHeadX   = (int) (endX + scale*100 * Math.sin(headAngle));
+		int endHeadY   = (int) (endY - scale*100 * Math.cos(headAngle));
+
+		g2d.drawLine(startHeadX, startHeadY, endHeadX, endHeadY);
+
+		headAngle = (angleR-(225* Math.PI / 180));
+		endHeadX   = (int) (endX + scale*100 * Math.sin(headAngle));
+		endHeadY   = (int) (endY - scale*100 * Math.cos(headAngle));
+
+		g2d.drawLine(startHeadX, startHeadY, endHeadX, endHeadY);
 	}
 	
 	private void drawRunwayTop(Graphics2D g2d, Runway runway, int runwayX, int runwayLength, int runwayWidth, int centerlineY, float scale) {
