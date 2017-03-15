@@ -1,5 +1,6 @@
 package core;
 
+import javax.swing.plaf.ColorUIResource;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -433,29 +434,21 @@ public class Draw
 			return;
 		}
 		LogicalRunway lrw = model.getSelectedLogicalRunway();
+		boolean reverse = model.highAngleLRSelected;
 
 		Obstacle obstacle = model.selectedObstacle; //Can be null
 		if (obstacle != null) {
-			g2d.setColor(Color.cyan);
-			g2d.fillRect(obstacle.distanceFromThreshold, 100, obstacle.length, obstacle.height);
-			g2d.setColor(Color.black);
-			g2d.drawRect(obstacle.distanceFromThreshold, 100, obstacle.length, obstacle.height);
+			drawSimpleRect(g2d, obstacle.distanceFromThreshold, 100, obstacle.length, obstacle.height, reverse, ColorUIResource.cyan, width/2);
 		}
+
 		
 		g2d.setFont(new Font(g2d.getFont().getFontName(), Font.PLAIN, 20));
 		int totalRunwayLength = Math.max(lrw.toda, lrw.asda);
 		float scale = 0.8F * width / totalRunwayLength;
-		g2d.drawString("Runway Designator: " + lrw.designator, width/10, height/5);
-
-		g2d.drawString("Landing/Take-Off Direction: ", width/10, height/5 + g2d.getFontMetrics().getHeight());
-		int dirAngle = model.towardsSelectedLR && model.highAngleLRSelected 
-						? 90
-						: (!model.towardsSelectedLR && model.highAngleLRSelected)
-							? -90
-							: (model.towardsSelectedLR && !model.highAngleLRSelected)
-								? -90 : 90;
-		
-		drawArrow(g2d, dirAngle, scale, width/10 + g2d.getFontMetrics().stringWidth("Landing/Take-Off Direction: ") + (dirAngle == -90 ? (int)(scale*250) : 0), height/5 + g2d.getFontMetrics().getHeight(), 250);
+		g2d.drawString("Runway Designator: " + lrw.designator, ((reverse) ? width/2 -10 : 10), 30);
+		g2d.drawString("Landing/Take-Off Direction: ",((reverse) ? width/2 -10 : 10), 50);
+		int dirAngle = (model.towardsSelectedLR && model.highAngleLRSelected) || (!model.towardsSelectedLR && !model.highAngleLRSelected) ? 90 : -90;
+		drawArrow(g2d, dirAngle, scale, ((reverse) ? width/2 -10 : 10) + g2d.getFontMetrics().stringWidth("Landing/Take-Off Direction: ") + (dirAngle == -90 ? (int)(scale*250) : 0), 45, 250);
 		
 		//Drawing Values
 		int drawLda = (int) (lrw.lda * scale);
@@ -465,35 +458,39 @@ public class Draw
 		int drawStopwayLength = (int) (lrw.stopwayLength * scale);
 		int drawClearwayLength = (int) (lrw.clearwayLength * scale);
 
-		g2d.setColor(Color.orange);
-		g2d.fillRect(50, 100, drawTora, 15);
-		g2d.setColor(Color.black);
-		g2d.drawRect(50, 100, drawTora, 15);
+		drawSimpleRect(g2d, 50, 100, drawTora, 15, reverse, ColorUIResource.darkGray, width/2);
 		if (drawStopwayLength > 0) {
-			g2d.setColor(Color.orange);
-			g2d.fillRect(50 + drawTora, 100, drawStopwayLength, 10);
-			g2d.setColor(Color.black);
-			g2d.drawRect(50 + drawTora, 100, drawStopwayLength, 10);
+			drawSimpleRect(g2d, 50 + drawTora, 100, drawStopwayLength, 10, reverse, ColorUIResource.darkGray, width/2);
 		}
 		if (drawClearwayLength > 0) {
-			g2d.setColor(Color.orange);
-			g2d.fillRect(50 + drawTora, 100, drawClearwayLength, 5);
-			g2d.setColor(Color.black);
-			g2d.drawRect(50 + drawTora, 100, drawClearwayLength, 5);
+			drawSimpleRect(g2d, 50 + drawTora, 100, drawClearwayLength, 5, reverse, ColorUIResource.darkGray, width/2);
 		}
 		g2d.setColor(Color.black);
 		//TODO:: draw displaced threshold?
-		drawSimpleMeasurement(g2d, 50 + (drawTora - drawLda), -80, lrw.lda, drawLda, "LDA");
-		drawSimpleMeasurement(g2d, 50, -120, lrw.tora, drawTora, "TORA");
-		drawSimpleMeasurement(g2d, 50, -160, lrw.asda, drawAsda, "ASDA");
-		drawSimpleMeasurement(g2d, 50, -200, lrw.toda, drawToda, "TODA");
-		drawSimpleMeasurement(g2d, 50 + drawTora, 50, lrw.stopwayLength, drawStopwayLength, "Stopway");
-		drawSimpleMeasurement(g2d, 50 + drawTora, 90, lrw.clearwayLength, drawClearwayLength, "Clearway");
+		drawSimpleMeasurement(g2d, 50 + (drawTora - drawLda), -80, lrw.lda, drawLda, "LDA", reverse, width/2);
+		drawSimpleMeasurement(g2d, 50, -120, lrw.tora, drawTora, "TORA", reverse, width/2);
+		drawSimpleMeasurement(g2d, 50, -160, lrw.asda, drawAsda, "ASDA", reverse, width/2);
+		drawSimpleMeasurement(g2d, 50, -200, lrw.toda, drawToda, "TODA", reverse, width/2);
+		drawSimpleMeasurement(g2d, 50 + drawTora, 50, lrw.stopwayLength, drawStopwayLength, "Stopway", reverse, width/2);
+		drawSimpleMeasurement(g2d, 50 + drawTora, 90, lrw.clearwayLength, drawClearwayLength, "Clearway", reverse, width/2);
 		//TODO:: obstacle gradient
 		g2d.dispose();
 	}
 
-	private void drawSimpleMeasurement(Graphics2D g2d, int xPos, int height, int length, int scaleLength, String label) {
+	private void drawSimpleRect(Graphics2D g2d, int x, int y, int width, int height, boolean reverse, Color colour, int centreOfRunway) {
+		if (reverse) {
+			x += 2*(centreOfRunway - x) - width;
+		}
+		g2d.setColor(colour);
+		g2d.fillRect(x, y, width, height);
+		g2d.setColor(Color.black);
+		g2d.drawRect(x, y, width, height);
+	}
+
+	private void drawSimpleMeasurement(Graphics2D g2d, int xPos, int height, int length, int scaleLength, String label, boolean reverse, int centreOfRunway) {
+		if (reverse) {
+			xPos += 2*(centreOfRunway - xPos) - scaleLength;
+		}
 		int runwayYPos = 100 + 15;
 		int startX = xPos;
 		int endX = xPos + scaleLength;

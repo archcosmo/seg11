@@ -170,7 +170,7 @@ public class Console
 			System.out.println("");
 			Integer blastAllowance = readInt("Enter blast allowance value for runway in meters", 300);
 			System.out.println("");
-			Integer stripEnd = readInt("Enter strip end value for runway in meters");
+			Integer stripEnd = readInt("Enter strip end value for runway in meters", 60);
 			System.out.println("");
 			Runway runway = new Runway(resa, blastAllowance, stripEnd, runwayLength, runwayWidth);
 			
