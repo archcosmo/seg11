@@ -1,6 +1,5 @@
 package core;
 
-import javax.swing.plaf.basic.BasicSliderUI;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -12,7 +11,6 @@ public class Draw
 {
 	
 	Model model;
-	int lastAngle = 0;
 	
 	public Draw(Model model) {
 		this.model = model;
@@ -23,17 +21,14 @@ public class Draw
 		AffineTransform at = new AffineTransform();
 		g2d.setTransform(at);
 		
-//		int runwayLength = model.selectedRunway.runwayLength;
-//		int runwayWidth = model.selectedRunway.runwayWidth;
-		
 		Runway runway = new Runway(300, 240, 100);
 		runway.setLogicalRunways(new LogicalRunway("09", runway, 3000, 3000, 3200, 2800, 200), new LogicalRunway("27", runway, 3000, 3500, 3000, 2800, 0));
 		
 		int runwayLength = 3000;
 		int runwayWidth = 200;
-		int totalLength = runwayLength + 
-						(runway.shortAngleLogicalRunway.stopwayLength > runway.shortAngleLogicalRunway.clearwayLength ? runway.shortAngleLogicalRunway.stopwayLength : runway.shortAngleLogicalRunway.clearwayLength)
-						+ (runway.longAngleLogicalRunway.stopwayLength > runway.longAngleLogicalRunway.clearwayLength ? runway.longAngleLogicalRunway.stopwayLength : runway.longAngleLogicalRunway.clearwayLength);
+		int totalLength = Math.max(
+								Math.max(runway.shortAngleLogicalRunway.asda, runway.shortAngleLogicalRunway.toda),
+								Math.max(runway.longAngleLogicalRunway.asda, runway.longAngleLogicalRunway.toda));
 		
 		float scale = 0.8F * width / totalLength;
 		
@@ -42,6 +37,8 @@ public class Draw
 		if (model.selectedLogicalRunway != null) {
 			selectedLogRun = model.selectedLogicalRunway.designator;
 		}
+
+		g2d.setFont(new Font("TimesRoman", Font.PLAIN, 20));
 		g2d.drawString("Logical Runway Selected: "+selectedLogRun, width/10, height/5);
 		
 		/*Draw Compass*/
@@ -142,11 +139,7 @@ public class Draw
 			lineX = (int)(runwayX + runwayLength * 0.05)+(i*lineLength);
 			g2d.fillRect(lineX, centerlineY-lineWidth/2, lineLength, lineWidth);
 		}
-		
-		Font gFont = g2d.getFont();
-		
-		
-		
+
 		/*Draw Clearways*/
 		g2d.setColor(Color.GRAY);
 		int adjustedLowClearwayLength = (int) (scale * runway.shortAngleLogicalRunway.clearwayLength);
@@ -169,6 +162,9 @@ public class Draw
 		
 		/*Label Clearway*/
 		g2d.setColor(Color.BLACK);
+		Font startFont = g2d.getFont();
+		g2d.setFont(new Font(startFont.getFontName(), Font.BOLD, startFont.getSize()));
+		Font gFont = g2d.getFont();
 		
 		/*Label used if no clearway:*/
 		String noClearwayLabel = "No clearway";
@@ -266,7 +262,7 @@ public class Draw
 		g2d.setTransform(at);
 		
 		//Reset font
-		g2d.setFont(gFont);
+		g2d.setFont(startFont);
 	}
 	
 	private void drawLogicalRunwayMeasurementsTop(Graphics2D g2d, boolean lowAngle, Runway runway, int runwayX, int runwayLength, int runwayWidth, int centerlineY, float scale) {
@@ -318,7 +314,8 @@ public class Draw
 		Font gFont = g2d.getFont();
 		g2d.setColor(Color.BLACK);
 		
-		g2d.setFont(new Font(gFont.getFontName(), gFont.getStyle(), (int)(60 * scale)));
+		g2d.setFont(new Font(gFont.getFontName(), Font.PLAIN, (int)(60 * scale)));
+		//System.out.println(scale + "  " + g2d.getFont().getSize());
 		
 		g2d.drawChars(displacedLabel.toCharArray(), 0, displacedLabel.length(), displacementX, centerlineY-runwayWidth/2-5);
 		
@@ -412,7 +409,10 @@ public class Draw
 
 		Obstacle obstacle = model.selectedObstacle; //Can be null
 		if (obstacle != null) {
-
+			g2d.setColor(Color.cyan);
+			g2d.fillRect(obstacle.distanceFromThreshold, 100, obstacle.length, obstacle.height);
+			g2d.setColor(Color.black);
+			g2d.drawRect(obstacle.distanceFromThreshold, 100, obstacle.length, obstacle.height);
 		}
 
 		//TODO:: display Runway designator
