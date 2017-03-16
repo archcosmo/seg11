@@ -164,7 +164,7 @@ public class Console
 
 			Integer runwayLength = readInt("Enter runway length in meters", 100, 10000);
 			System.out.println("");
-			Integer runwayWidth = readInt("Enter runway width in meters", 5, 100);
+			Integer runwayWidth = readInt("Enter runway width in meters", 5, 2000);
 			System.out.println("");
 			Integer resa = readInt("Enter RESA value for runway in meters", 240);
 			System.out.println("");
