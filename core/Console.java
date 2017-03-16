@@ -329,7 +329,7 @@ public class Console
 //				System.out.println("  |  T : Take-off/Land towards selected designator.");
 //				System.out.println("  |  A : Take-off/Land away from selected designator.");	
 				System.out.println("\nstatus : Prints current selected system to console view\n");
-				System.out.println("breakdown : print a breakdown of the last calculation\n");
+				System.out.println("breakdown : Prints a breakdown of the last calculation\n");
 				System.out.println("quit : Quits the program\n");
 				System.out.println("######################################################################\n");
 			} 
