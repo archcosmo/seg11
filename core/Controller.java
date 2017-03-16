@@ -167,7 +167,7 @@ public class Controller
 	}
 	
 	public void setDirection(boolean towards) {
-		model.towardsSelectedLR = towards;
+		model.selectDirection(towards);
 		window.repaint();
 	}
 

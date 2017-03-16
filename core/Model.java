@@ -249,6 +249,11 @@ public class Model
 		catch(IndexOutOfBoundsException e) { return false; }
 	}
 	
+	public void selectDirection(boolean towards) {
+		this.towardsSelectedLR = towards;
+		this.recalculateValues();
+	}
+	
 	public LogicalRunway getSelectedLogicalRunway() {
 		if(selectedRunway == null)
 			return null;
