@@ -186,6 +186,7 @@ public class Console
 			for(int i = 0; i < 2; i++) {
 				String letter = "";
 				//TODO::letter - find any other runways in airport with same angle
+				
 				int runwayAngle = (i == 0) ? firstAngle : reciprocalAngle;
 				String designator = String.format("%02d" + letter, runwayAngle);
 
@@ -335,12 +336,12 @@ public class Console
 				
 				System.out.println("\nIf you wanted to change the currenly configured airport, you can list the airports avaluable in the system, listed by ID, and then use the corresponding ID to select one"
 						+ "\n\t\"list airports\" : This will return a numbered list of all airports in the system."
-						+ "\n\t\"select airport 0\" : This will select the top airport in the list, which had a [0] next to it in the list.");
+						+ "\n\t\"select airport\" : This will print an indexed list of airports in the system, and ask you for a number to indicate which one you want to select");
 				promptNext(); 
 				
 				System.out.println("\nUsing this same method, you can now select a runway"
 						+ "\n\t\"list runways\" : Prints a list of runways"
-						+ "\n\t\"select runway 0\" : Selects first runway on list"
+						+ "\n\t\"select runway\" : This will print an indexed list of airports in the system, and ask you for a number to indicate which one you want to select"
 						+ "At this point, you will be prompted with further input, asking you to select a logical runway direction, for this runway selection"
 						+ "\n\nWhen doing this for objects, you will be prompted for input of the object position. Input the values as indicated."
 						+ "It is also possible to clear object using \"select object null\" for when you dont want an object in the system\n"

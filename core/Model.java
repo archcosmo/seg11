@@ -281,7 +281,7 @@ public class Model
 	{
 		try {
 			this.selectedObstacle = obstacles.get(id);
-			this.selectedObstacle.setPosition(xPos, yPos);
+			this.selectedObstacle.setPosition(xPos, this.getSelectedLogicalRunway(), !highAngleLRSelected, yPos);
 			this.recalculateValues();
 			return true;
 		} catch(IndexOutOfBoundsException e) {
@@ -305,8 +305,6 @@ public class Model
 	
 	public BufferedImage getTopView() 
 	{
-		//TODO::Pass which information you need for drawing :: Return null if required selections (eg runway) have not been made
-
 		BufferedImage i = new BufferedImage(600, 600, BufferedImage.TYPE_4BYTE_ABGR);
 		draw.drawTopView(i.createGraphics(), 600, 600);
 		return i;
@@ -314,7 +312,6 @@ public class Model
 
 	public BufferedImage getSideView() 
 	{
-		//TODO::Pass which information you need for drawing :: Return null if required selections (eg runway) have not been made#
 		BufferedImage i = new BufferedImage(600, 600, BufferedImage.TYPE_4BYTE_ABGR);
 		draw.drawSideView(i.createGraphics(), 600, 600);
 		return i;
