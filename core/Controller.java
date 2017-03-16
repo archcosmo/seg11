@@ -106,7 +106,7 @@ public class Controller
 				if (r.shortAngleLogicalRunway.designator.equals(runway.shortAngleLogicalRunway.designator)) {
 					r.shortAngleLogicalRunway.designator = r.shortAngleLogicalRunway.designator + "L";
 					r.longAngleLogicalRunway.designator = r.longAngleLogicalRunway.designator + "R";
-					r.designator = r.shortAngleLogicalRunway.designator+"/"+r.longAngleLogicalRunway;
+					r.designator = r.shortAngleLogicalRunway.designator+"/"+r.longAngleLogicalRunway.designator;
 					runway.shortAngleLogicalRunway.designator = runway.shortAngleLogicalRunway.designator + "R";
 					runway.longAngleLogicalRunway.designator = runway.longAngleLogicalRunway.designator + "L";
 					runway.designator = runway.shortAngleLogicalRunway.designator+"/"+runway.longAngleLogicalRunway.designator;
