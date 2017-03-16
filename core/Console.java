@@ -302,15 +302,20 @@ public class Console
 				printBar("\nProgram Help:\n"
 						+ "(For a full walkthrough of using the program, use \"help walkthrough\")\n");
 				
-				System.out.println("Commands are written in the UNIX standard notation:\n"
-						+ "\t (bracketed) should be replaced with an input value\n"
-						+ "\t\teg.. list (type) would become \"list airports\"\n"
-						+ "\t [square] bracketed terms are optional inputs\n"
-						+ "\t\teg.. calculate [-v] (T|A) could become \"calculate -v T\" or \"calculate T\" or \"calculate -v A\" or other combinations\n");
-				System.out.println("\nlist (type) : lists airports, runways, designators, and obstacles registered to the system.");
+//				System.out.println("Commands are written in the UNIX standard notation:\n"
+//						+ "\t (bracketed) should be replaced with an input value\n"
+//						+ "\t\teg.. list (type) would become \"list airports\"\n"
+//						+ "\t [square] bracketed terms are optional inputs\n"
+//						+ "\t\teg.. calculate [-v] (T|A) could become \"calculate -v T\" or \"calculate T\" or \"calculate -v A\" or other combinations\n");
+				System.out.println("\nlist (type) : returns a list of the selected type.");
 				System.out.println("  | (type) = airports, runways, thresholds, or obstacles");
+
+				System.out.println("\nselect (type) (id) : selects what to use in the calculation.");
+				System.out.println("  | (type) = airport, runway, designator, or obstacle");
+
 				System.out.println("\nselect (type) (id) : selects which airport, runway, designator, direction, and obstacle to use in calculation.");
 				System.out.println("  | (type) = airport, runway, designator, direction, or obstacle");
+
 				System.out.println("  | get (id) using list command.");
 				System.out.println("  | select obstacle (id) : Places obstacle on runway");
 				System.out.println("  | select obstacle null : Removes obstacle from runway");
@@ -319,13 +324,14 @@ public class Console
 				System.out.println("\nadd (type) (id)");
 				System.out.println("  | (type) = airport, runway, or obstacle");
 				System.out.println("  | get (id) using list command.");
-				System.out.println("\ncalculate [-v] [T|A]");
-				System.out.println("  | -v : Verbose, prints the calculation breakdown.");
-				System.out.println("  |  T : Take-off/Land towards selected designator.");
-				System.out.println("  |  A : Take-off/Land away from selected designator.");		
-				System.out.println("\nstatus");
-				System.out.println("  | No options available, prints current selected system to console view");	
-				System.out.println("quit"); 
+//				System.out.println("\ncalculate [-v] [T|A]");
+//				System.out.println("  | -v : Verbose, prints the calculation breakdown.");
+//				System.out.println("  |  T : Take-off/Land towards selected designator.");
+//				System.out.println("  |  A : Take-off/Land away from selected designator.");	
+				System.out.println("\nstatus : Prints current selected system to console view\n");
+				System.out.println("breakdown : print a breakdown of the last calculation\n");
+				System.out.println("quit : Quits the program\n");
+				System.out.println("######################################################################\n");
 			} 
 			else if ( input.length == 2 && input[1].equals("walkthrough")) 
 			{
@@ -576,6 +582,14 @@ public class Console
 			break;
 		case "status":
 			print_status();
+			break;
+		case "breakdown":
+			if (controller.model.calcBreakdown != null) {
+				System.out.println(controller.model.calcBreakdown);
+			}
+			else {
+				System.out.println("No calculations to print out.");
+			}
 			break;
 		default:
 			for ( int i = 0; i < input.length; i++) System.out.print(input[i] + " ");
