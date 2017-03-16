@@ -544,7 +544,8 @@ public class Draw
 			int drawObstacleHeight = (int) (obstacle.height * scale);
 			int drawObstacleXPos = (int) (obstacle.distanceFromThreshold * scale);
 			int drawObstacleLength = (int) (obstacle.length * scale);
-			drawSimpleRect(g2d, drawLEFT + drawObstacleXPos, 100 - drawObstacleHeight, drawObstacleLength, drawObstacleHeight, reverse, ColorUIResource.cyan, width/2);
+			int ALSWidth = (int) (obstacle.height * 50 * scale);
+			drawObstacle(g2d, drawLEFT + drawObstacleXPos, 100 - drawObstacleHeight, drawObstacleLength, drawObstacleHeight, reverse, ColorUIResource.cyan, width/2, true, ALSWidth);
 			ArrayList<Integer> newThreshold = model.recalculatedValues;
 			tora = newThreshold.get(0);
 			toda = newThreshold.get(1);
@@ -552,7 +553,6 @@ public class Draw
 			lda = newThreshold.get(3);
 			stopway = asda - tora;
 			clearway = toda - tora;
-			afterObstacleXPos = drawObstacleXPos + drawObstacleLength;
 		}
 
 		int drawLEFTOLD = drawLEFT;
@@ -569,6 +569,8 @@ public class Draw
 		drawSimpleMeasurement(g2d, drawLEFT, -200, toda, scale, "TODA", reverse, width/2);
 		drawSimpleMeasurement(g2d, drawLEFTOLD + drawTora, 50, stopway, scale, "Stopway", reverse, width/2);
 		drawSimpleMeasurement(g2d, drawLEFTOLD + drawTora, 90, clearway, scale, "Clearway", reverse, width/2);
+
+
 		//TODO:: obstacle gradient
 		g2d.dispose();
 	}
@@ -607,5 +609,23 @@ public class Draw
 		
 		int textstartX = startX + (scaleLength - textWidth) / 2;
 		g2d.drawString(measurementText, textstartX, startY - 2);
+	}
+
+	private void drawObstacle(Graphics2D g2d, int x, int y, int width, int height, boolean reverse, Color colour, int centreOfRunway, boolean left, int ALSWidth) {
+		if (width == 0) {
+			return;
+		}
+		if (reverse) {
+			x += 2*(centreOfRunway - x) - width;
+		}
+		g2d.setColor(colour);
+		g2d.fillRect(x, y, width, height);
+		g2d.setColor(Color.black);
+		g2d.drawRect(x, y, width, height);
+		//if (left) {
+			g2d.drawLine(x, y, x - ALSWidth, y + height);
+		//} else {
+			g2d.drawLine(x + width, y, x + width + ALSWidth, y + height);
+		//}
 	}
 }
