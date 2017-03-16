@@ -194,7 +194,7 @@ public class Console
 					boolean matchFound = false;
 					if(r.longAngleLogicalRunway.designator.equals(bigAngle.toString()))
 						matchFound = true;
-					if(r.longAngleLogicalRunway.designator.endsWith("L") || r.longAngleLogicalRunway.designator.endsWith("R"))
+					if(r.longAngleLogicalRunway.designator.endsWith("L") || r.longAngleLogicalRunway.designator.endsWith("R") || r.longAngleLogicalRunway.designator.endsWith("C"))
 						if(r.longAngleLogicalRunway.designator.substring(0, r.longAngleLogicalRunway.designator.length()-1).equals(bigAngle.toString()))
 							matchFound = true;
 					if (matchFound) {
