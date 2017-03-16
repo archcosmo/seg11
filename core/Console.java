@@ -223,16 +223,16 @@ public class Console
 				
 				for(Runway r : matchingRunways) {
 					if(matchingRunways.size() == 1) {
-						String lowAngle = r.shortAngleLogicalRunway.designator.substring(0, r.shortAngleLogicalRunway.designator.length()-1);
-						String highAngle = r.longAngleLogicalRunway.designator.substring(0, r.longAngleLogicalRunway.designator.length()-1);
+						String lowAngle = r.shortAngleLogicalRunway.designator.substring(0, r.shortAngleLogicalRunway.designator.length());
+						String highAngle = r.longAngleLogicalRunway.designator.substring(0, r.longAngleLogicalRunway.designator.length());
 						
 						r.shortAngleLogicalRunway.designator = lowAngle + (leftOrR.equalsIgnoreCase("L") ? "R" : "L");
 						r.longAngleLogicalRunway.designator = highAngle + (leftOrR.equalsIgnoreCase("L") ? "L" : "R");
 						r.setLogicalRunways(r.shortAngleLogicalRunway, r.longAngleLogicalRunway);
 					}
 					else if(matchingRunways.size() == 2) {
-						String lowAngle = r.shortAngleLogicalRunway.designator.substring(0, r.shortAngleLogicalRunway.designator.length()-1);
-						String highAngle = r.longAngleLogicalRunway.designator.substring(0, r.longAngleLogicalRunway.designator.length()-1);
+						String lowAngle = r.shortAngleLogicalRunway.designator.substring(0, r.shortAngleLogicalRunway.designator.length());
+						String highAngle = r.longAngleLogicalRunway.designator.substring(0, r.longAngleLogicalRunway.designator.length());
 						
 						if(leftOrR.equals("L")) {
 							r.shortAngleLogicalRunway.designator = lowAngle + (r.shortAngleLogicalRunway.designator.endsWith("L") ? "C" : "R");
