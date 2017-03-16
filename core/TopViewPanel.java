@@ -24,11 +24,6 @@ public class TopViewPanel extends JPanel
 		/* Vertical Spacer */
 		add(Box.createRigidArea(new Dimension(0, 50)));
 		
-		JLabel init1 = new JLabel("Nothing to show here!");
-		JLabel init2 = new JLabel("System needs to be configured with things to draw. Use \"help\" or \"help walkthrough\" for more information");
-		add(init1);
-		add(init2);
-		
 		this.drawingModule = drawingModule;
 	}
 	

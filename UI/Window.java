@@ -75,9 +75,4 @@ public class Window extends JFrame
 		add(tabs, BorderLayout.CENTER);
 		//TODO: New tab: Add Runways + Objects
 	}
-
-	public void updateUI(BufferedImage topView, BufferedImage sideView, String[] Calculations, String[] Answers) 
-	{
-		//TODO: Update panels with information
-	}
 }
