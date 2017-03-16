@@ -89,6 +89,13 @@ public class Calculations {
 			lastCalculationBreakdown.append("     = "+newLda+"\n");
 		}
 
+		if(!towards) {
+			newTora -= obstacle.length;
+			newToda -= obstacle.length;
+			newAsda -= obstacle.length;
+			newLda -= obstacle.length;
+		}
+		
 		ArrayList<Integer> thresholds = new ArrayList<>();
 		thresholds.add(newTora);
 		thresholds.add(newToda);
