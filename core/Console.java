@@ -310,9 +310,6 @@ public class Console
 				System.out.println("\nlist (type) : returns a list of the selected type.");
 				System.out.println("  | (type) = airports, runways, thresholds, or obstacles");
 
-				System.out.println("\nselect (type) (id) : selects what to use in the calculation.");
-				System.out.println("  | (type) = airport, runway, designator, or obstacle");
-
 				System.out.println("\nselect (type) (id) : selects which airport, runway, designator, direction, and obstacle to use in calculation.");
 				System.out.println("  | (type) = airport, runway, designator, direction, or obstacle");
 
@@ -324,10 +321,7 @@ public class Console
 				System.out.println("\nadd (type) (id)");
 				System.out.println("  | (type) = airport, runway, or obstacle");
 				System.out.println("  | get (id) using list command.");
-//				System.out.println("\ncalculate [-v] [T|A]");
-//				System.out.println("  | -v : Verbose, prints the calculation breakdown.");
-//				System.out.println("  |  T : Take-off/Land towards selected designator.");
-//				System.out.println("  |  A : Take-off/Land away from selected designator.");	
+				
 				System.out.println("\nstatus : Prints current selected system to console view\n");
 				System.out.println("breakdown : Prints a breakdown of the last calculation\n");
 				System.out.println("quit : Quits the program\n");
@@ -356,12 +350,17 @@ public class Console
 						+ "\n\t\"select runway 0\" : Selects first runway on list"
 						+ "At this point, you will be prompted with further input, asking you to select a logical runway direction, for this runway selection"
 						+ "\n\nWhen doing this for objects, you will be prompted for input of the object position. Input the values as indicated."
-						+ "It is also possible to clear object using \"select object null\" for when you dont want an object in the system\n\n");
+						+ "It is also possible to clear object using \"select object null\" for when you dont want an object in the system\n"
+						+ "\nAfter selecting a runway, you will notice the window will update with a diagram of the side and top view of the runway\n\n");
+				promptNext();
+				
+				System.out.println("\nBy default, the calculations are configured for a landing or takeoff towards the selected threshold"
+						+ "\n\t\"select direction away\" : will set the oppersit direction"
+						+ "\n\t\"select direction towards\" : will set the direction back to its original value");
 				promptNext();
 				
 				System.out.println("Once you have an airport and runway selected (optionally an object too), you are ready to run any calculations"
-						+ "\n\t\"calculate -v T\" : Prints the calculation results, along with a calculation breakdown. 'T' Indicating takeoff direction as towards the selected threshold"
-						+ "\n\tWhile doing these commands, the second window of this application, containing the diagrams, will be updated");
+						+ "\n\t\"breakdown\" : Prints the calculation breakdown.");
 				System.out.println("Finally, once you are done with the application, you can quit the application safely using the \"quit\" command.");
 				promptNext();
 				
