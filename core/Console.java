@@ -1,7 +1,6 @@
 package core;
 
 import java.awt.Point;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -31,7 +30,7 @@ public class Console
 	
 	private Integer readInt(String msg, int min, int max) {
 		while(true) {
-			String inputStr = prompt(msg + "(" + min + "-" + max + "):");
+			String inputStr = prompt(msg + "(Enter a number between: " + min + " and " + max + "):");
 			
 			try{
 				Integer intgr = Integer.parseInt(inputStr);
@@ -312,12 +311,6 @@ public class Console
 
 				System.out.println("\nselect (type) (id) : selects which airport, runway, designator, direction, and obstacle to use in calculation.");
 				System.out.println("  | (type) = airport, runway, designator, direction, or obstacle");
-
-				System.out.println("  | get (id) using list command.");
-				System.out.println("  | select obstacle (id) : Places obstacle on runway");
-				System.out.println("  | select obstacle null : Removes obstacle from runway");
-				System.out.println("  | select direction towards : Sets the direction to towards the selected threshold");
-				System.out.println("  | select direction away    : Sets the direction to away from the selected threshold");
 				System.out.println("\nadd (type) (id)");
 				System.out.println("  | (type) = airport, runway, or obstacle");
 				System.out.println("  | get (id) using list command.");
@@ -472,78 +465,41 @@ public class Console
 			}
 			break;
 		case "select":
-			if ( input.length == 3) 
+			if ( input.length == 2) 
 			{
-				try {
-					int ID = 0;
-					if(!(input[1].equals("obstacle") && input[2].equals("null")) && !input[1].equals("direction") )
-						ID = Integer.parseInt(input[2]);
 					switch ( input[1] )
 					{
 					case "airport":
-						if(controller.selectAirport(ID)) {
-							System.out.println("Selected airport: " + controller.getSelectedAirport().name);
-						}
-						else
-							System.out.println("Invalid airport ID, use 'list airports' to get a list of airport IDs.\n");
+						selectAirports();
 						break;
 					case "runway":
-						if(controller.selectRunway(ID)) {
-							LogicalRunway selectedLr = controller.getSelectedLogicalRunway();
-							System.out.println(selectedLr.designator + " designator selected on " + selectedLr.runway.designator + ".\n");
-						}
-						else
-							System.out.println("Invalid runway ID, use 'list runways' to get a list of runway IDs.\n");
+						selectRunway();
 						break;
 					case "designator":
-						if(controller.selectThreshold(ID)) {
-							LogicalRunway selectedLr = controller.getSelectedLogicalRunway();
-							System.out.println(selectedLr.designator + " designator selected on " + selectedLr.runway.designator + ".\n");
-						}
+						if(controller.getSelectedLogicalRunway() != null)
+							selectThreshold(controller.getSelectedLogicalRunway().runway);
 						else
-							System.out.println("Invalid threshold ID, use 'list designators' to get a list of designator IDs for the currently selected runway.");
+							selectRunway();
 						break;
 					case "obstacle":
 						if(controller.getSelectedLogicalRunway() == null)
-							System.out.println("Select a runway with 'select runway [runway_id]' before adding an obstacle.");
-						else if(input[2].equals("null")) {
-							controller.clearObstacle();
-							System.out.println("Runway is cleared of obstacles.");
-						}
-						else if(controller.selectObstacle(ID)) {
-							Obstacle selectedObstacle = controller.getSelectedObstacle();
-							LogicalRunway selectedLr = controller.getSelectedLogicalRunway();
-							System.out.println("Added " + selectedObstacle.name + " to " + selectedLr.runway.designator + " " + Math.abs(selectedObstacle.distanceFromThreshold) + "m " + (selectedObstacle.distanceFromThreshold < 0 ? "before" : "after") + " " + selectedLr.designator + " threshold and " + Math.abs(selectedObstacle.distanceFromCenterline) + "m " + (selectedObstacle.distanceFromCenterline < 0 ? "south" : "north") + " of centerline.");
-						}
+							System.out.println("Select a runway with 'select runway' before adding an obstacle.");
 						else
-							System.out.println("Invalid obstacle ID, use 'list obstacles' to get a list of obstacle IDs.");
+							selectObstacle();
 						break;
 					case "direction":
 						if(controller.getSelectedLogicalRunway() == null)
-							System.out.println("Select a runway first with 'select runway [runway_id]' before choosing a direction.");
+							System.out.println("Select a runway first with 'select runway' before choosing a direction.");
 						else {
-							if(input[2].equalsIgnoreCase("t") || input[2].equalsIgnoreCase("toward") || input[2].equalsIgnoreCase("towards")) {
-								controller.setDirection(true);
-								System.out.println("Direction set towards " + controller.getSelectedLogicalRunway().designator + " logical runway.");
-							}
-							else if(input[2].equalsIgnoreCase("a") || input[2].equalsIgnoreCase("away")) {
-								controller.setDirection(false);
-								System.out.println("Direction set away from " + controller.getSelectedLogicalRunway().designator + " logical runway.");
-							}
-							else {
-								System.out.println("Invalid argument, use 'select direction towards' or 'select direction away'");
-							}
+							selectDirection();
 						}
 						break;
 					default:
-						System.out.println("Invalid argument to command 'select (type) (id)'\n : Valid types are; 'airport', 'runway', 'designator', 'obstacle'\n");
+						System.out.println("Invalid argument to command 'select (type)'\n : Valid types are; 'airport', 'runway', 'designator', 'obstacle'\n");
 						break;
 					}
-				} catch (NumberFormatException e) {
-					System.out.println("Invalid argument to command 'select (type) (id)'\n : Expected number for id, but \"" + input[2] + "\" was given.\n");
-				}
 			} else { 
-				System.out.println("Invalid argument to command 'select (type) (id)'\n : Valid types are; 'airport', 'runway', 'designator', 'obstacle'\n");
+				System.out.println("Invalid argument to command 'select (type)'\n : Valid types are; 'airport', 'runway', 'designator', 'obstacle'\n");
 			}
 			break;
 		case "calculate":
@@ -664,16 +620,63 @@ public class Console
 	}
 	
 	public Point getObstaclePosition() {
-		Integer x = readInt("Enter the obstacle's distance from the " + controller.getSelectedLogicalRunway().designator + " designator in meters.\n(Negative for before threshold, Positive for after threshold)\n", -1000, 6000);
-		Integer y = readInt("Enter the obstacle's distance from the centerline in meters\n(Positive for north of centerline, Negative for south of centerline)\n", -100, 100);
+		Integer x = readInt("Enter the obstacle's distance from the " + controller.getSelectedLogicalRunway().designator + " designator in meters.\n(Negative for before threshold, Positive for after threshold)\n");
+		Integer y = readInt("Enter the obstacle's distance from the centerline in meters\n(Positive for north of centerline, Negative for south of centerline)\n");
 		
 		return new Point(x, y);
+	}
+	
+	private void selectRunway() {
+		List<Runway> runways = controller.getRunways();
+		String[] designators = new String[runways.size()];
+		for(int i = 0; i < runways.size(); i++)
+			designators[i] = runways.get(i).designator;
+			
+		int ID = selectFromList("Select a runway", designators);
+		if(controller.selectRunway(ID)) {
+			LogicalRunway selectedLr = controller.getSelectedLogicalRunway();
+			System.out.println(selectedLr.designator + " designator selected on " + selectedLr.runway.designator + ".\n");
+		}
 	}
 	
 	public void selectThreshold(Runway runway) {
 		String prompt = "Select a logical runway / direction to use for " + runway.designator;
 		int result = selectFromList(prompt, new String[] { runway.shortAngleLogicalRunway.designator, runway.longAngleLogicalRunway.designator });
 		controller.selectThreshold(result); //TODO: not sure if this selects the correct logical runway
+	}
+	
+	public void selectDirection() {
+		String selectedLr = controller.getSelectedLogicalRunway().designator;
+		int result = selectFromList("Select a direction in relation to the " + selectedLr + "logical runway.", new String[] { "Towards " + selectedLr, "Away from " + selectedLr });
+		if(result == 0) {
+			controller.setDirection(true);
+			System.out.println("Direction set towards " + controller.getSelectedLogicalRunway().designator + " logical runway.");
+		}
+		else if(result == 1) {
+			controller.setDirection(false);
+			System.out.println("Direction set away from " + controller.getSelectedLogicalRunway().designator + " logical runway.");
+		}
+	}
+	
+	public void selectObstacle() {
+		List<Obstacle> obs = controller.getObstacles();
+		String[] obNames = new String[obs.size() + 1];
+		for(int i = 0; i < obs.size(); i++)
+			obNames[i] = obs.get(i).name;
+		obNames[obs.size()] = "Remove obstacle";
+		
+			
+		int ID = selectFromList("Select an obstacle", obNames);
+		if(ID == obs.size()) {
+			controller.clearObstacle();
+			System.out.println("Runway is cleared of obstacles.");
+		}
+		else if(controller.selectObstacle(ID)) {
+			Obstacle selectedObstacle = controller.getSelectedObstacle();
+			LogicalRunway selectedLr = controller.getSelectedLogicalRunway();
+			System.out.println("Added " + selectedObstacle.name + " to " + selectedLr.runway.designator + " " + Math.abs(selectedObstacle.distanceFromThreshold) + "m " + (selectedObstacle.distanceFromThreshold < 0 ? "before" : "after") + " " + selectedLr.designator + " threshold and " + Math.abs(selectedObstacle.distanceFromCenterline) + "m " + (selectedObstacle.distanceFromCenterline < 0 ? "south" : "north") + " of centerline.");
+		}
+		
 	}
 	
 	private int selectFromList(String message, String[] listItems) {
