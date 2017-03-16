@@ -19,7 +19,7 @@ public class Obstacle {
 	}
 	
 	public void setPosition(int distanceFromThreshold, LogicalRunway lr, boolean lowAngleLR, int distanceFromCenterline) {
-		this.distanceFromThreshold = distanceFromThreshold + lr.displacedThreshold;
+		this.distanceFromThreshold = distanceFromThreshold;
 		if(lowAngleLR)
 			this.distanceFromLowAngleEndOfRunway = distanceFromThreshold + lr.displacedThreshold;
 		else

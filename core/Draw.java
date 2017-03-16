@@ -110,7 +110,7 @@ public class Draw
 			
 			if (ob != null) {
 				drawObstacleTop(g2d, ob, runwayX, height/2, scale);
-				drawRecalculatedValuesTop(g2d, !model.highAngleLRSelected, runway, runwayX, adjustedRunwayLength, adjustedRunwayWidth, height/2, scale);
+				drawRecalculatedValuesTop(g2d, !model.highAngleLRSelected, ob, runway, runwayX, adjustedRunwayLength, adjustedRunwayWidth, height/2, scale);
 			}
 			
 			drawLogicalRunwayMeasurementsTop(g2d, !model.highAngleLRSelected, runway, runwayX, adjustedRunwayLength, adjustedRunwayWidth, height/2, scale);
@@ -351,7 +351,7 @@ public class Draw
 		g2d.setFont(gFont);
 	}
 	
-	private void drawRecalculatedValuesTop(Graphics2D g2d, boolean lowAngle, Runway runway, int runwayX, int runwayLength, int runwayWidth, int centerlineY, float scale) {
+	private void drawRecalculatedValuesTop(Graphics2D g2d, boolean lowAngle, Obstacle ob, Runway runway, int runwayX, int runwayLength, int runwayWidth, int centerlineY, float scale) {
 		Set<String> addedLabels = new HashSet<String>();
 		
 		LogicalRunway lr = new LogicalRunway("", runway, model.recalculatedValues.get(0), model.recalculatedValues.get(1),model.recalculatedValues.get(2), model.recalculatedValues.get(3),0);
@@ -359,7 +359,7 @@ public class Draw
 		/*Displaced Threshold*/
 		int adjustedDisplacement = (int)(scale*lr.displacedThreshold);
 		int displacedThreshWidth = runwayLength/100;
-		int displacementX = lowAngle ? runwayX+(int)(runway.shortAngleLogicalRunway.displacedThreshold*scale)+adjustedDisplacement-displacedThreshWidth/2 : runwayX+runwayLength-(int)(scale*runway.longAngleLogicalRunway.displacedThreshold)-adjustedDisplacement-displacedThreshWidth/2;
+		int displacementX = (lowAngle && !model.towardsSelectedLR) || (!lowAngle && model.towardsSelectedLR) ? runwayX + (int)(scale * (ob.distanceFromLowAngleEndOfRunway))+adjustedDisplacement : runwayX+(int)(scale*ob.distanceFromLowAngleEndOfRunway) - adjustedDisplacement;
 		
 		for(int i = 0; i < 4; i++) {
 			String selectedLabel = "";
@@ -394,15 +394,15 @@ public class Draw
 		
 		
 		/*Make transparent so threshold designators can be read*/
-		g2d.setColor(new Color(0, 0, 0, 150));
-		g2d.fillRect(displacementX, centerlineY - runwayWidth/2, displacedThreshWidth, runwayWidth);
+		g2d.setColor(new Color(255, 0, 0, 150));
+		g2d.fillRect(displacementX-displacedThreshWidth/2, centerlineY - runwayWidth/2, displacedThreshWidth, runwayWidth);
 		String displacedLabel = "Recalculated Displaced Threshold";
 		
 		Font gFont = g2d.getFont();
-		g2d.setColor(Color.BLACK);
+		g2d.setColor(Color.RED);
 		g2d.setFont(new Font(gFont.getFontName(), Font.PLAIN, (int)(60 * scale)));
 		
-		g2d.drawChars(displacedLabel.toCharArray(), 0, displacedLabel.length(), displacementX, centerlineY-runwayWidth/2-g2d.getFontMetrics().getHeight());
+		g2d.drawChars(displacedLabel.toCharArray(), 0, displacedLabel.length(), displacementX, centerlineY+runwayWidth/2+g2d.getFontMetrics().getHeight());
 		
 		//Reset Font
 		g2d.setFont(gFont);
