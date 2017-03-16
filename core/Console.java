@@ -194,7 +194,7 @@ public class Console
 					boolean matchFound = false;
 					if(r.longAngleLogicalRunway.designator.equals(bigAngle.toString()))
 						matchFound = true;
-					if(r.longAngleLogicalRunway.designator.endsWith("L") || r.longAngleLogicalRunway.designator.endsWith("R") || r.longAngleLogicalRunway.designator.endsWith("C"))
+					if(r.longAngleLogicalRunway.designator.endsWith("L") || r.longAngleLogicalRunway.designator.endsWith("R") || r.longAngleLogicalRunway.designator.endsWith("C2"))
 						if(r.longAngleLogicalRunway.designator.substring(0, r.longAngleLogicalRunway.designator.length()-1).equals(bigAngle.toString()))
 							matchFound = true;
 					if (matchFound) {
@@ -231,8 +231,8 @@ public class Console
 						r.setLogicalRunways(r.shortAngleLogicalRunway, r.longAngleLogicalRunway);
 					}
 					else if(matchingRunways.size() == 2) {
-						String lowAngle = r.shortAngleLogicalRunway.designator.substring(0, r.shortAngleLogicalRunway.designator.length());
-						String highAngle = r.longAngleLogicalRunway.designator.substring(0, r.longAngleLogicalRunway.designator.length());
+						String lowAngle = r.shortAngleLogicalRunway.designator.substring(0, r.shortAngleLogicalRunway.designator.length()-1);
+						String highAngle = r.longAngleLogicalRunway.designator.substring(0, r.longAngleLogicalRunway.designator.length()-1);
 						
 						if(leftOrR.equals("L")) {
 							r.shortAngleLogicalRunway.designator = lowAngle + (r.shortAngleLogicalRunway.designator.endsWith("L") ? "C" : "R");
