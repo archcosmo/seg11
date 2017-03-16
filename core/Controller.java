@@ -65,7 +65,7 @@ public class Controller
 		
 		Runway runway = null;
 		do {
-			runway = view.configureRunway(false);
+			runway = view.configureRunway(false, airport);
 			if(runway != null)
 				airport.addRunway(runway);
 		} while(runway != null);
@@ -75,8 +75,12 @@ public class Controller
 		return true;
 	}
 	
+	public void addLowAngleLetter(boolean isL) {
+		
+	}
+	
 	public boolean createRunway(int airportId) {
-		Runway runway = view.configureRunway(true);
+		Runway runway = view.configureRunway(true, model.getAirports().get(airportId));
 		
 		if(runway == null)
 			return false;

@@ -1,8 +1,10 @@
 package core;
 
 import java.awt.Point;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 import com.sun.media.sound.InvalidDataException;
 
@@ -154,7 +156,7 @@ public class Console
 		}
 	}
 	
-	public Runway configureRunway(boolean toCancel, int airportID) {
+	public Runway configureRunway(boolean toCancel, Airport airport) {
 		while(true) {
 			//Not sure how to word first prompt.
 			String confirmation = prompt("Press Enter to add runway:\n(Or type '!' to " + (toCancel ? " cancel)" : " finish entering runways."));
@@ -174,29 +176,87 @@ public class Console
 			System.out.println("");
 			Runway runway = new Runway(resa, blastAllowance, stripEnd, runwayLength, runwayWidth);
 			
-			Integer firstAngle = readInt("Enter an angle for the runway", 0, 359);
-			System.out.println("");
-			firstAngle /= 10;
-			Integer reciprocalAngle = (firstAngle + 18) % 36;
-			
-			Integer bigAngle = Math.max(firstAngle, reciprocalAngle);
+			boolean angleOk = false;
+			Integer firstAngle = null, reciprocalAngle = null;
 			String leftOrR = "";
-			for (Runway r : controller.getAirports().get(airportID).runways) {
-				if (r.longAngleLogicalRunway.designator.equals(bigAngle.toString())) {
-					leftOrR = prompt("Is "+firstAngle+" L or R?");
+			
+			while(!angleOk) {
+				firstAngle = readInt("Enter an angle for the runway", 10, 180);
+				System.out.println("");
+				firstAngle /= 10;
+				reciprocalAngle = (firstAngle + 18) % 36;
+
+				Integer bigAngle = Math.max(firstAngle, reciprocalAngle);
+				
+				Set<Runway> matchingRunways = new HashSet<Runway>();
+				int noMatching = 0;
+				for (Runway r : airport.runways) {
+					boolean matchFound = false;
+					if(r.longAngleLogicalRunway.designator.equals(bigAngle.toString()))
+						matchFound = true;
+					if(r.longAngleLogicalRunway.designator.endsWith("L") || r.longAngleLogicalRunway.designator.endsWith("R"))
+						if(r.longAngleLogicalRunway.designator.substring(0, r.longAngleLogicalRunway.designator.length()-1).equals(bigAngle.toString()))
+							matchFound = true;
+					if (matchFound) {
+						matchingRunways.add(r);
+						noMatching++;
+					}
+				}
+
+				switch(noMatching) {
+				case 0: angleOk = true; break;
+				case 1:
+					do {
+						leftOrR = prompt("Another runway with this angle has been found!\nIs "+firstAngle+" L or R?\n(Enter 'L' or 'R')");
+					} while(!leftOrR.equalsIgnoreCase("L") && !leftOrR.equalsIgnoreCase("R"));
+					angleOk = true;
 					break;
+				case 2:
+					do {
+						leftOrR = prompt("Two other runways with this angle have been found!\nIs "+firstAngle+" to the left, right, or center of the other runways?\n(Enter 'L' or 'R' or 'C')");
+					} while(!leftOrR.equalsIgnoreCase("L") && !leftOrR.equalsIgnoreCase("R") && !leftOrR.equalsIgnoreCase("C"));
+					angleOk = true;
+					break;
+				default:
+					System.out.println("Too many runways with that angle have already been added.");
+				}
+				
+				for(Runway r : matchingRunways) {
+					if(matchingRunways.size() == 1) {
+						String lowAngle = r.shortAngleLogicalRunway.designator.substring(0, r.shortAngleLogicalRunway.designator.length()-1);
+						String highAngle = r.longAngleLogicalRunway.designator.substring(0, r.longAngleLogicalRunway.designator.length()-1);
+						
+						r.shortAngleLogicalRunway.designator = lowAngle + (leftOrR.equalsIgnoreCase("L") ? "R" : "L");
+						r.longAngleLogicalRunway.designator = highAngle + (leftOrR.equalsIgnoreCase("L") ? "L" : "R");
+						r.setLogicalRunways(r.shortAngleLogicalRunway, r.longAngleLogicalRunway);
+					}
+					else if(matchingRunways.size() == 2) {
+						String lowAngle = r.shortAngleLogicalRunway.designator.substring(0, r.shortAngleLogicalRunway.designator.length()-1);
+						String highAngle = r.longAngleLogicalRunway.designator.substring(0, r.longAngleLogicalRunway.designator.length()-1);
+						
+						if(leftOrR.equals("L")) {
+							r.shortAngleLogicalRunway.designator = lowAngle + (r.shortAngleLogicalRunway.designator.endsWith("L") ? "C" : "R");
+							r.longAngleLogicalRunway.designator = highAngle + (r.longAngleLogicalRunway.designator.endsWith("R") ? "C" : "L");
+							r.setLogicalRunways(r.shortAngleLogicalRunway, r.longAngleLogicalRunway);
+						}
+						else if(leftOrR.equals("R")) {
+							r.shortAngleLogicalRunway.designator = lowAngle + (r.shortAngleLogicalRunway.designator.endsWith("R") ? "C" : "L");
+							r.longAngleLogicalRunway.designator = highAngle + (r.longAngleLogicalRunway.designator.endsWith("L") ? "C" : "R");
+							r.setLogicalRunways(r.shortAngleLogicalRunway, r.longAngleLogicalRunway);
+						}
+					}
 				}
 			}
-
+			
 			LogicalRunway shortAngleLogicalRunway = null; //needs to be initialised for add to runway method
 			LogicalRunway longAngleLogicalRunway = null;
 			System.out.println("");
 
 			for(int i = 0; i < 2; i++) {
-				String letter = leftOrR;
+				String letter = leftOrR.toUpperCase();
 				if (i == 1) {
-					if (letter.equals("L")) letter = "R";
-					else if (leftOrR.equals("R")) letter = "L";
+					if (letter.equalsIgnoreCase("L")) letter = "R";
+					else if (leftOrR.equalsIgnoreCase("R")) letter = "L";
 				}
 				//TODO::letter - find any other runways in airport with same angle
 				
@@ -216,11 +276,11 @@ public class Console
 					}
 				} while (!acceptedValue);
 				do {
-					lda = readInt("Enter LDA value in meters for " + designator, 0, 10000);
+					toda = readInt("Enter TODA value in meters for " + designator, 0, 10000);
 					System.out.println("");
-					if (lda > tora) {
+					if (toda < tora) {
 						acceptedValue = false;
-						System.out.println("LDA can't be larger than TORA");
+						System.out.println("TODA can't be less than TORA");
 					} else {
 						acceptedValue = true;
 					}
@@ -236,15 +296,17 @@ public class Console
 					}
 				} while (!acceptedValue);
 				do {
-					toda = readInt("Enter TODA value in meters for " + designator, 0, 10000);
+					lda = readInt("Enter LDA value in meters for " + designator, 0, 10000);
 					System.out.println("");
-					if (toda < tora) {
+					if (lda > tora) {
 						acceptedValue = false;
-						System.out.println("TODA can't be less than TORA");
+						System.out.println("LDA can't be larger than TORA");
 					} else {
 						acceptedValue = true;
 					}
 				} while (!acceptedValue);
+				
+				
 
 				LogicalRunway lr = new LogicalRunway(designator, runway, tora, toda, asda, lda, 0);
 				if (runwayAngle < 18) {

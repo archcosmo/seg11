@@ -512,9 +512,9 @@ public class Draw
 		//Drawing Values
 		int drawLda = (int) (lrw.lda * scale);
 		int drawTora = (int) (lrw.tora * scale);
-		int drawAsda = (int) (lrw.asda * scale);
-		int drawToda = (int) (lrw.toda * scale);
-		int drawDisplacedThreshold = drawTora - drawLda;
+//		int drawAsda = (int) (lrw.asda * scale);
+//		int drawToda = (int) (lrw.toda * scale);
+//		int drawDisplacedThreshold = drawTora - drawLda;
 		int drawStopwayLength = (int) (lrw.stopwayLength * scale);
 		int drawClearwayLength = (int) (lrw.clearwayLength * scale);
 		LogicalRunway otherLR = model.highAngleLRSelected ? runway.shortAngleLogicalRunway : runway .longAngleLogicalRunway;
@@ -531,7 +531,7 @@ public class Draw
 
 
 		int lda, tora, asda, toda, stopway, clearway;
-		int afterObstacleXPos = 0;
+//		int afterObstacleXPos = 0;
 		Obstacle obstacle = model.selectedObstacle; //Can be null
 		if (obstacle == null) {
 			lda = lrw.lda;
