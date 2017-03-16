@@ -154,7 +154,7 @@ public class Console
 		}
 	}
 	
-	public Runway configureRunway(boolean toCancel) {
+	public Runway configureRunway(boolean toCancel, int airportID) {
 		while(true) {
 			//Not sure how to word first prompt.
 			String confirmation = prompt("Press Enter to add runway:\n(Or type '!' to " + (toCancel ? " cancel)" : " finish entering runways."));
@@ -178,13 +178,26 @@ public class Console
 			System.out.println("");
 			firstAngle /= 10;
 			Integer reciprocalAngle = (firstAngle + 18) % 36;
+			
+			Integer bigAngle = Math.max(firstAngle, reciprocalAngle);
+			String leftOrR = "";
+			for (Runway r : controller.getAirports().get(airportID).runways) {
+				if (r.longAngleLogicalRunway.designator.equals(bigAngle.toString())) {
+					leftOrR = prompt("Is "+firstAngle+" L or R?");
+					break;
+				}
+			}
 
 			LogicalRunway shortAngleLogicalRunway = null; //needs to be initialised for add to runway method
 			LogicalRunway longAngleLogicalRunway = null;
 			System.out.println("");
 
 			for(int i = 0; i < 2; i++) {
-				String letter = "";
+				String letter = leftOrR;
+				if (i == 1) {
+					if (letter.equals("L")) letter = "R";
+					else if (leftOrR.equals("R")) letter = "L";
+				}
 				//TODO::letter - find any other runways in airport with same angle
 				
 				int runwayAngle = (i == 0) ? firstAngle : reciprocalAngle;
