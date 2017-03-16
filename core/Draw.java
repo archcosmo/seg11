@@ -359,7 +359,7 @@ public class Draw
 		/*Displaced Threshold*/
 		int adjustedDisplacement = (int)(scale*lr.displacedThreshold);
 		int displacedThreshWidth = runwayLength/100;
-		int displacementX = (lowAngle && !model.towardsSelectedLR) || (!lowAngle && model.towardsSelectedLR) ? runwayX + (int)(scale * (ob.distanceFromLowAngleEndOfRunway))+adjustedDisplacement : runwayX+(int)(scale*ob.distanceFromLowAngleEndOfRunway) - adjustedDisplacement;
+		int displacementX = (lowAngle && !model.towardsSelectedLR) || (!lowAngle && model.towardsSelectedLR) ? runwayX + (int)(scale * (ob.distanceFromLowAngleEndOfRunway+ob.length)) : runwayX+(int)(scale*ob.distanceFromLowAngleEndOfRunway);
 		
 		for(int i = 0; i < 4; i++) {
 			String selectedLabel = "";
@@ -381,28 +381,28 @@ public class Draw
 				selectedLabel = "LDA";
 			}
 			addedLabels.add(selectedLabel);
-			int arrowX = lowAngle ? (int)(displacementX + scale*selectedValue/2) : (int)(runwayX+runwayLength - scale*selectedValue/2);
+			int arrowX = (lowAngle && !model.towardsSelectedLR) || (!lowAngle && model.towardsSelectedLR) ? (int)(displacementX + scale*selectedValue/2) : (int)(displacementX - scale*selectedValue/2);
 			
 			/*LDA Positioned from threshold*/
 			if(selectedLabel.equals("LDA")) {
-				arrowX = lowAngle ? (int)(displacementX + scale*lr.tora - scale*selectedValue/2) : (int)(runwayX+runwayLength-adjustedDisplacement - lr.tora + scale*selectedValue/2);
+				arrowX = (lowAngle && !model.towardsSelectedLR) || (!lowAngle && model.towardsSelectedLR) ? (int)(displacementX + Math.abs(adjustedDisplacement) + scale*selectedValue/2) : (int)(displacementX - Math.abs(adjustedDisplacement)- scale*selectedValue/2);
 			}
 			int arrowY = (int)(centerlineY - runwayWidth/2 - 150*(i+1)*scale);
 			drawMeasurement(g2d, scale, selectedValue, arrowX, arrowY, 90, "Recalculated " + selectedLabel, -(int)(150*(i+1)*scale), -(int)(150*(i+1)*scale));
 		}
 		
-		
+		int threshX = (lowAngle && !model.towardsSelectedLR) || (!lowAngle && model.towardsSelectedLR) ? (int)(displacementX + Math.abs(adjustedDisplacement)) : (int)(displacementX - Math.abs(adjustedDisplacement));
 		
 		/*Make transparent so threshold designators can be read*/
 		g2d.setColor(new Color(255, 0, 0, 150));
-		g2d.fillRect(displacementX-displacedThreshWidth/2, centerlineY - runwayWidth/2, displacedThreshWidth, runwayWidth);
+		g2d.fillRect(threshX-displacedThreshWidth/2, centerlineY - runwayWidth/2, displacedThreshWidth, runwayWidth);
 		String displacedLabel = "Recalculated Displaced Threshold";
 		
 		Font gFont = g2d.getFont();
 		g2d.setColor(Color.RED);
 		g2d.setFont(new Font(gFont.getFontName(), Font.PLAIN, (int)(60 * scale)));
 		
-		g2d.drawChars(displacedLabel.toCharArray(), 0, displacedLabel.length(), displacementX, centerlineY+runwayWidth/2+g2d.getFontMetrics().getHeight());
+		g2d.drawChars(displacedLabel.toCharArray(), 0, displacedLabel.length(), threshX, centerlineY+runwayWidth/2+g2d.getFontMetrics().getHeight());
 		
 		//Reset Font
 		g2d.setFont(gFont);
@@ -544,7 +544,8 @@ public class Draw
 			int drawObstacleHeight = (int) (obstacle.height * scale);
 			int drawObstacleXPos = (int) (obstacle.distanceFromThreshold * scale);
 			int drawObstacleLength = (int) (obstacle.length * scale);
-			drawSimpleRect(g2d, drawLEFT + drawObstacleXPos, 100 - drawObstacleHeight, drawObstacleLength, drawObstacleHeight, reverse, ColorUIResource.cyan, width/2);
+			int ALSWidth = (int) (obstacle.height * 50 * scale);
+			drawObstacle(g2d, drawLEFT + drawObstacleXPos, 100 - drawObstacleHeight, drawObstacleLength, drawObstacleHeight, reverse, ColorUIResource.cyan, width/2, true, ALSWidth);
 			ArrayList<Integer> newThreshold = model.recalculatedValues;
 			tora = newThreshold.get(0);
 			toda = newThreshold.get(1);
@@ -552,7 +553,6 @@ public class Draw
 			lda = newThreshold.get(3);
 			stopway = asda - tora;
 			clearway = toda - tora;
-			afterObstacleXPos = drawObstacleXPos + drawObstacleLength;
 		}
 
 		int drawLEFTOLD = drawLEFT;
@@ -569,6 +569,8 @@ public class Draw
 		drawSimpleMeasurement(g2d, drawLEFT, -200, toda, scale, "TODA", reverse, width/2);
 		drawSimpleMeasurement(g2d, drawLEFTOLD + drawTora, 50, stopway, scale, "Stopway", reverse, width/2);
 		drawSimpleMeasurement(g2d, drawLEFTOLD + drawTora, 90, clearway, scale, "Clearway", reverse, width/2);
+
+
 		//TODO:: obstacle gradient
 		g2d.dispose();
 	}
@@ -607,5 +609,23 @@ public class Draw
 		
 		int textstartX = startX + (scaleLength - textWidth) / 2;
 		g2d.drawString(measurementText, textstartX, startY - 2);
+	}
+
+	private void drawObstacle(Graphics2D g2d, int x, int y, int width, int height, boolean reverse, Color colour, int centreOfRunway, boolean left, int ALSWidth) {
+		if (width == 0) {
+			return;
+		}
+		if (reverse) {
+			x += 2*(centreOfRunway - x) - width;
+		}
+		g2d.setColor(colour);
+		g2d.fillRect(x, y, width, height);
+		g2d.setColor(Color.black);
+		g2d.drawRect(x, y, width, height);
+		//if (left) {
+			g2d.drawLine(x, y, x - ALSWidth, y + height);
+		//} else {
+			g2d.drawLine(x + width, y, x + width + ALSWidth, y + height);
+		//}
 	}
 }
