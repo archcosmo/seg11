@@ -165,6 +165,11 @@ public class Controller
 		
 		return newValues;
 	}
+	
+	public void setDirection(boolean towards) {
+		model.towardsSelectedLR = towards;
+		window.repaint();
+	}
 
 	/* Return false if ID does not exist */
 	public boolean selectObstacle(int ID) {
@@ -190,6 +195,14 @@ public class Controller
 			return false;
 		view.selectThreshold(model.selectedRunway);
 		return true;
+	}
+	
+	public List<Integer> getRecalculatedValues() {
+		return model.recalculatedValues;
+	}
+	
+	public String getCalculationBreakdown() {
+		return model.calcBreakdown;
 	}
 	
 	public boolean selectThreshold(int ID) {

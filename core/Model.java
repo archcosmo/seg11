@@ -257,11 +257,11 @@ public class Model
 	
 	public boolean selectThreshold(int id) {
 		try{
-			if (id == 1) {
+			if (id == 0) {
 				this.highAngleLRSelected = false;
-			} else { // id == 2
+			} else if(id == 1) {
 				this.highAngleLRSelected = true;
-			}
+			} else { throw new IndexOutOfBoundsException("Invalid designator selection."); }
 			this.recalculateValues();
 			return true;
 		}

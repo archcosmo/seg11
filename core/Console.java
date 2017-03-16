@@ -1,6 +1,7 @@
 package core;
 
 import java.awt.Point;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -308,11 +309,13 @@ public class Console
 						+ "\t\teg.. calculate [-v] (T|A) could become \"calculate -v T\" or \"calculate T\" or \"calculate -v A\" or other combinations\n");
 				System.out.println("\nlist (type) : lists airports, runways, designators, and obstacles registered to the system.");
 				System.out.println("  | (type) = airports, runways, thresholds, or obstacles");
-				System.out.println("\nselect (type) (id) : selects which airport, runway, designator, and obstacle to use in calculation.");
-				System.out.println("  | (type) = airport, runway, designator, or obstacle");
+				System.out.println("\nselect (type) (id) : selects which airport, runway, designator, direction, and obstacle to use in calculation.");
+				System.out.println("  | (type) = airport, runway, designator, direction, or obstacle");
 				System.out.println("  | get (id) using list command.");
 				System.out.println("  | select obstacle (id) : Places obstacle on runway");
 				System.out.println("  | select obstacle null : Removes obstacle from runway");
+				System.out.println("  | select direction towards : Sets the direction to towards the selected threshold");
+				System.out.println("  | select direction away    : Sets the direction to away from the selected threshold");
 				System.out.println("\nadd (type) (id)");
 				System.out.println("  | (type) = airport, runway, or obstacle");
 				System.out.println("  | get (id) using list command.");
@@ -381,9 +384,9 @@ public class Console
 				case "designators":
 					LogicalRunway lr = controller.getSelectedLogicalRunway();
 					if(lr != null) {
-						System.out.print("[1]: ");
+						System.out.print("[0]: ");
 						list_thresholds(lr.runway.shortAngleLogicalRunway);
-						System.out.print("[2]: ");
+						System.out.print("[1]: ");
 						list_thresholds(lr.runway.longAngleLogicalRunway);
 					}
 					else
@@ -468,7 +471,7 @@ public class Console
 			{
 				try {
 					int ID = 0;
-					if(!(input[1].equals("obstacle") && input[2].equals("null")))
+					if(!(input[1].equals("obstacle") && input[2].equals("null")) && !input[1].equals("direction") )
 						ID = Integer.parseInt(input[2]);
 					switch ( input[1] )
 					{
@@ -509,6 +512,23 @@ public class Console
 						}
 						else
 							System.out.println("Invalid obstacle ID, use 'list obstacles' to get a list of obstacle IDs.");
+						break;
+					case "direction":
+						if(controller.getSelectedLogicalRunway() == null)
+							System.out.println("Select a runway first with 'select runway [runway_id]' before choosing a direction.");
+						else {
+							if(input[2].equalsIgnoreCase("t") || input[2].equalsIgnoreCase("toward") || input[2].equalsIgnoreCase("towards")) {
+								controller.setDirection(true);
+								System.out.println("Direction set towards " + controller.getSelectedLogicalRunway().designator + " logical runway.");
+							}
+							else if(input[2].equalsIgnoreCase("a") || input[2].equalsIgnoreCase("away")) {
+								controller.setDirection(false);
+								System.out.println("Direction set away from " + controller.getSelectedLogicalRunway().designator + " logical runway.");
+							}
+							else {
+								System.out.println("Invalid argument, use 'select direction towards' or 'select direction away'");
+							}
+						}
 						break;
 					default:
 						System.out.println("Invalid argument to command 'select (type) (id)'\n : Valid types are; 'airport', 'runway', 'designator', 'obstacle'\n");
@@ -638,10 +658,17 @@ public class Console
 	}
 	
 	public void selectThreshold(Runway runway) {
-		String prompt = "Select a logical runway / direction to use for " + runway.designator + ":\n";
-		prompt += "[" + 1 + "] : " + runway.shortAngleLogicalRunway.designator + "\n";
-		prompt += "[" + 2 + "] : " + runway.longAngleLogicalRunway.designator + "\n";
-		controller.selectThreshold(readInt(prompt, 1, 2)); //TODO: not sure if this selects the correct logical runway
+		String prompt = "Select a logical runway / direction to use for " + runway.designator;
+		int result = selectFromList(prompt, new String[] { runway.shortAngleLogicalRunway.designator, runway.longAngleLogicalRunway.designator });
+		controller.selectThreshold(result); //TODO: not sure if this selects the correct logical runway
+	}
+	
+	private int selectFromList(String message, String[] listItems) {
+		String prompt = message + ":\n";
+		for(int i = 0; i < listItems.length; i++) {
+			prompt += "[" + i + "] : " + listItems[i] + "\n";
+		}
+		return readInt(prompt, 0, listItems.length-1);
 	}
 	
 	private void print_status() {
@@ -683,6 +710,8 @@ public class Console
 			System.out.println("Strip End: " + lr.getStripEnd() + "m");
 			System.out.println("");
 		}
+		
+		
 	}
 	
 	/* Displays  sign 
