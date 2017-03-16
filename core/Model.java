@@ -281,7 +281,7 @@ public class Model
 	{
 		try {
 			this.selectedObstacle = obstacles.get(id);
-			this.selectedObstacle.setPosition(xPos, yPos);
+			this.selectedObstacle.setPosition(xPos, this.getSelectedLogicalRunway(), !highAngleLRSelected, yPos);
 			this.recalculateValues();
 			return true;
 		} catch(IndexOutOfBoundsException e) {

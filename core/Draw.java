@@ -97,22 +97,24 @@ public class Draw
 			int runwayX = width/2 - adjustedRunwayLength/2; 
 
 
-			if (ob != null) {
-				Runway recalculatedRunway = new Runway(runway.RESA, runway.blastAllowance, runway.stripEnd, runway.length, runway.width);
-				if(model.highAngleLRSelected)
-					recalculatedRunway.setLogicalRunways(runway.shortAngleLogicalRunway, new LogicalRunway(runway.longAngleLogicalRunway.designator, recalculatedRunway, model.recalculatedValues.get(0), model.recalculatedValues.get(1), model.recalculatedValues.get(2), model.recalculatedValues.get(3), 0));
-				else
-					recalculatedRunway.setLogicalRunways(new LogicalRunway(runway.shortAngleLogicalRunway.designator, recalculatedRunway, model.recalculatedValues.get(0), model.recalculatedValues.get(1), model.recalculatedValues.get(2), model.recalculatedValues.get(3), 0), runway.longAngleLogicalRunway);
-				runway = recalculatedRunway;
-			}
+//			if (ob != null) {
+//				Runway recalculatedRunway = new Runway(runway.RESA, runway.blastAllowance, runway.stripEnd, runway.length, runway.width);
+//				if(model.highAngleLRSelected)
+//					recalculatedRunway.setLogicalRunways(runway.shortAngleLogicalRunway, new LogicalRunway(runway.longAngleLogicalRunway.designator, recalculatedRunway, model.recalculatedValues.get(0), model.recalculatedValues.get(1), model.recalculatedValues.get(2), model.recalculatedValues.get(3), 0));
+//				else
+//					recalculatedRunway.setLogicalRunways(new LogicalRunway(runway.shortAngleLogicalRunway.designator, recalculatedRunway, model.recalculatedValues.get(0), model.recalculatedValues.get(1), model.recalculatedValues.get(2), model.recalculatedValues.get(3), 0), runway.longAngleLogicalRunway);
+//				runway = recalculatedRunway;
+//			}
 			
 			drawRunwayTop(g2d, runway, runwayX, adjustedRunwayLength, adjustedRunwayWidth, height/2, scale);
-			drawLogicalRunwayMeasurementsTop(g2d, true, runway, runwayX, adjustedRunwayLength, adjustedRunwayWidth, height/2, scale);
-
 			
 			if (ob != null) {
 				drawObstacleTop(g2d, ob, runwayX, height/2, scale);
+				drawRecalculatedValuesTop(g2d, !model.highAngleLRSelected, runway, runwayX, adjustedRunwayLength, adjustedRunwayWidth, height/2, scale);
 			}
+			
+			drawLogicalRunwayMeasurementsTop(g2d, !model.highAngleLRSelected, runway, runwayX, adjustedRunwayLength, adjustedRunwayWidth, height/2, scale);
+			
 		}
 	}
 
@@ -349,10 +351,67 @@ public class Draw
 		g2d.setFont(gFont);
 	}
 	
+	private void drawRecalculatedValuesTop(Graphics2D g2d, boolean lowAngle, Runway runway, int runwayX, int runwayLength, int runwayWidth, int centerlineY, float scale) {
+		Set<String> addedLabels = new HashSet<String>();
+		
+		LogicalRunway lr = new LogicalRunway("", runway, model.recalculatedValues.get(0), model.recalculatedValues.get(1),model.recalculatedValues.get(2), model.recalculatedValues.get(3),0);
+		
+		/*Displaced Threshold*/
+		int adjustedDisplacement = (int)(scale*lr.displacedThreshold);
+		int displacedThreshWidth = runwayLength/100;
+		int displacementX = lowAngle ? runwayX+(int)(runway.shortAngleLogicalRunway.displacedThreshold*scale)+adjustedDisplacement-displacedThreshWidth/2 : runwayX+runwayLength-(int)(scale*runway.longAngleLogicalRunway.displacedThreshold)-adjustedDisplacement-displacedThreshWidth/2;
+		
+		for(int i = 0; i < 4; i++) {
+			String selectedLabel = "";
+			int selectedValue = Integer.MAX_VALUE;
+			if(lr.tora < selectedValue && !addedLabels.contains("TORA")) {
+				selectedValue = lr.tora;
+				selectedLabel = "TORA";
+			}
+			if(lr.toda < selectedValue && !addedLabels.contains("TODA")) {
+				selectedValue = lr.toda;
+				selectedLabel = "TODA";
+			}
+			if(lr.asda < selectedValue && !addedLabels.contains("ASDA")) {
+				selectedValue = lr.asda;
+				selectedLabel = "ASDA";
+			}
+			if(lr.lda < selectedValue && !addedLabels.contains("LDA")) {
+				selectedValue = lr.lda;
+				selectedLabel = "LDA";
+			}
+			addedLabels.add(selectedLabel);
+			int arrowX = lowAngle ? (int)(displacementX + scale*selectedValue/2) : (int)(runwayX+runwayLength - scale*selectedValue/2);
+			
+			/*LDA Positioned from threshold*/
+			if(selectedLabel.equals("LDA")) {
+				arrowX = lowAngle ? (int)(displacementX + scale*lr.tora - scale*selectedValue/2) : (int)(runwayX+runwayLength-adjustedDisplacement - lr.tora + scale*selectedValue/2);
+			}
+			int arrowY = (int)(centerlineY - runwayWidth/2 - 150*(i+1)*scale);
+			drawMeasurement(g2d, scale, selectedValue, arrowX, arrowY, 90, "Recalculated " + selectedLabel, -(int)(150*(i+1)*scale), -(int)(150*(i+1)*scale));
+		}
+		
+		
+		
+		/*Make transparent so threshold designators can be read*/
+		g2d.setColor(new Color(0, 0, 0, 150));
+		g2d.fillRect(displacementX, centerlineY - runwayWidth/2, displacedThreshWidth, runwayWidth);
+		String displacedLabel = "Recalculated Displaced Threshold";
+		
+		Font gFont = g2d.getFont();
+		g2d.setColor(Color.BLACK);
+		g2d.setFont(new Font(gFont.getFontName(), Font.PLAIN, (int)(60 * scale)));
+		
+		g2d.drawChars(displacedLabel.toCharArray(), 0, displacedLabel.length(), displacementX, centerlineY-runwayWidth/2-g2d.getFontMetrics().getHeight());
+		
+		//Reset Font
+		g2d.setFont(gFont);
+	}
+	
 	private void drawObstacleTop(Graphics2D g2d, Obstacle ob, int runwayX, int centerlineY, float scale) {
 		g2d.setColor(Color.WHITE);
 		//TODO: Fix positioning of obstacle
-		int obX = runwayX + (int)(scale * ob.distanceFromThreshold);
+		int obX = runwayX + (int)(scale * ob.distanceFromLowAngleEndOfRunway);
 		int obY = centerlineY - (int)(scale * ob.distanceFromCenterline);
 		int obLength = (int)(scale * ob.length);
 		int obWidth = (int)(scale * ob.width);
@@ -371,7 +430,7 @@ public class Draw
 		int fontHeight = g2d.getFontMetrics().getHeight();
 		boolean shortenedLabel = false;
 				
-		while(stringWidth > obLength) {
+		while(stringWidth > obLength && planeLabel.length() > 1) {
 			shortenedLabel = true;
 			planeLabel = planeLabel.substring(0, planeLabel.length()-1);
 			stringWidth = g2d.getFontMetrics().stringWidth(planeLabel + "......");
