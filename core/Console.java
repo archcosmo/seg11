@@ -342,7 +342,7 @@ public class Console
 				System.out.println("\nUsing this same method, you can now select a runway"
 						+ "\n\t\"list runways\" : Prints a list of runways"
 						+ "\n\t\"select runway\" : This will print an indexed list of airports in the system, and ask you for a number to indicate which one you want to select"
-						+ "At this point, you will be prompted with further input, asking you to select a logical runway direction, for this runway selection"
+						+ "\n\tAt this point, you will be prompted with further input, asking you to select a logical runway direction, for this runway selection"
 						+ "\n\nWhen doing this for objects, you will be prompted for input of the object position. Input the values as indicated."
 						+ "It is also possible to clear object using \"select object null\" for when you dont want an object in the system\n"
 						+ "\nAfter selecting a runway, you will notice the window will update with a diagram of the side and top view of the runway\n\n");
