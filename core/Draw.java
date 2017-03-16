@@ -491,6 +491,7 @@ public class Draw
 		}
 		g2d.setColor(Color.black);
 		//TODO:: draw displaced threshold?
+		
 		drawSimpleMeasurement(g2d, 50 + (drawTora - drawLda), -80, lda, scale, "LDA", reverse, width/2);
 		drawSimpleMeasurement(g2d, 50, -120, tora, scale, "TORA", reverse, width/2);
 		drawSimpleMeasurement(g2d, 50, -160, asda, scale, "ASDA", reverse, width/2);
@@ -529,6 +530,7 @@ public class Draw
 		g2d.drawLine(endX, runwayYPos, endX, startY);
 		String measurementText = label + ": " + length + "m";
 		int textWidth = g2d.getFontMetrics().stringWidth(measurementText);
+		
 		int textstartX = startX + (scaleLength - textWidth) / 2;
 		g2d.drawString(measurementText, textstartX, startY - 2);
 	}
