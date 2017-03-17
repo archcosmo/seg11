@@ -61,7 +61,7 @@ public class Calculations {
 			int blast_DThreshold = blastAllowance + logicalRunway.displacedThreshold;
 			if (RESA_StripEnd > blast_DThreshold) {
 
-				newTora = logicalRunway.tora - fromThresh -(RESA_StripEnd);
+				newTora = logicalRunway.tora - fromThresh - (RESA_StripEnd);
 				lastCalculationBreakdown.append("TORA = Original TORA - Distance from Threshold - "+"RESA - Strip End\n");
 				lastCalculationBreakdown.append("     = "+logicalRunway.tora+" - "+fromThresh+" - "+RESA+" - "+logicalRunway.getStripEnd()+"\n");
 				lastCalculationBreakdown.append("     = "+newTora+"\n");

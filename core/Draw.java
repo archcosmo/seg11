@@ -359,7 +359,7 @@ public class Draw
 		/*Displaced Threshold*/
 		int adjustedDisplacement = (int)(scale*lr.displacedThreshold);
 		int displacedThreshWidth = runwayLength/100;
-		int displacementX = (lowAngle && !model.towardsSelectedLR) || (!lowAngle && model.towardsSelectedLR) ? runwayX + (int)(scale * (ob.distanceFromLowAngleEndOfRunway+ob.length)) : runwayX+(int)(scale*ob.distanceFromLowAngleEndOfRunway);
+		int displacementX = (lowAngle && !model.towardsSelectedLR) || (!lowAngle && model.towardsSelectedLR) ? runwayX + runwayLength - (int)(scale * lr.tora) : runwayX+(int)(scale*lr.tora);
 		
 		for(int i = 0; i < 4; i++) {
 			String selectedLabel = "";
@@ -392,6 +392,26 @@ public class Draw
 		}
 		
 		int threshX = (lowAngle && !model.towardsSelectedLR) || (!lowAngle && model.towardsSelectedLR) ? (int)(displacementX + Math.abs(adjustedDisplacement)) : (int)(displacementX - Math.abs(adjustedDisplacement));
+
+		LogicalRunway selectedLR = lowAngle ? runway.shortAngleLogicalRunway : runway.longAngleLogicalRunway;
+		
+//		if(model.towardsSelectedLR) {
+//
+//		}
+//		else {
+//			int RESA_StripEnd = runway.RESA + runway.stripEnd;
+//			int blast_DThreshold = runway.blastAllowance + selectedLR.displacedThreshold;
+//			
+//			int measureX = (lowAngle && !model.towardsSelectedLR) || (!lowAngle && model.towardsSelectedLR) ? (int)(runwayX + scale*(ob.distanceFromLowAngleEndOfRunway + ob.length) ) : (int)(runwayX + scale*ob.distanceFromLowAngleEndOfRunway) ;
+//			
+//			if (RESA_StripEnd > blast_DThreshold) {
+//				drawMeasurement(g2d, scale, runway.RESA, measureX + ((lowAngle && !model.towardsSelectedLR) || (!lowAngle && model.towardsSelectedLR) ? (int)(runway.RESA*scale/2) : -(int)(runway.RESA*scale/2)) , (int)(centerlineY), 90, "RESA", -(int)(150*scale), -(int)(150*scale));
+//				drawMeasurement(g2d, scale, runway.stripEnd, measureX + (int)(scale*runway.RESA) + ((lowAngle && !model.towardsSelectedLR) || (!lowAngle && model.towardsSelectedLR) ? (int)(runway.stripEnd*scale/2) : -(int)(runway.stripEnd*scale/2)) , (int)(centerlineY - runwayWidth/2 - 150*scale), 90, "Strip End", -(int)(150*scale), -(int)(150*scale));
+//			} else {
+//				drawMeasurement(g2d, scale, runway.blastAllowance, measureX + ((lowAngle && !model.towardsSelectedLR) || (!lowAngle && model.towardsSelectedLR) ? (int)(runway.blastAllowance*scale/2) : -(int)(runway.blastAllowance*scale/2)) , (int)(centerlineY), 90, "Blast Allowance", -(int)(150*scale), -(int)(150*scale));
+//				drawMeasurement(g2d, scale, selectedLR.displacedThreshold, measureX + (int)(scale*selectedLR.displacedThreshold) + ((lowAngle && !model.towardsSelectedLR) || (!lowAngle && model.towardsSelectedLR) ? (int)(selectedLR.displacedThreshold*scale/2) : -(int)(selectedLR.displacedThreshold*scale/2)) , (int)(centerlineY - runwayWidth/2 - 150*scale), 90, "Displaced Threshold", -(int)(150*scale), -(int)(150*scale));
+//			}
+//		}
 		
 		/*Make transparent so threshold designators can be read*/
 		g2d.setColor(new Color(255, 0, 0, 150));
