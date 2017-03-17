@@ -44,15 +44,15 @@ public class Draw
 			Font gFont = g2d.getFont();
 			g2d.setFont(new Font(gFont.getFontName(), gFont.getStyle(), 20));
 			g2d.setFont(new Font(g2d.getFont().getFontName(), Font.PLAIN, 20));
-			g2d.drawString("Logical Runway Selected: "+selectedLogRun, width/10, height/5);
+			g2d.drawString("Logical Runway Selected: "+selectedLogRun, width/10, height/10);
 			
-			g2d.drawString("Obstacle Distance From Centerline: " + (ob == null ? "N/A" : ob.distanceFromCenterline), width/10, height/5 + g2d.getFontMetrics().getHeight());
-			g2d.drawString("Obstacle Distance From Threshold: " + (ob == null ? "N/A" : ob.distanceFromThreshold), width/10, height/5 + g2d.getFontMetrics().getHeight()*2);
+			g2d.drawString("Obstacle Distance From Centerline: " + (ob == null ? "N/A" : ob.distanceFromCenterline), width/10, height/10 + g2d.getFontMetrics().getHeight());
+			g2d.drawString("Obstacle Distance From Threshold: " + (ob == null ? "N/A" : ob.distanceFromThreshold), width/10, height/10 + g2d.getFontMetrics().getHeight()*2);
 			
-			g2d.drawString("Landing/Take-Off Direction: ", width/10, height/5 + g2d.getFontMetrics().getHeight()*3);
+			g2d.drawString("Landing/Take-Off Direction: ", width/10, height/10 + g2d.getFontMetrics().getHeight()*3);
 			int dirAngle = model.highAngleLRSelected ? -90 : 90;
 			
-			drawArrow(g2d, dirAngle, scale, width/10 + g2d.getFontMetrics().stringWidth("Landing/Take-Off Direction: ") + (dirAngle == -90 ? (int)(scale*250) : 0), height/5 + g2d.getFontMetrics().getHeight()*3, 250);
+			drawArrow(g2d, dirAngle, scale, width/10 + g2d.getFontMetrics().stringWidth("Landing/Take-Off Direction: ") + (dirAngle == -90 ? (int)(scale*250) : 0), height/10 + g2d.getFontMetrics().getHeight()*3, 250);
 			
 			/*Draw Compass*/
 			int angle = Integer.parseInt(runway.shortAngleLogicalRunway.designator.substring(0,2)) * 10;
