@@ -48,11 +48,11 @@ public class Draw
 			
 			g2d.drawString("Landing/Take-Off Direction: ", width/10, height/5 + g2d.getFontMetrics().getHeight());
 			int dirAngle = model.towardsSelectedLR && model.highAngleLRSelected 
-							? 90
+							? -90
 							: (!model.towardsSelectedLR && model.highAngleLRSelected)
-								? -90
+								? 90
 								: (model.towardsSelectedLR && !model.highAngleLRSelected)
-									? -90 : 90;
+									? 90 : -90;
 			
 			drawArrow(g2d, dirAngle, scale, width/10 + g2d.getFontMetrics().stringWidth("Landing/Take-Off Direction: ") + (dirAngle == -90 ? (int)(scale*250) : 0), height/5 + g2d.getFontMetrics().getHeight(), 250);
 			
@@ -525,7 +525,7 @@ public class Draw
 		float scale = 0.8F * width / totalRunwayLength;
 		g2d.drawString("Runway Designator: " + lrw.designator, ((reverse) ? width/2 -10 : 10), 30);
 		g2d.drawString("Landing/Take-Off Direction: ",((reverse) ? width/2 -10 : 10), 50);
-		int dirAngle = (model.towardsSelectedLR && model.highAngleLRSelected) || (!model.towardsSelectedLR && !model.highAngleLRSelected) ? 90 : -90;
+		int dirAngle = (model.towardsSelectedLR && model.highAngleLRSelected) || (!model.towardsSelectedLR && !model.highAngleLRSelected) ? -90 : 90;
 		drawArrow(g2d, dirAngle, scale, ((reverse) ? width/2 -10 : 10) + g2d.getFontMetrics().stringWidth("Landing/Take-Off Direction: ") + (dirAngle == -90 ? (int)(scale*250) : 0), 45, 250);
 
 		
@@ -551,7 +551,6 @@ public class Draw
 
 
 		int lda, tora, asda, toda, stopway, clearway;
-//		int afterObstacleXPos = 0;
 		Obstacle obstacle = model.selectedObstacle; //Can be null
 		if (obstacle == null) {
 			lda = lrw.lda;
@@ -566,7 +565,11 @@ public class Draw
 			int drawObstacleXPos = (int) (obstacle.distanceFromThreshold * scale);
 			int drawObstacleLength = (int) (obstacle.length * scale);
 			int ALSWidth = (int) (obstacle.height * 50 * scale);
-			drawObstacle(g2d, drawLEFT + drawObstacleXPos, 100 - drawObstacleHeight, drawObstacleLength, drawObstacleHeight, reverse, ColorUIResource.cyan, width/2, true, ALSWidth);
+			boolean left = model.towardsSelectedLR;
+			if (model.highAngleLRSelected) {
+				left = !left;
+			}
+			drawObstacle(g2d, drawLEFT + drawObstacleXPos, 100 - drawObstacleHeight, drawObstacleLength, drawObstacleHeight, reverse, ColorUIResource.cyan, width/2, left, ALSWidth);
 			ArrayList<Integer> newThreshold = model.recalculatedValues;
 			tora = newThreshold.get(0);
 			toda = newThreshold.get(1);
@@ -592,7 +595,6 @@ public class Draw
 		drawSimpleMeasurement(g2d, drawLEFTOLD + drawTora, 90, clearway, scale, "Clearway", reverse, width/2);
 
 
-		//TODO:: obstacle gradient
 		g2d.dispose();
 	}
 
@@ -643,10 +645,10 @@ public class Draw
 		g2d.fillRect(x, y, width, height);
 		g2d.setColor(Color.black);
 		g2d.drawRect(x, y, width, height);
-		//if (left) {
+		if (left) {
 			g2d.drawLine(x, y, x - ALSWidth, y + height);
-		//} else {
+		} else {
 			g2d.drawLine(x + width, y, x + width + ALSWidth, y + height);
-		//}
+		}
 	}
 }
