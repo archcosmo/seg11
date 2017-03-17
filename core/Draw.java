@@ -569,16 +569,15 @@ public class Draw
 			lda = newThreshold.get(3);
 			stopway = asda - tora;
 			clearway = toda - tora;
-
-			//drawLDALEFT
 		}
 
 		int drawLEFTOLD = drawLEFT;
 		g2d.setColor(Color.black);
 		//TODO:: draw displaced threshold?
 		if (!model.towardsSelectedLR) {
-				int diff = drawTora - (int) (tora * scale);
-				drawLEFT += diff; //TODO
+			int diff = drawTora - (int) (tora * scale);
+			drawLEFT += diff;
+			drawLDALEFT += drawTora - (int) (lda * scale);
 		}
 
 
