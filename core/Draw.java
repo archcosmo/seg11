@@ -385,13 +385,14 @@ public class Draw
 			
 			/*LDA Positioned from threshold*/
 			if(selectedLabel.equals("LDA")) {
-				arrowX = (lowAngle && !model.towardsSelectedLR) || (!lowAngle && model.towardsSelectedLR) ? (int)(displacementX + Math.abs(adjustedDisplacement) + scale*selectedValue/2) : (int)(displacementX - Math.abs(adjustedDisplacement)- scale*selectedValue/2);
+				//arrowX = (lowAngle && !model.towardsSelectedLR) || (!lowAngle && model.towardsSelectedLR) ? (int)(displacementX + Math.abs(adjustedDisplacement) + scale*selectedValue/2) : (int)(displacementX - Math.abs(adjustedDisplacement)- scale*selectedValue/2);
+				arrowX = (lowAngle && !model.towardsSelectedLR) || (!lowAngle && model.towardsSelectedLR) ? (int)(displacementX + scale*lr.tora - scale*selectedValue/2) : (int)(displacementX - scale*lr.tora + scale*selectedValue/2);
 			}
 			int arrowY = (int)(centerlineY - runwayWidth/2 - 150*(i+1)*scale);
 			drawMeasurement(g2d, scale, selectedValue, arrowX, arrowY, 90, "Recalculated " + selectedLabel, -(int)(150*(i+1)*scale), -(int)(150*(i+1)*scale));
 		}
 		
-		int threshX = (lowAngle && !model.towardsSelectedLR) || (!lowAngle && model.towardsSelectedLR) ? (int)(displacementX + Math.abs(adjustedDisplacement)) : (int)(displacementX - Math.abs(adjustedDisplacement));
+		int threshX = (lowAngle && !model.towardsSelectedLR) || (!lowAngle && model.towardsSelectedLR) ? (int)(displacementX + scale*lr.tora) : (int)(displacementX - scale*lr.tora);
 
 		LogicalRunway selectedLR = lowAngle ? runway.shortAngleLogicalRunway : runway.longAngleLogicalRunway;
 		
