@@ -560,7 +560,8 @@ public class Draw
 			stopway = lrw.stopwayLength;
 			clearway = lrw.clearwayLength;
 		} else {
-			int drawObstacleHeight = (int) (obstacle.height * scale);
+			float heightScale = 2f;
+			int drawObstacleHeight = (int) (obstacle.height * heightScale);
 			int drawObstacleXPos = (int) (obstacle.distanceFromThreshold * scale);
 			int drawObstacleLength = (int) (obstacle.length * scale);
 			int ALSWidth = (int) (obstacle.height * 50 * scale);

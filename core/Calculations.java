@@ -32,7 +32,7 @@ public class Calculations {
 		int fromThresh = obstacle.distanceFromThreshold;
 
 		if (towards){
-			//Take off towards/ land towards obstacle
+			//Take off towards/ land towards logical runway start
 
 			newTora = fromThresh + logicalRunway.displacedThreshold - ALSWidth - logicalRunway.getStripEnd();
 			lastCalculationBreakdown.append("TORA = Distance from Threshold + Displaced Threshold - Slope Calculation - Strip End\n");
@@ -53,7 +53,7 @@ public class Calculations {
 			lastCalculationBreakdown.append("     = "+newLda+"\n");
 
 		} else {
-			//Take off away/ land over obstacle
+			//Take off away/ land away from logical runway start
 
 			int blastAllowance = logicalRunway.runway.blastAllowance;
 
@@ -83,7 +83,7 @@ public class Calculations {
 			lastCalculationBreakdown.append("     = "+newTora+" + "+logicalRunway.stopwayLength+"\n");
 			lastCalculationBreakdown.append("     = "+newAsda+"\n");
 
-			newLda = logicalRunway.lda - fromThresh - ALSWidth - logicalRunway.getStripEnd();
+			newLda = logicalRunway.lda - fromThresh - obstacle.length - ALSWidth - logicalRunway.getStripEnd();
 			lastCalculationBreakdown.append("LDA  = Original LDA - Distance from Threshold - Slope Calculation - Strip End\n");
 			lastCalculationBreakdown.append("     = "+logicalRunway.lda+" - "+fromThresh+" - "+DEFAULT_ANGLE_OF_DESCENT +"*"+ obstacle.height+" - "+logicalRunway.getStripEnd()+"\n");
 			lastCalculationBreakdown.append("     = "+newLda+"\n");
