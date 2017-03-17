@@ -554,7 +554,7 @@ public class Draw
 		} else {
 			float heightScale = 2f;
 			int drawObstacleHeight = (int) (obstacle.height * heightScale);
-			int drawObstacleXPos = (int) (obstacle.distanceFromThreshold * scale);
+			int drawObstacleXPos = (int) (obstacle.distanceFromLowAngleEndOfRunway * scale);
 			int drawObstacleLength = (int) (obstacle.length * scale);
 			int ALSWidth = (int) (obstacle.height * 50 * scale);
 			boolean left = model.towardsSelectedLR;

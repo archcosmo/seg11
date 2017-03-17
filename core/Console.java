@@ -385,7 +385,7 @@ public class Console
 				System.out.println("\nlist (type) : returns a list of the selected type.");
 				System.out.println("  | (type) = airports, runways, thresholds, or obstacles");
 
-				System.out.println("\nselect (type) (id) : selects which airport, runway, designator, direction, and obstacle to use in calculation.");
+				System.out.println("\nselect (type) : selects which airport, runway, designator, direction, and obstacle to use in calculation.");
 				System.out.println("  | (type) = airport, runway, designator, direction, or obstacle");
 				System.out.println("\nadd (type) (id)");
 				System.out.println("  | (type) = airport, runway, or obstacle");
