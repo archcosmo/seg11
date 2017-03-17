@@ -250,8 +250,11 @@ public class Model
 	}
 	
 	public void selectDirection(boolean towards) {
-		int displacementX = (this.towardsSelectedLR && !towards) ? this.selectedObstacle.length : 
-							(!this.towardsSelectedLR && towards) ? -this.selectedObstacle.length : 0;
+		int displacementX = (!highAngleLRSelected && this.towardsSelectedLR && !towards) ? this.selectedObstacle.length : 
+							(!highAngleLRSelected && !this.towardsSelectedLR && towards) ? -this.selectedObstacle.length : 
+							(highAngleLRSelected && this.towardsSelectedLR && !towards) ? -this.selectedObstacle.length : 
+							(highAngleLRSelected && !this.towardsSelectedLR && towards) ? this.selectedObstacle.length : 0;
+		if(highAngleLRSelected) displacementX *= -1;
 		this.towardsSelectedLR = towards;
 		this.selectedObstacle.setPosition(this.selectedObstacle.distanceFromThreshold + displacementX, this.getSelectedLogicalRunway(), !highAngleLRSelected, towardsSelectedLR, this.selectedObstacle.distanceFromCenterline);
 		this.recalculateValues();

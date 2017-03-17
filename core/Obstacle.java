@@ -25,9 +25,9 @@ public class Obstacle {
 		else if(lowAngleLR && !towardsObj)
 			this.distanceFromLowAngleEndOfRunway = distanceFromThreshold + lr.displacedThreshold - length;
 		else if(!lowAngleLR && !towardsObj)
-			this.distanceFromLowAngleEndOfRunway = lr.runway.length - distanceFromThreshold - lr.displacedThreshold - length;
-		else
 			this.distanceFromLowAngleEndOfRunway = lr.runway.length - distanceFromThreshold - lr.displacedThreshold;
+		else
+			this.distanceFromLowAngleEndOfRunway = lr.runway.length - distanceFromThreshold - lr.displacedThreshold - length;
 		this.distanceFromCenterline = distanceFromCenterline;
 	}
 	
