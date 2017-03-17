@@ -511,7 +511,7 @@ public class Draw
 		LogicalRunway lrw = model.getSelectedLogicalRunway();
 		boolean reverse = model.highAngleLRSelected;
 		Runway runway = model.selectedRunway;
-
+		int windowHeight = height/2;
 		//Draw Runway Info
 		g2d.setFont(new Font(g2d.getFont().getFontName(), Font.PLAIN, 20));
 		int totalRunwayLength = Math.max(runway.shortAngleLogicalRunway.tora, runway.longAngleLogicalRunway.tora) +
@@ -520,16 +520,13 @@ public class Draw
 		float scale = 0.8F * width / totalRunwayLength;
 		g2d.drawString("Runway Designator: " + lrw.designator, ((reverse) ? width/2 -10 : 10), 30);
 		g2d.drawString("Landing/Take-Off Direction: ",((reverse) ? width/2 -10 : 10), 50);
-		int dirAngle = (model.towardsSelectedLR && model.highAngleLRSelected) || (!model.towardsSelectedLR && !model.highAngleLRSelected) ? -90 : 90;
+		int dirAngle = (model.highAngleLRSelected) ? -90 : 90;
 		drawArrow(g2d, dirAngle, scale, ((reverse) ? width/2 -10 : 10) + g2d.getFontMetrics().stringWidth("Landing/Take-Off Direction: ") + (dirAngle == -90 ? (int)(scale*250) : 0), 45, 250);
 
 		
 		//Drawing Values
 		int drawLda = (int) (lrw.lda * scale);
 		int drawTora = (int) (lrw.tora * scale);
-//		int drawAsda = (int) (lrw.asda * scale);
-//		int drawToda = (int) (lrw.toda * scale);
-//		int drawDisplacedThreshold = drawTora - drawLda;
 		int drawStopwayLength = (int) (lrw.stopwayLength * scale);
 		int drawClearwayLength = (int) (lrw.clearwayLength * scale);
 		LogicalRunway otherLR = model.highAngleLRSelected ? runway.shortAngleLogicalRunway : runway .longAngleLogicalRunway;
@@ -538,11 +535,13 @@ public class Draw
 		int drawLEFT = 50 + Math.max(drawOtherStopwayLength, drawOtherClearwayLength);
 
 		//Draw Runway
-		drawSimpleRect(g2d, drawLEFT, 100, drawTora, 15, reverse, ColorUIResource.darkGray, width/2);
-		drawSimpleRect(g2d, drawLEFT + drawTora, 100, drawStopwayLength, 10, reverse, ColorUIResource.darkGray, width/2);
-		drawSimpleRect(g2d, drawLEFT + drawTora, 100, drawClearwayLength, 5, reverse, ColorUIResource.darkGray, width/2);
-		drawSimpleRect(g2d, drawLEFT - drawOtherStopwayLength, 100, drawOtherStopwayLength, 10, reverse, ColorUIResource.darkGray, width/2);
-		drawSimpleRect(g2d, drawLEFT - drawOtherClearwayLength, 100, drawOtherClearwayLength, 5, reverse, ColorUIResource.darkGray, width/2);
+		drawSimpleRect(g2d, drawLEFT, windowHeight, drawTora, 15, reverse, ColorUIResource.darkGray, width/2);
+		drawSimpleRect(g2d, drawLEFT + drawTora, windowHeight, drawStopwayLength, 10, reverse, ColorUIResource.darkGray, width/2);
+		drawSimpleRect(g2d, drawLEFT + drawTora, windowHeight, drawClearwayLength, 5, reverse, ColorUIResource.darkGray, width/2);
+		drawSimpleRect(g2d, drawLEFT - drawOtherStopwayLength, windowHeight, drawOtherStopwayLength, 10, reverse, ColorUIResource.darkGray, width/2);
+		drawSimpleRect(g2d, drawLEFT - drawOtherClearwayLength, windowHeight, drawOtherClearwayLength, 5, reverse, ColorUIResource.darkGray, width/2);
+
+		int drawLDALEFT = drawLEFT;
 
 
 		int lda, tora, asda, toda, stopway, clearway;
@@ -554,6 +553,7 @@ public class Draw
 			toda = lrw.toda;
 			stopway = lrw.stopwayLength;
 			clearway = lrw.clearwayLength;
+			drawLDALEFT += (drawTora - drawLda);
 		} else {
 			float heightScale = 2f;
 			int drawObstacleHeight = (int) (obstacle.height * heightScale);
@@ -564,7 +564,7 @@ public class Draw
 			if (model.highAngleLRSelected) {
 				left = !left;
 			}
-			drawObstacle(g2d, drawLEFT + drawObstacleXPos, 100 - drawObstacleHeight, drawObstacleLength, drawObstacleHeight, reverse, ColorUIResource.cyan, width/2, left, ALSWidth);
+			drawObstacle(g2d, drawLEFT + drawObstacleXPos, windowHeight - drawObstacleHeight, drawObstacleLength, drawObstacleHeight, reverse, ColorUIResource.white, width/2, left, ALSWidth, drawObstacleHeight);
 			ArrayList<Integer> newThreshold = model.recalculatedValues;
 			tora = newThreshold.get(0);
 			toda = newThreshold.get(1);
@@ -572,6 +572,8 @@ public class Draw
 			lda = newThreshold.get(3);
 			stopway = asda - tora;
 			clearway = toda - tora;
+
+			//drawLDALEFT
 		}
 
 		int drawLEFTOLD = drawLEFT;
@@ -582,12 +584,13 @@ public class Draw
 				drawLEFT += diff; //TODO
 		}
 
-		drawSimpleMeasurement(g2d, drawLEFT + (drawTora - drawLda), -80, lda, scale, "LDA", reverse, width/2);
-		drawSimpleMeasurement(g2d, drawLEFT, -120, tora, scale, "TORA", reverse, width/2);
-		drawSimpleMeasurement(g2d, drawLEFT, -160, asda, scale, "ASDA", reverse, width/2);
-		drawSimpleMeasurement(g2d, drawLEFT, -200, toda, scale, "TODA", reverse, width/2);
-		drawSimpleMeasurement(g2d, drawLEFTOLD + drawTora, 50, stopway, scale, "Stopway", reverse, width/2);
-		drawSimpleMeasurement(g2d, drawLEFTOLD + drawTora, 90, clearway, scale, "Clearway", reverse, width/2);
+
+		drawSimpleMeasurement(g2d, drawLDALEFT, -80, lda, scale, "LDA", reverse, width/2, windowHeight);
+		drawSimpleMeasurement(g2d, drawLEFT, -120, tora, scale, "TORA", reverse, width/2, windowHeight);
+		drawSimpleMeasurement(g2d, drawLEFT, -160, asda, scale, "ASDA", reverse, width/2, windowHeight);
+		drawSimpleMeasurement(g2d, drawLEFT, -200, toda, scale, "TODA", reverse, width/2, windowHeight);
+		drawSimpleMeasurement(g2d, drawLEFTOLD + drawTora, 50, stopway, scale, "Stopway", reverse, width/2, windowHeight);
+		drawSimpleMeasurement(g2d, drawLEFTOLD + drawTora, 90, clearway, scale, "Clearway", reverse, width/2, windowHeight);
 
 
 		g2d.dispose();
@@ -606,12 +609,15 @@ public class Draw
 		g2d.drawRect(x, y, width, height);
 	}
 
-	private void drawSimpleMeasurement(Graphics2D g2d, int xPos, int height, int length, float scale, String label, boolean reverse, int centreOfRunway) {
+	private void drawSimpleMeasurement(Graphics2D g2d, int xPos, int height, int length, float scale, String label, boolean reverse, int centreOfRunway, int windowHeight) {
+		if (length == 0) {
+			return;
+		}
 		int scaleLength = (int) (length * scale);
 		if (reverse) {
 			xPos += 2*(centreOfRunway - xPos) - scaleLength;
 		}
-		int runwayYPos = 100 + 15;
+		int runwayYPos = windowHeight + 15;
 		int startX = xPos;
 		int endX = xPos + scaleLength;
 		int startY = runwayYPos - height;
@@ -629,7 +635,7 @@ public class Draw
 		g2d.drawString(measurementText, textstartX, startY - 2);
 	}
 
-	private void drawObstacle(Graphics2D g2d, int x, int y, int width, int height, boolean reverse, Color colour, int centreOfRunway, boolean left, int ALSWidth) {
+	private void drawObstacle(Graphics2D g2d, int x, int y, int width, int height, boolean reverse, Color colour, int centreOfRunway, boolean left, int ALSWidth, int obstacleHeight) {
 		if (width == 0) {
 			return;
 		}
@@ -645,5 +651,6 @@ public class Draw
 		} else {
 			g2d.drawLine(x + width, y, x + width + ALSWidth, y + height);
 		}
+		g2d.drawString("Obstacle Height: " + obstacleHeight + "m", x, y - 15);
 	}
 }
