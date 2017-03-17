@@ -387,7 +387,7 @@ public class Draw
 			drawMeasurement(g2d, scale, selectedValue, arrowX, arrowY, 90, "Recalculated " + selectedLabel, -(int)(150*(i+1)*scale), -(int)(150*(i+1)*scale));
 		}
 		
-		int threshX = (lowAngle && !model.towardsSelectedLR) || (!lowAngle && model.towardsSelectedLR) ? (int)(displacementX + scale*lr.tora) : (int)(displacementX - scale*lr.tora);
+		int threshX = (lowAngle && !model.towardsSelectedLR) || (!lowAngle && model.towardsSelectedLR) ? (int)(displacementX + scale*lr.tora - scale*lr.lda) : (int)(displacementX - scale*lr.tora + scale*lr.lda);
 
 		LogicalRunway selectedLR = lowAngle ? runway.shortAngleLogicalRunway : runway.longAngleLogicalRunway;
 		

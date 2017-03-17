@@ -566,6 +566,8 @@ public class Console
 					case "direction":
 						if(controller.getSelectedLogicalRunway() == null)
 							System.out.println("Select a runway first with 'select runway' before choosing a direction.");
+						else if(controller.getSelectedObstacle() == null)
+							System.out.println("Add an obstacle to the runway first with 'select obstacle' before choosing a direction.");
 						else {
 							selectDirection();
 						}
@@ -722,15 +724,15 @@ public class Console
 	}
 	
 	public void selectDirection() {
-		String selectedLr = controller.getSelectedLogicalRunway().designator;
-		int result = selectFromList("Select a direction in relation to the " + selectedLr + "logical runway.", new String[] { "Towards " + selectedLr, "Away from " + selectedLr });
+		String selectedOb = controller.getSelectedObstacle().name;
+		int result = selectFromList("Select a direction in relation to the obstacle", new String[] { "Towards " + selectedOb, "Away from " + selectedOb });
 		if(result == 0) {
 			controller.setDirection(true);
-			System.out.println("Direction set towards " + controller.getSelectedLogicalRunway().designator + " logical runway.");
+			System.out.println("Direction set towards " + selectedOb + ".");
 		}
 		else if(result == 1) {
 			controller.setDirection(false);
-			System.out.println("Direction set away from " + controller.getSelectedLogicalRunway().designator + " logical runway.");
+			System.out.println("Direction set away from " + selectedOb + ".");
 		}
 	}
 	
