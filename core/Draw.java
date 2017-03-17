@@ -47,12 +47,7 @@ public class Draw
 			g2d.drawString("Logical Runway Selected: "+selectedLogRun, width/10, height/5);
 			
 			g2d.drawString("Landing/Take-Off Direction: ", width/10, height/5 + g2d.getFontMetrics().getHeight());
-			int dirAngle = model.towardsSelectedLR && model.highAngleLRSelected 
-							? -90
-							: (!model.towardsSelectedLR && model.highAngleLRSelected)
-								? 90
-								: (model.towardsSelectedLR && !model.highAngleLRSelected)
-									? 90 : -90;
+			int dirAngle = model.highAngleLRSelected ? -90 : 90;
 			
 			drawArrow(g2d, dirAngle, scale, width/10 + g2d.getFontMetrics().stringWidth("Landing/Take-Off Direction: ") + (dirAngle == -90 ? (int)(scale*250) : 0), height/5 + g2d.getFontMetrics().getHeight(), 250);
 			
