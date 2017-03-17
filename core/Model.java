@@ -250,7 +250,10 @@ public class Model
 	}
 	
 	public void selectDirection(boolean towards) {
+		int displacementX = (this.towardsSelectedLR && !towards) ? this.selectedObstacle.length : 
+							(!this.towardsSelectedLR && towards) ? -this.selectedObstacle.length : 0;
 		this.towardsSelectedLR = towards;
+		this.selectedObstacle.setPosition(this.selectedObstacle.distanceFromThreshold + displacementX, this.getSelectedLogicalRunway(), !highAngleLRSelected, towardsSelectedLR, this.selectedObstacle.distanceFromCenterline);
 		this.recalculateValues();
 	}
 	
@@ -281,7 +284,7 @@ public class Model
 	{
 		try {
 			this.selectedObstacle = obstacles.get(id);
-			this.selectedObstacle.setPosition(xPos, this.getSelectedLogicalRunway(), !highAngleLRSelected, yPos);
+			this.selectedObstacle.setPosition(xPos, this.getSelectedLogicalRunway(), !highAngleLRSelected, towardsSelectedLR, yPos);
 			this.recalculateValues();
 			return true;
 		} catch(IndexOutOfBoundsException e) {

@@ -11,9 +11,19 @@ public class Calculations {
 		lastCalculationBreakdown =  new StringBuilder();
 	}
 
+	private boolean obInCGA(LogicalRunway lr, Obstacle obstacle) {
+		if(obstacle.distanceFromLowAngleEndOfRunway > -60 - obstacle.length && obstacle.distanceFromLowAngleEndOfRunway < lr.runway.length + 60
+				&& obstacle.distanceFromCenterline < 75 + obstacle.width + lr.runway.width/2 && obstacle.distanceFromCenterline > -75 - lr.runway.width/2)
+			return true;
+		if(obstacle.distanceFromLowAngleEndOfRunway > 150 - obstacle.length && obstacle.distanceFromLowAngleEndOfRunway < lr.runway.length -150
+				&& obstacle.distanceFromCenterline < 105 + obstacle.width + lr.runway.width/2 && obstacle.distanceFromCenterline > -105 - lr.runway.width/2)
+			return true;
+		return false;
+	}
+	
 	public ArrayList<Integer> calculateDistances(LogicalRunway logicalRunway, Obstacle obstacle, boolean towards) {
 
-		if (obstacle == null || (Math.abs(obstacle.distanceFromCenterline) > 75 && (obstacle.distanceFromThreshold > 60 || obstacle.distanceFromThreshold > logicalRunway.tora + 60))) {
+		if (obstacle == null || !obInCGA(logicalRunway, obstacle)) {
 			ArrayList<Integer> thresholds = new ArrayList<>();
 			thresholds.add(logicalRunway.tora);
 			thresholds.add(logicalRunway.toda);
@@ -88,13 +98,6 @@ public class Calculations {
 			lastCalculationBreakdown.append("     = "+logicalRunway.lda+" - "+fromThresh+" - "+DEFAULT_ANGLE_OF_DESCENT +"*"+ obstacle.height+" - "+logicalRunway.getStripEnd()+"\n");
 			lastCalculationBreakdown.append("     = "+newLda+"\n");
 		}
-
-//		if(!towards) {
-//			newTora -= obstacle.length;
-//			newToda -= obstacle.length;
-//			newAsda -= obstacle.length;
-//			newLda -= obstacle.length;
-//		}
 		
 		ArrayList<Integer> thresholds = new ArrayList<>();
 		thresholds.add(newTora);

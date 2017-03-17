@@ -18,12 +18,17 @@ public class Obstacle {
 		this.distanceFromCenterline = 0;
 	}
 	
-	public void setPosition(int distanceFromThreshold, LogicalRunway lr, boolean lowAngleLR, int distanceFromCenterline) {
+	public void setPosition(int distanceFromThreshold, LogicalRunway lr, boolean lowAngleLR, boolean towardsObj, int distanceFromCenterline) {
 		this.distanceFromThreshold = distanceFromThreshold;
-		if(lowAngleLR)
-			this.distanceFromLowAngleEndOfRunway = distanceFromThreshold + lr.displacedThreshold - this.length;
+		if(lowAngleLR && towardsObj)
+			this.distanceFromLowAngleEndOfRunway = distanceFromThreshold + lr.displacedThreshold;
+		else if(lowAngleLR && !towardsObj)
+			this.distanceFromLowAngleEndOfRunway = distanceFromThreshold + lr.displacedThreshold - length;
+		else if(!lowAngleLR && !towardsObj)
+			this.distanceFromLowAngleEndOfRunway = lr.runway.length - distanceFromThreshold - lr.displacedThreshold - length;
 		else
 			this.distanceFromLowAngleEndOfRunway = lr.runway.length - distanceFromThreshold - lr.displacedThreshold;
 		this.distanceFromCenterline = distanceFromCenterline;
 	}
+	
 }
