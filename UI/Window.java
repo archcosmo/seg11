@@ -75,8 +75,8 @@ public class Window extends JFrame
 		DATA = new DataPanel();
 		tabs.addTab("Calculations", DATA);
 		SIDE = new SideViewPanel(CONTROLLER.getDraw());
-		tabs.addTab("Top View", TOP);
 		TOP = new TopViewPanel(CONTROLLER.getDraw());
+		tabs.addTab("Top View", TOP);
 		tabs.addTab("Side View", SIDE);
 		add(tabs, BorderLayout.CENTER);
 		//TODO: New tab: Add/edit/remove Runways + Objects
