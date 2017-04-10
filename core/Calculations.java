@@ -11,9 +11,19 @@ public class Calculations {
 		lastCalculationBreakdown =  new StringBuilder();
 	}
 
+	private boolean obInCGA(LogicalRunway lr, Obstacle obstacle) {
+		if(obstacle.distanceFromLowAngleEndOfRunway > -60 - obstacle.length && obstacle.distanceFromLowAngleEndOfRunway < lr.runway.length + 60
+				&& obstacle.distanceFromCenterline < 75 + obstacle.width + lr.runway.width/2 && obstacle.distanceFromCenterline > -75 - lr.runway.width/2)
+			return true;
+		if(obstacle.distanceFromLowAngleEndOfRunway > 150 - obstacle.length && obstacle.distanceFromLowAngleEndOfRunway < lr.runway.length -150
+				&& obstacle.distanceFromCenterline < 105 + obstacle.width + lr.runway.width/2 && obstacle.distanceFromCenterline > -105 - lr.runway.width/2)
+			return true;
+		return false;
+	}
+	
 	public ArrayList<Integer> calculateDistances(LogicalRunway logicalRunway, Obstacle obstacle, boolean towards) {
 
-		if (obstacle == null || (Math.abs(obstacle.distanceFromCenterline) > 75 && (obstacle.distanceFromThreshold > 60 || obstacle.distanceFromThreshold > logicalRunway.tora + 60))) {
+		if (obstacle == null || !obInCGA(logicalRunway, obstacle)) {
 			ArrayList<Integer> thresholds = new ArrayList<>();
 			thresholds.add(logicalRunway.tora);
 			thresholds.add(logicalRunway.toda);
@@ -32,7 +42,7 @@ public class Calculations {
 		int fromThresh = obstacle.distanceFromThreshold;
 
 		if (towards){
-			//Take off towards/ land towards obstacle
+			//Take off towards/ land towards logical runway start
 
 			newTora = fromThresh + logicalRunway.displacedThreshold - ALSWidth - logicalRunway.getStripEnd();
 			lastCalculationBreakdown.append("TORA = Distance from Threshold + Displaced Threshold - Slope Calculation - Strip End\n");
@@ -53,7 +63,7 @@ public class Calculations {
 			lastCalculationBreakdown.append("     = "+newLda+"\n");
 
 		} else {
-			//Take off away/ land over obstacle
+			//Take off away/ land away from logical runway start
 
 			int blastAllowance = logicalRunway.runway.blastAllowance;
 
@@ -61,7 +71,7 @@ public class Calculations {
 			int blast_DThreshold = blastAllowance + logicalRunway.displacedThreshold;
 			if (RESA_StripEnd > blast_DThreshold) {
 
-				newTora = logicalRunway.tora - fromThresh -(RESA_StripEnd);
+				newTora = logicalRunway.tora - fromThresh - (RESA_StripEnd);
 				lastCalculationBreakdown.append("TORA = Original TORA - Distance from Threshold - "+"RESA - Strip End\n");
 				lastCalculationBreakdown.append("     = "+logicalRunway.tora+" - "+fromThresh+" - "+RESA+" - "+logicalRunway.getStripEnd()+"\n");
 				lastCalculationBreakdown.append("     = "+newTora+"\n");
@@ -83,17 +93,10 @@ public class Calculations {
 			lastCalculationBreakdown.append("     = "+newTora+" + "+logicalRunway.stopwayLength+"\n");
 			lastCalculationBreakdown.append("     = "+newAsda+"\n");
 
-			newLda = logicalRunway.lda - fromThresh - ALSWidth - logicalRunway.getStripEnd();
+			newLda = logicalRunway.lda - fromThresh - obstacle.length - ALSWidth - logicalRunway.getStripEnd();
 			lastCalculationBreakdown.append("LDA  = Original LDA - Distance from Threshold - Slope Calculation - Strip End\n");
 			lastCalculationBreakdown.append("     = "+logicalRunway.lda+" - "+fromThresh+" - "+DEFAULT_ANGLE_OF_DESCENT +"*"+ obstacle.height+" - "+logicalRunway.getStripEnd()+"\n");
 			lastCalculationBreakdown.append("     = "+newLda+"\n");
-		}
-
-		if(!towards) {
-			newTora -= obstacle.length;
-			newToda -= obstacle.length;
-			newAsda -= obstacle.length;
-			newLda -= obstacle.length;
 		}
 		
 		ArrayList<Integer> thresholds = new ArrayList<>();
