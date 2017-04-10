@@ -1,9 +1,9 @@
 package UI;
 
 import java.awt.BorderLayout;
-import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import Application.Controller;
@@ -17,8 +17,8 @@ public class Window extends JFrame
 	TopBarPanel TOP_BAR;
 	SelectionPanel SELECTION;
 	DataPanel DATA;
-	SideViewPanel TOP;
-	TopViewPanel SIDE;
+	SideViewPanel SIDE;
+	TopViewPanel TOP;
 	
 	/* Constor
 	 * - Stores reference to controller for input handler references later
@@ -38,9 +38,11 @@ public class Window extends JFrame
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setLayout(new BorderLayout());
 		loadAirportSelectionLayout();
-		/* TODO: Remove this line (Testing) */
-		loadRunningLayout(); //*/
 	}
+	
+	public DataPanel getDATA() {return DATA;}
+	public TopViewPanel getTOP() {return TOP;}
+	public SideViewPanel getBOTTOM() {return SIDE;}
 
 	/* Initial Screen on load up, 
 	 * - gets user to choose or make a new airport 
@@ -56,6 +58,9 @@ public class Window extends JFrame
 	 */
 	public void loadRunningLayout() 
 	{
+		JPanel contentPanel = (JPanel) this.getContentPane();
+		contentPanel.removeAll();
+		
 		/* Adding top bar panel */
 		TOP_BAR = new TopBarPanel(CONTROLLER);
 		add(TOP_BAR, BorderLayout.PAGE_START);
@@ -67,10 +72,10 @@ public class Window extends JFrame
 		/* Adding left side (Data) tabbed panels */
 		JTabbedPane tabs = new JTabbedPane();
 		DATA = new DataPanel();
-		tabs.addTab("Data", DATA);
-		TOP = new SideViewPanel();
+		tabs.addTab("Calculations", DATA);
+		SIDE = new SideViewPanel(CONTROLLER.getDraw());
 		tabs.addTab("Top View", TOP);
-		SIDE = new TopViewPanel();
+		TOP = new TopViewPanel(CONTROLLER.getDraw());
 		tabs.addTab("Side View", SIDE);
 		add(tabs, BorderLayout.CENTER);
 		//TODO: New tab: Add Runways + Objects

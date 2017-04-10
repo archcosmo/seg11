@@ -1,6 +1,8 @@
 package UI;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -11,6 +13,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import Application.Controller;
+import Model.Runway;
 
 @SuppressWarnings("serial")
 public class SelectionPanel extends JPanel
@@ -39,17 +42,42 @@ public class SelectionPanel extends JPanel
 		/* Runway Selection and Dropdown Menu : No Handler yet */
 		MenuItem runwaySelection = new MenuItem("Runway : ");
 		JComboBox<String> runwayDropdown = new JComboBox<String>();
-		//Add handler
+		for (Runway r: CONTROLLER.getRunways()) 
+		{
+			runwayDropdown.addItem(r.getName());
+		}
+		runwayDropdown.addActionListener( new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				System.out.println("Runway Selected : "+ (String) runwayDropdown.getSelectedItem());
+				CONTROLLER.selectRunway((String) runwayDropdown.getSelectedItem());
+		}});
 		runwaySelection.addComponent(runwayDropdown);
 		add(runwaySelection);
+		
+		/* Threshold selector */
+		MenuItem angleSelection = new MenuItem("Threshold Angle : ");
+		JComboBox<String> angleDropdown = new JComboBox<String>();
+		angleDropdown.addItem("Small Angle");
+		angleDropdown.addItem("Large Angle");
+		angleDropdown.addActionListener( new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				CONTROLLER.setRunwayAngle((String) angleDropdown.getSelectedItem());
+				System.out.println("Angle Threshold Selected : "+ (String) angleDropdown.getSelectedItem());
+		}});
+		angleSelection.add(angleDropdown);
+		add(angleSelection);
 		
 		/* Horizontal Line */
 		add(new JSeparator(SwingConstants.HORIZONTAL));
 		
-		/* obsacle Selection and Dropdown Menu : No Handler yet */
+		/* Obstacle Selection and Dropdown Menu */
 		MenuItem obsacleSelection = new MenuItem("Obstacle : ");
 		JComboBox<String> obsacleDropdown = new JComboBox<String>();
-		//Add handler
+		//TODO: Add handler
 		obsacleSelection.addComponent(obsacleDropdown);
 		add(obsacleSelection);
 		
@@ -62,6 +90,7 @@ public class SelectionPanel extends JPanel
 		yPosInput.setPreferredSize(new Dimension(50, 20));
 		xPosSelection.add(xPosInput);
 		yPosSelection.add(yPosInput);
+		//TODO: Add BOTH handlers
 		add(xPosSelection);
 		add(yPosSelection);
 		

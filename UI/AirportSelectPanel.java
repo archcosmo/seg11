@@ -2,6 +2,8 @@ package UI;
 
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -12,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import Application.Controller;
+import Model.Airport;
 
 @SuppressWarnings("serial")
 public class AirportSelectPanel extends JPanel {
@@ -34,6 +37,8 @@ public class AirportSelectPanel extends JPanel {
 	/* Create menu */
 	private void addComponents() 
 	{
+		
+		/* TODO: If num airports == 0; Only allow new airport*/
 		/* Vertical Spacer */
 		add(Box.createRigidArea(new Dimension(0, 200)));
 		
@@ -48,7 +53,10 @@ public class AirportSelectPanel extends JPanel {
 		/* Airport Selection and Dropdown Menu : No Handler yet */
 		MenuItem airportSelection = new MenuItem("Select an Airport : ");
 		JComboBox<String> airportDropdown = new JComboBox<String>();
-		//TODO: Add combo list
+		for (Airport a: CONTROLLER.getAirports()) 
+		{
+			airportDropdown.addItem(a.getName());
+		}
 		airportSelection.addComponent(airportDropdown);
 		add(airportSelection);
 		
@@ -56,7 +64,13 @@ public class AirportSelectPanel extends JPanel {
 		JButton selectAirport = new JButton("Use this airport");
 		selectAirport.setAlignmentX(Component.CENTER_ALIGNMENT);
 		add(selectAirport);
-		/* TODO: Add button handler here */
+		selectAirport.addActionListener( new ActionListener()
+			{
+				public void actionPerformed(ActionEvent e)
+				{
+					System.out.println("Airport Selected : "+ (String) airportDropdown.getSelectedItem());
+					CONTROLLER.selectAirport((String) airportDropdown.getSelectedItem());
+			}});
 		
 		/* Vertical Spacer */
 		add(Box.createRigidArea(new Dimension(0, 50)));

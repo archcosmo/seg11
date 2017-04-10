@@ -1,6 +1,7 @@
 package Model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Airport {
 	String name;
@@ -15,8 +16,11 @@ public class Airport {
 		runways.add(runway);
 	}
 	
-	public ArrayList<Runway> getRunways() 
-	{
+	public String getName() {
+		return name;
+	}
+
+	public List<Runway> getRunways() {
 		return runways;
 	}
 }

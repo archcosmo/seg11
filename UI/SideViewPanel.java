@@ -1,14 +1,43 @@
 package UI;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import Model.Draw;
 
 @SuppressWarnings("serial")
 public class SideViewPanel extends JPanel 
 {
+	Draw drawModule;
+	
+	public SideViewPanel(Draw drawModule) 
+	{
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		
+		/* Vertical Spacer */
+		add(Box.createRigidArea(new Dimension(0, 15)));
+		
+		this.drawModule = drawModule;
+	}
+	
 	public void updateUI(BufferedImage i)
 	{
-		
+		setLayout(new BorderLayout());
+		JLabel picLabel = new JLabel(new ImageIcon(i));
+		add(picLabel, BorderLayout.CENTER);
+	}
+	
+	@Override
+	public void paintComponent(Graphics g) {
+		drawModule.drawSideView((Graphics2D) g, this.getWidth(), this.getHeight());
 	}
 }
