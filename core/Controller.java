@@ -224,22 +224,11 @@ public class Controller
 			return false;
 		
 		if(model.selectedObstacle != null) {
-//			if(model.selectedLogicalRunway.isReciprocalOf(oldThresh.designator)) {
-//				Obstacle selectedObstacle = model.selectedObstacle;
-//				LogicalRunway thresh = model.selectedLogicalRunway;
-//				int selectedObstacleId = model.getObjects().indexOf(model.selectedObstacle);
-//				model.selectObstacle(selectedObstacleId, thresh.tora - selectedObstacle.distanceFromThreshold + selectedObstacle.length, selectedObstacle.distanceFromCenterline);
-//			}
-//			else
 			selectObstacle(model.getObjects().indexOf(model.selectedObstacle));
 		}
 		window.repaint();
 		return true;
 	}
-
-	public void deleteAirport(int iD) {}
-	public void deleteRunway(int iD) {}
-	public void deleteObject(int iD) {}
 
 	public void draw() {
 		if (model.getSelectedLogicalRunway() == null) {
