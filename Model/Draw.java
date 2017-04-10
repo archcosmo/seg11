@@ -413,7 +413,7 @@ public class Draw
 	
 	private void drawObstacleTop(Graphics2D g2d, Obstacle ob, int runwayX, int centerlineY, float scale) {
 		g2d.setColor(Color.WHITE);
-		//TODO: Fix positioning of obstacle
+		//TODO :: Fix positioning of obstacle
 		int obX = runwayX + (int)(scale * ob.distanceFromLowAngleEndOfRunway);
 		int obY = centerlineY - (int)(scale * ob.distanceFromCenterline);
 		int obLength = (int)(scale * ob.length);
@@ -563,7 +563,7 @@ public class Draw
 		//TODO:: draw displaced threshold?
 		if (!model.towardsSelectedLR) {
 				int diff = drawTora - (int) (tora * scale);
-				drawLEFT += diff; //TODO
+				drawLEFT += diff;
 		}
 
 		drawSimpleMeasurement(g2d, drawLEFT + (drawTora - drawLda), -80, lda, scale, "LDA", reverse, width/2);

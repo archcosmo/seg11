@@ -19,6 +19,7 @@ public class Window extends JFrame
 	DataPanel DATA;
 	SideViewPanel SIDE;
 	TopViewPanel TOP;
+	/* TODO: Notifications Panel */
 	
 	/* Constor
 	 * - Stores reference to controller for input handler references later
@@ -78,6 +79,6 @@ public class Window extends JFrame
 		TOP = new TopViewPanel(CONTROLLER.getDraw());
 		tabs.addTab("Side View", SIDE);
 		add(tabs, BorderLayout.CENTER);
-		//TODO: New tab: Add Runways + Objects
+		//TODO: New tab: Add/edit/remove Runways + Objects
 	}
 }

@@ -87,15 +87,6 @@ public class Controller
 		}
 	}
 	
-	/* Run calculation and drawing, 
-	 * - call updateUI to return info 
-	 * - TODO: Data types might need changing, ie Runway as string/runway, same with objects
-	 */
-	public void run(String runway, String object, int objX, int objY) 
-	{
-		//TODO: UI.updateUI(null);
-	}
-	
 	public void selectAirport(String airport)
 	{
 		AIRPORT_NAME = airport;
