@@ -26,4 +26,6 @@ public class Obstacle {
 			this.distanceFromLowAngleEndOfRunway = lr.runway.length - distanceFromThreshold - lr.displacedThreshold;
 		this.distanceFromCenterline = distanceFromCenterline;
 	}
+	
+	public String getName() { return name; }
 }

@@ -19,7 +19,7 @@ public class Window extends JFrame
 	DataPanel DATA;
 	SideViewPanel SIDE;
 	TopViewPanel TOP;
-	/* TODO: Notifications Panel */
+	NotificationsPanel NOTIFICATION;
 	
 	/* Constor
 	 * - Stores reference to controller for input handler references later
@@ -27,6 +27,7 @@ public class Window extends JFrame
 	 */
 	public Window(Controller c) 
 	{ 
+		NOTIFICATION = new NotificationsPanel();
 		CONTROLLER = c;
 		initFrame(); 
 	}
@@ -53,8 +54,10 @@ public class Window extends JFrame
 		JPanel contentPanel = (JPanel) this.getContentPane();
 		contentPanel.removeAll();
 		
+		setLayout(new BorderLayout());
 		AirportSelectPanel AIRPORT = new AirportSelectPanel(CONTROLLER);
 		add(AIRPORT, BorderLayout.CENTER);
+		add(NOTIFICATION, BorderLayout.SOUTH);
 	}
 
 	/* Main program running screen,
@@ -77,11 +80,12 @@ public class Window extends JFrame
 		JTabbedPane tabs = new JTabbedPane();
 		SIDE = new SideViewPanel(CONTROLLER.getDraw());
 		TOP = new TopViewPanel(CONTROLLER.getDraw());
-		DATA = new DataPanel();
+		DATA = new DataPanel(CONTROLLER);
 		tabs.addTab("Top View", TOP);
 		tabs.addTab("Side View", SIDE);
 		tabs.addTab("Calculations", DATA);
 		add(tabs, BorderLayout.CENTER);
+		add(NOTIFICATION, BorderLayout.SOUTH);
 		//TODO: New tab: Add/edit/remove Runways + Objects
 	}
 	
@@ -89,5 +93,10 @@ public class Window extends JFrame
 	{
 		SIDE.repaint();
 		TOP.repaint();
+	}
+	
+	public void notify(String s)
+	{
+		NOTIFICATION.notify(s);
 	}
 }

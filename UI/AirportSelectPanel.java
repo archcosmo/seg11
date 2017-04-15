@@ -20,7 +20,6 @@ import Model.Airport;
 public class AirportSelectPanel extends JPanel {
 	
 	Controller CONTROLLER;
-	//Airport list
 	
 	public AirportSelectPanel(Controller c) 
 	{
@@ -37,46 +36,48 @@ public class AirportSelectPanel extends JPanel {
 	/* Create menu */
 	private void addComponents() 
 	{
-		
-		/* TODO: If num airports == 0; Only allow new airport*/
-		/* Vertical Spacer */
-		add(Box.createRigidArea(new Dimension(0, 200)));
-		
-		/* Intro label */
-		JLabel intro = new JLabel("Welcome to " + Controller.TITLE);
-		intro.setAlignmentX(Component.CENTER_ALIGNMENT);
-		add(intro);
-		
-		/* Vertical Spacer */
-		add(Box.createRigidArea(new Dimension(0, 100)));
-		
-		/* Airport Selection and Dropdown Menu : No Handler yet */
-		MenuItem airportSelection = new MenuItem("Select an Airport : ");
-		JComboBox<String> airportDropdown = new JComboBox<String>();
-		for (Airport a: CONTROLLER.getAirports()) 
+		boolean noAirports = (CONTROLLER.getAirports().size() == 0);
+		if (!noAirports)
 		{
-			airportDropdown.addItem(a.getName());
-		}
-		airportSelection.addComponent(airportDropdown);
-		add(airportSelection);
-		
-		/* Confirmation button */
-		JButton selectAirport = new JButton("Use this airport");
-		selectAirport.setAlignmentX(Component.CENTER_ALIGNMENT);
-		add(selectAirport);
-		selectAirport.addActionListener( new ActionListener()
+			/* Vertical Spacer */
+			add(Box.createRigidArea(new Dimension(0, 200)));
+			
+			/* Intro label */
+			JLabel intro = new JLabel("Welcome to " + Controller.TITLE);
+			intro.setAlignmentX(Component.CENTER_ALIGNMENT);
+			add(intro);
+			
+			/* Vertical Spacer */
+			add(Box.createRigidArea(new Dimension(0, 100)));
+			
+			/* Airport Selection and Dropdown Menu : No Handler yet */
+			MenuItem airportSelection = new MenuItem("Select an Airport : ");
+			JComboBox<String> airportDropdown = new JComboBox<String>();
+			for (Airport a: CONTROLLER.getAirports()) 
 			{
-				public void actionPerformed(ActionEvent e)
+				airportDropdown.addItem(a.getName());
+			}
+			airportSelection.addComponent(airportDropdown);
+			add(airportSelection);
+			
+			/* Confirmation button */
+			JButton selectAirport = new JButton("Use this airport");
+			selectAirport.setAlignmentX(Component.CENTER_ALIGNMENT);
+			add(selectAirport);
+			selectAirport.addActionListener( new ActionListener()
 				{
-					System.err.println("Airport Selected : "+ (String) airportDropdown.getSelectedItem());
-					CONTROLLER.selectAirport((String) airportDropdown.getSelectedItem());
-			}});
-		
-		/* Vertical Spacer */
-		add(Box.createRigidArea(new Dimension(0, 50)));
-		
+					public void actionPerformed(ActionEvent e)
+					{
+						CONTROLLER.notify("Airport Selected : "+ (String) airportDropdown.getSelectedItem());
+						CONTROLLER.selectAirport((String) airportDropdown.getSelectedItem());
+				}});
+			
+			/* Vertical Spacer */
+			add(Box.createRigidArea(new Dimension(0, 50)));
+		}
 		/* Add a newAirport option */
-		MenuItem newAirport = new MenuItem("or create and use a new airport with name : ");
+		String temp = noAirports ? "No airports found in files. Create a new airport with name: " : "or create and use a new airport with name : ";
+		MenuItem newAirport = new MenuItem(temp);
 		JTextField newAirportName = new JTextField(" ");
 		newAirportName.setPreferredSize(new Dimension(200, 20));
 		newAirport.add(newAirportName);

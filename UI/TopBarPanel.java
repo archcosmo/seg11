@@ -41,7 +41,7 @@ public class TopBarPanel extends JPanel
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				System.err.println("Airport Switch Initiated");
+				CONTROLLER.notify("Airport Switch Initiated");
 				CONTROLLER.showAirportSelection();
 		}});
 		add(switchAirport, BorderLayout.EAST);

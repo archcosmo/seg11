@@ -13,6 +13,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
 import Application.Controller;
+import Model.Obstacle;
 import Model.Runway;
 
 @SuppressWarnings("serial")
@@ -50,7 +51,7 @@ public class SelectionPanel extends JPanel
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				System.err.println("Runway Selected : "+ (String) runwayDropdown.getSelectedItem());
+				CONTROLLER.notify("Runway Selected : "+ (String) runwayDropdown.getSelectedItem());
 				CONTROLLER.selectRunway((String) runwayDropdown.getSelectedItem());
 		}});
 		runwaySelection.addComponent(runwayDropdown);
@@ -66,7 +67,7 @@ public class SelectionPanel extends JPanel
 			public void actionPerformed(ActionEvent e)
 			{
 				CONTROLLER.setRunwayAngle((String) angleDropdown.getSelectedItem());
-				System.err.println("Angle Threshold Selected : "+ (String) angleDropdown.getSelectedItem());
+				CONTROLLER.notify("Angle Threshold Selected : "+ (String) angleDropdown.getSelectedItem());
 		}});
 		angleSelection.add(angleDropdown);
 		add(angleSelection);
@@ -81,7 +82,7 @@ public class SelectionPanel extends JPanel
 			public void actionPerformed(ActionEvent e)
 			{
 				CONTROLLER.setTakeoffDirection((String) directionDropdown.getSelectedItem());
-				System.err.println("Take-Off Direction Selected : "+ (String) directionDropdown.getSelectedItem());
+				CONTROLLER.notify("Take-Off Direction Selected : "+ (String) directionDropdown.getSelectedItem());
 		}});
 		directionSelection.add(directionDropdown);
 		add(directionSelection);
@@ -92,14 +93,25 @@ public class SelectionPanel extends JPanel
 		/* Obstacle Selection and Dropdown Menu */
 		MenuItem obsacleSelection = new MenuItem("Obstacle : ");
 		JComboBox<String> obsacleDropdown = new JComboBox<String>();
-		//TODO: Add handler
+		obsacleDropdown.addItem("None");
+		for (Obstacle o: CONTROLLER.getObstacles()) 
+		{
+			obsacleDropdown.addItem(o.getName());
+		}
+		obsacleDropdown.addActionListener( new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				CONTROLLER.notify("Obstacle Selected : "+ (String) obsacleDropdown.getSelectedItem());
+				CONTROLLER.selectObstacle((String) obsacleDropdown.getSelectedItem());
+		}});
 		obsacleSelection.addComponent(obsacleDropdown);
 		add(obsacleSelection);
 		
 		/* Obstacle position selection */
 		MenuItem xPosSelection = new MenuItem("Horizontal Displacement : ");
 		MenuItem yPosSelection = new MenuItem("Vertical Displacement : ");
-		JTextField xPosInput = new JTextField("ulatedValues = calculator.calculateDistances(getSelectedLogicalRunway(), selectedObstacle, towardsSelectedLR);0");
+		JTextField xPosInput = new JTextField("0");
 		JTextField yPosInput = new JTextField("0");
 		xPosInput.setPreferredSize(new Dimension(50, 20));
 		yPosInput.setPreferredSize(new Dimension(50, 20));

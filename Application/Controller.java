@@ -43,7 +43,8 @@ public class Controller
 	/* Initialise frame on swing worker thread */
 	public static void main(String[] args)	{	new Controller();	}
 	
-	public Controller() {
+	public Controller() 
+	{
 		
 		/* Load XML info from files */
 		loadObstacleInfoFromFile();
@@ -70,7 +71,8 @@ public class Controller
 	}
 	
 	/* XML_LOAD Obstacles */
-	public boolean loadObstacleInfoFromFile() {
+	public boolean loadObstacleInfoFromFile() 
+	{
 		try {
 			obstacles = XML.readObstacleInfoFromXML();
 			return true;	
@@ -85,7 +87,8 @@ public class Controller
 	}
 	 
 	/* XML_LOAD Airports */
-	public boolean loadAirportInfoFromFile() {
+	public boolean loadAirportInfoFromFile() 
+	{
 		try {
 			airports = XML.readAirportInfoFromXML();
 			return true;
@@ -106,7 +109,7 @@ public class Controller
 				break;
 			}
 		}
-		System.err.println("Switching application to calculation");
+		UI.notify("Switching application to calculation");
 		
 		EventQueue.invokeLater(() -> {
 			UI.loadRunningLayout();
@@ -137,12 +140,13 @@ public class Controller
 		return selectedAirport.getRunways();
 	}
 
-	public void selectRunway(String runway) {
+	public void selectRunway(String runway) 
+	{
 		for (Runway r: getRunways()) {
 			if (runway.equals(r.getName())) 
 			{
 				selectedRunway = r;
-				System.err.println("Runway Selected");
+				UI.notify("Runway Selected : " + runway);
 				break;
 			}
 		}
@@ -155,7 +159,8 @@ public class Controller
 		recalculateValues();
 	}
 	
-	public LogicalRunway getSelectedLogicalRunway() {
+	public LogicalRunway getSelectedLogicalRunway() 
+	{
 		return lowAngleRunway ? selectedRunway.lowAngle() : selectedRunway.highAngle();
 	}
 	
@@ -163,16 +168,45 @@ public class Controller
 		if (selectedRunway != null) {
 			recalculatedValues = calculator.calculateDistances(getSelectedLogicalRunway(), selectedObstacle, towardsSelectedLR);
 			calcBreakdown = calculator.getLastCalculationBreakdown();
-			System.err.println("Running Calculations");
 			UI.getDATA().printStr(calcBreakdown);
 			UI.draw();
-			/* TODO: Re Draw Call */
 		}
 	}
 
 	public void setTakeoffDirection(String selectedItem) 
 	{
 		towardsSelectedLR = selectedItem.equals("Towards Selected Threshold End");
+		recalculateValues();
+	}
+
+	public void notify(String string) 
+	{
+		UI.notify(string);
+	}
+
+	public List<Obstacle> getObstacles() 
+	{
+		return obstacles;
+	}
+
+	public void selectObstacle(String obj) 
+	{
+		if (obj.equals("None")) 
+		{
+			selectedObstacle = null;
+			System.err.println("None");
+		}
+		else 
+		{
+			for (Obstacle o: obstacles) {
+				if (obj.equals(o.getName())) 
+				{
+					selectedObstacle = o;
+					break;
+					
+				}
+			}
+		}
 		recalculateValues();
 	}
 }

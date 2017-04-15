@@ -7,12 +7,16 @@ import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import Application.Controller;
+
 @SuppressWarnings("serial")
 public class DataPanel extends JPanel 
 {
 	JLabel calculations;
+	Controller CONTROLLER;
 	
-	public DataPanel() {
+	public DataPanel(Controller c) {
+		CONTROLLER = c;
 		/* Vertical Spacer */
 		add(Box.createRigidArea(new Dimension(0, 500)));
 		
@@ -28,7 +32,7 @@ public class DataPanel extends JPanel
 			else
 			{
 				calculations.setText("<html>"+s+"</html>");;
-				System.err.println("Printing calculation breakdown");
+				CONTROLLER.notify("Printed Calculatons Breakdown");
 			}
         });
 	}
