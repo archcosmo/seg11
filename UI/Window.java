@@ -48,8 +48,11 @@ public class Window extends JFrame
 	/* Initial Screen on load up, 
 	 * - gets user to choose or make a new airport 
 	 */
-	private void loadAirportSelectionLayout() 
+	public void loadAirportSelectionLayout() 
 	{
+		JPanel contentPanel = (JPanel) this.getContentPane();
+		contentPanel.removeAll();
+		
 		AirportSelectPanel AIRPORT = new AirportSelectPanel(CONTROLLER);
 		add(AIRPORT, BorderLayout.CENTER);
 	}
@@ -72,13 +75,19 @@ public class Window extends JFrame
 		
 		/* Adding left side (Data) tabbed panels */
 		JTabbedPane tabs = new JTabbedPane();
-		DATA = new DataPanel();
-		tabs.addTab("Calculations", DATA);
 		SIDE = new SideViewPanel(CONTROLLER.getDraw());
 		TOP = new TopViewPanel(CONTROLLER.getDraw());
+		DATA = new DataPanel();
 		tabs.addTab("Top View", TOP);
 		tabs.addTab("Side View", SIDE);
+		tabs.addTab("Calculations", DATA);
 		add(tabs, BorderLayout.CENTER);
 		//TODO: New tab: Add/edit/remove Runways + Objects
+	}
+	
+	public void draw()
+	{
+		SIDE.repaint();
+		TOP.repaint();
 	}
 }

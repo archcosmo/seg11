@@ -60,6 +60,15 @@ public class Controller
         });
 	}
 	
+	/* Redisplays Airport Selection Panel */
+	public void showAirportSelection() 
+	{
+		EventQueue.invokeLater(() -> {
+			UI.loadAirportSelectionLayout();
+			UI.setVisible(true);
+        });
+	}
+	
 	/* XML_LOAD Obstacles */
 	public boolean loadObstacleInfoFromFile() {
 		try {
@@ -142,8 +151,7 @@ public class Controller
 
 	public void setRunwayAngle(String selectedItem) 
 	{
-		if (selectedItem.equals("Small Angle")) lowAngleRunway = true;
-		else lowAngleRunway = false;
+		lowAngleRunway = selectedItem.equals("Small Angle");
 		recalculateValues();
 	}
 	
@@ -157,6 +165,18 @@ public class Controller
 			calcBreakdown = calculator.getLastCalculationBreakdown();
 			System.err.println("Running Calculations");
 			UI.getDATA().printStr(calcBreakdown);
+			UI.draw();
+			/* TODO: Re Draw Call */
 		}
 	}
+
+	public void setTakeoffDirection(String selectedItem) 
+	{
+		towardsSelectedLR = selectedItem.equals("Towards Selected Threshold End");
+		recalculateValues();
+	}
 }
+
+
+
+

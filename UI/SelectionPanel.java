@@ -50,14 +50,14 @@ public class SelectionPanel extends JPanel
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				System.out.println("Runway Selected : "+ (String) runwayDropdown.getSelectedItem());
+				System.err.println("Runway Selected : "+ (String) runwayDropdown.getSelectedItem());
 				CONTROLLER.selectRunway((String) runwayDropdown.getSelectedItem());
 		}});
 		runwaySelection.addComponent(runwayDropdown);
 		add(runwaySelection);
 		
 		/* Threshold selector */
-		MenuItem angleSelection = new MenuItem("Threshold Angle : ");
+		MenuItem angleSelection = new MenuItem("Threshold Angle (For Calculations) : ");
 		JComboBox<String> angleDropdown = new JComboBox<String>();
 		angleDropdown.addItem("Small Angle");
 		angleDropdown.addItem("Large Angle");
@@ -66,10 +66,25 @@ public class SelectionPanel extends JPanel
 			public void actionPerformed(ActionEvent e)
 			{
 				CONTROLLER.setRunwayAngle((String) angleDropdown.getSelectedItem());
-				System.out.println("Angle Threshold Selected : "+ (String) angleDropdown.getSelectedItem());
+				System.err.println("Angle Threshold Selected : "+ (String) angleDropdown.getSelectedItem());
 		}});
 		angleSelection.add(angleDropdown);
 		add(angleSelection);
+		
+		/* Take-off Direction Selector */
+		MenuItem directionSelection = new MenuItem("Take-off Direction : ");
+		JComboBox<String> directionDropdown = new JComboBox<String>();
+		directionDropdown.addItem("Towards Selected Threshold End");
+		directionDropdown.addItem("Away From Selected Threshold End");
+		directionDropdown.addActionListener( new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				CONTROLLER.setTakeoffDirection((String) directionDropdown.getSelectedItem());
+				System.err.println("Take-Off Direction Selected : "+ (String) directionDropdown.getSelectedItem());
+		}});
+		directionSelection.add(directionDropdown);
+		add(directionSelection);
 		
 		/* Horizontal Line */
 		add(new JSeparator(SwingConstants.HORIZONTAL));
@@ -84,7 +99,7 @@ public class SelectionPanel extends JPanel
 		/* Obstacle position selection */
 		MenuItem xPosSelection = new MenuItem("Horizontal Displacement : ");
 		MenuItem yPosSelection = new MenuItem("Vertical Displacement : ");
-		JTextField xPosInput = new JTextField("0");
+		JTextField xPosInput = new JTextField("ulatedValues = calculator.calculateDistances(getSelectedLogicalRunway(), selectedObstacle, towardsSelectedLR);0");
 		JTextField yPosInput = new JTextField("0");
 		xPosInput.setPreferredSize(new Dimension(50, 20));
 		yPosInput.setPreferredSize(new Dimension(50, 20));

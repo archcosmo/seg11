@@ -2,7 +2,10 @@ package UI;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -28,8 +31,19 @@ public class TopBarPanel extends JPanel
 
 	private void addComponents() 
 	{
-		/* Exit Button, Event Handler done locally */
+		/* Airport label */
 		JLabel airportName = new JLabel("Selected Airport: " + CONTROLLER.AIRPORT_NAME);
 		add(airportName, BorderLayout.CENTER);
+		
+		/* Switch Airports Button */
+		JButton switchAirport = new JButton("Switch Airport");
+		switchAirport.addActionListener( new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				System.err.println("Airport Switch Initiated");
+				CONTROLLER.showAirportSelection();
+		}});
+		add(switchAirport, BorderLayout.EAST);
 	}
 }

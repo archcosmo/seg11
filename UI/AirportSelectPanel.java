@@ -68,7 +68,7 @@ public class AirportSelectPanel extends JPanel {
 			{
 				public void actionPerformed(ActionEvent e)
 				{
-					System.out.println("Airport Selected : "+ (String) airportDropdown.getSelectedItem());
+					System.err.println("Airport Selected : "+ (String) airportDropdown.getSelectedItem());
 					CONTROLLER.selectAirport((String) airportDropdown.getSelectedItem());
 			}});
 		
