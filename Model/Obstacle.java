@@ -31,6 +31,4 @@ public class Obstacle {
 	
 	public void setDistCenter(int x) { distanceFromCenterline = x; }
 	public void setDistLowEnd(int x) { distanceFromLowAngleEndOfRunway = x; }
-	public int getX() { return distanceFromCenterline; }
-	public int getY() { return distanceFromLowAngleEndOfRunway; }
 }

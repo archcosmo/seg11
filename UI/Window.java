@@ -21,6 +21,8 @@ public class Window extends JFrame
 	TopViewPanel TOP;
 	NotificationsPanel NOTIFICATION;
 	
+	JTabbedPane tabs = new JTabbedPane();
+	
 	/* Constor
 	 * - Stores reference to controller for input handler references later
 	 * - Runs initFrame
@@ -77,7 +79,7 @@ public class Window extends JFrame
 		add(SELECTION, BorderLayout.EAST);
 		
 		/* Adding left side (Data) tabbed panels */
-		JTabbedPane tabs = new JTabbedPane();
+		tabs = new JTabbedPane();
 		SIDE = new SideViewPanel(CONTROLLER.getDraw());
 		TOP = new TopViewPanel(CONTROLLER.getDraw());
 		DATA = new DataPanel(CONTROLLER);
@@ -85,6 +87,7 @@ public class Window extends JFrame
 		tabs.addTab("Side View", SIDE);
 		tabs.addTab("Calculations", DATA);
 		add(tabs, BorderLayout.CENTER);
+	
 		add(NOTIFICATION, BorderLayout.SOUTH);
 		//TODO: New tab: Add/edit/remove Runways + Objects
 	}
@@ -94,6 +97,11 @@ public class Window extends JFrame
 		SIDE.repaint();
 		TOP.repaint();
 		DATA.repaint();
+		
+		/* Nasty hack to get the UI to work */
+		int temp = tabs.getSelectedIndex();
+		tabs.setSelectedIndex(temp - 1);
+		tabs.setSelectedIndex(temp);
 	}
 	
 	public void notify(String s)

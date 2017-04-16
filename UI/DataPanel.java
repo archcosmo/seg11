@@ -32,7 +32,6 @@ public class DataPanel extends JPanel
 		else
 		{
 			calculations.setText("<html>"+s+"</html>");;
-			CONTROLLER.notify("Printed Calculatons Breakdown");
 		}
 	}
 }

@@ -110,8 +110,8 @@ public class SelectionPanel extends JPanel
 		add(obsacleSelection);
 		
 		/* Obstacle position selection */
-		MenuItem xPosSelection = new MenuItem("Horizontal Displacement : ");
-		MenuItem yPosSelection = new MenuItem("Vertical Displacement : ");
+		MenuItem xPosSelection = new MenuItem("<html>Displacement From Runway Centerline : <br> <center>(meters)");
+		MenuItem yPosSelection = new MenuItem("<html>Displacement From Runway Start : <br> <center>(meters)");
 		xPosInput = new JTextField("0");
 		yPosInput = new JTextField("0");
 		xPosInput.setPreferredSize(new Dimension(50, 20));

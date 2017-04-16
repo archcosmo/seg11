@@ -192,7 +192,9 @@ public class Controller
 		if (selectedRunway != null) {
 			recalculatedValues = calculator.calculateDistances(getSelectedLogicalRunway(), selectedObstacle, towardsSelectedLR);
 			calcBreakdown = calculator.getLastCalculationBreakdown();
+			if (selectedObstacle == null) { calcBreakdown = ""; }
 			UI.draw();
+			notify("Printed Calculations Breakdown, Updated Diagrams");
 		}
 	}
 
@@ -231,7 +233,11 @@ public class Controller
 		}
 		recalculateValues();
 	}
-
+	
+	/* Halfway holder values for object position */
+	int distanceFromThreshold = 0;
+	int distanceFromCenterline = 0;
+	
 	public boolean selectObstacleXPos(String inp) 
 	{
 		int parsedInt = 0;
@@ -240,16 +246,16 @@ public class Controller
 		catch (Exception e) 
 		{ 
 			notify("Input is not a number. Resetting Obstacle X Offset to 0"); 
-			if (selectedObstacle != null) selectedObstacle.setDistCenter(0);
-			recalculateValues();
+			if (selectedObstacle != null) distanceFromCenterline = 0;
+			setObstaclePos();
 			return false;
 		}
 		
 		if (selectedObstacle != null)
 		{
 			notify("Obstacle X Offset Selected : "+ parsedInt);
-			selectedObstacle.setDistCenter(parsedInt); 
-			recalculateValues();
+			distanceFromCenterline = parsedInt;
+			setObstaclePos();
 			return true;
 		}
 		notify("Cannot select obstacle position while no obstacle is selected");
@@ -264,20 +270,26 @@ public class Controller
 		catch (Exception e) 
 		{ 
 			notify("Input is not a number. Resetting Obstacle Y Offset to 0"); 
-			if (selectedObstacle != null) selectedObstacle.setDistLowEnd(0); 
-			recalculateValues();
+			if (selectedObstacle != null) distanceFromThreshold = 0; 
+			setObstaclePos();
 			return false; 
 		}
 		
 		if (selectedObstacle != null)
 		{
 			notify("Obstacle Y Offset Selected : "+ parsedInt);
-			selectedObstacle.setDistLowEnd(parsedInt); 
-			recalculateValues();
+			distanceFromThreshold = parsedInt; 
+			setObstaclePos();
 			return true;
 		}
 		notify("Cannot select obstacle position while no obstacle is selected");
 		return false;
+	}
+	
+	private void setObstaclePos() 
+	{
+		selectedObstacle.setPosition(distanceFromThreshold, getSelectedLogicalRunway(), lowAngleRunway, distanceFromCenterline);
+		recalculateValues();
 	}
 
 	public String getCalculations() 
