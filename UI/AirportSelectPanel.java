@@ -78,7 +78,7 @@ public class AirportSelectPanel extends JPanel {
 		/* Add a newAirport option */
 		String temp = noAirports ? "No airports found in files. Create a new airport with name: " : "or create and use a new airport with name : ";
 		MenuItem newAirport = new MenuItem(temp);
-		JTextField newAirportName = new JTextField(" ");
+		JTextField newAirportName = new JTextField("");
 		newAirportName.setPreferredSize(new Dimension(200, 20));
 		newAirport.add(newAirportName);
 		add(newAirport);
@@ -87,7 +87,12 @@ public class AirportSelectPanel extends JPanel {
 		JButton makeAirport = new JButton("Create and use this airport");
 		makeAirport.setAlignmentX(Component.CENTER_ALIGNMENT);
 		add(makeAirport);
-		/* TODO: Add button handler */
+		makeAirport.addActionListener( new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				if (!CONTROLLER.newAirport((String) newAirportName.getText())) CONTROLLER.notify("Invalid Airport Name");
+		}});
 		
 		/* Vertical Spacer */
 		add(Box.createRigidArea(new Dimension(0, 400)));

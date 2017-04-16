@@ -121,10 +121,27 @@ public class Controller
 	}
 	
 	
-	public void newAirport(String airport)
+	public boolean newAirport(String airport)
 	{
-		//TODO: Add airport
-		selectAirport(airport);
+		if (airport.equals(" ") || airport.length() == 0) { return false; }
+		//TODO: Add default runway to airport before saving
+		selectedAirport = new Airport(airport);
+		airports.add(selectedAirport);
+		
+		selectedRunway = new Runway(240, 300, 60, 2000, 400);
+		selectedRunway.setLogicalRunways(
+				new LogicalRunway("00", selectedRunway, 100, 100, 100, 100, 200), 
+				new LogicalRunway("18", selectedRunway, 100, 100, 100, 100, 200));
+		selectedAirport.addRunway(selectedRunway);
+		
+		try {
+			XML.saveAirportInfoToXML(selectedAirport);
+		} catch (IOException e) {}
+		
+		notify("New Airport Added and Selected");
+		UI.loadRunningLayout();
+		UI.setVisible(true);
+		return true;
 	}
 	
 	public List<Airport> getAirports()
