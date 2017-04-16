@@ -93,6 +93,7 @@ public class Window extends JFrame
 	{
 		SIDE.repaint();
 		TOP.repaint();
+		DATA.repaint();
 	}
 	
 	public void notify(String s)

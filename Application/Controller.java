@@ -25,7 +25,7 @@ public class Controller
 	public Runway selectedRunway;
 	public Obstacle selectedObstacle;
 	List<Obstacle> obstacles;
-	Window UI;
+	Window UI;	
 	public final static String TITLE = "Runway Re-Declaration Calculator";
 	public String AIRPORT_NAME = "Error: No airport selected";
 	
@@ -51,8 +51,6 @@ public class Controller
 		loadAirportInfoFromFile();
 		
 		this.calculator = new Calculations();
-		//selectedObstacle = obstacles.get(0);
-		//this.draw = new Draw(this);
 		
 		/* Start UI */
 		EventQueue.invokeLater(() -> {
@@ -168,7 +166,6 @@ public class Controller
 		if (selectedRunway != null) {
 			recalculatedValues = calculator.calculateDistances(getSelectedLogicalRunway(), selectedObstacle, towardsSelectedLR);
 			calcBreakdown = calculator.getLastCalculationBreakdown();
-			UI.getDATA().printStr(calcBreakdown);
 			UI.draw();
 		}
 	}
@@ -194,7 +191,6 @@ public class Controller
 		if (obj.equals("None")) 
 		{
 			selectedObstacle = null;
-			System.err.println("None");
 		}
 		else 
 		{
@@ -208,6 +204,59 @@ public class Controller
 			}
 		}
 		recalculateValues();
+	}
+
+	public boolean selectObstacleXPos(String inp) 
+	{
+		int parsedInt = 0;
+		
+		try { 	parsedInt = Integer.parseInt(inp);	}
+		catch (Exception e) 
+		{ 
+			notify("Input is not a number. Resetting Obstacle X Offset to 0"); 
+			if (selectedObstacle != null) selectedObstacle.setDistCenter(0);
+			recalculateValues();
+			return false;
+		}
+		
+		if (selectedObstacle != null)
+		{
+			notify("Obstacle X Offset Selected : "+ parsedInt);
+			selectedObstacle.setDistCenter(parsedInt); 
+			recalculateValues();
+			return true;
+		}
+		notify("Cannot select obstacle position while no obstacle is selected");
+		return false;
+	}
+	
+	public boolean selectObstacleYPos(String inp) 
+	{
+		int parsedInt = 0;
+		
+		try { 	parsedInt = Integer.parseInt(inp);	}
+		catch (Exception e) 
+		{ 
+			notify("Input is not a number. Resetting Obstacle Y Offset to 0"); 
+			if (selectedObstacle != null) selectedObstacle.setDistLowEnd(0); 
+			recalculateValues();
+			return false; 
+		}
+		
+		if (selectedObstacle != null)
+		{
+			notify("Obstacle Y Offset Selected : "+ parsedInt);
+			selectedObstacle.setDistLowEnd(parsedInt); 
+			recalculateValues();
+			return true;
+		}
+		notify("Cannot select obstacle position while no obstacle is selected");
+		return false;
+	}
+
+	public String getCalculations() 
+	{
+		return calcBreakdown;
 	}
 }
 

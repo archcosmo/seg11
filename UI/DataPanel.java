@@ -1,9 +1,7 @@
 package UI;
 
-import java.awt.Dimension;
-import java.awt.EventQueue;
+import java.awt.Graphics;
 
-import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -15,25 +13,26 @@ public class DataPanel extends JPanel
 	JLabel calculations;
 	Controller CONTROLLER;
 	
-	public DataPanel(Controller c) {
+	public DataPanel(Controller c) 
+	{
 		CONTROLLER = c;
-		/* Vertical Spacer */
-		add(Box.createRigidArea(new Dimension(0, 500)));
 		
 		calculations = new JLabel("");
 		add(calculations);
 	}
 	
-	public void printStr(String s){
-		EventQueue.invokeLater(() -> {
-			if (s.equals("")) {
-				calculations.setText("Currently no calculations to display");
-			}
-			else
-			{
-				calculations.setText("<html>"+s+"</html>");;
-				CONTROLLER.notify("Printed Calculatons Breakdown");
-			}
-        });
+	@Override
+	public void paintComponent(Graphics g) 
+	{
+		String s = CONTROLLER.getCalculations();
+		if (s.equals("")) 
+		{
+			calculations.setText("Currently no calculations to display");
+		}
+		else
+		{
+			calculations.setText("<html>"+s+"</html>");;
+			CONTROLLER.notify("Printed Calculatons Breakdown");
+		}
 	}
 }

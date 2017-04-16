@@ -20,6 +20,8 @@ import Model.Runway;
 public class SelectionPanel extends JPanel
 {
 	Controller CONTROLLER;
+	JTextField xPosInput;
+	JTextField yPosInput;
 	
 	public SelectionPanel(Controller c) 
 	{
@@ -51,7 +53,6 @@ public class SelectionPanel extends JPanel
 		{
 			public void actionPerformed(ActionEvent e)
 			{
-				CONTROLLER.notify("Runway Selected : "+ (String) runwayDropdown.getSelectedItem());
 				CONTROLLER.selectRunway((String) runwayDropdown.getSelectedItem());
 		}});
 		runwaySelection.addComponent(runwayDropdown);
@@ -111,13 +112,24 @@ public class SelectionPanel extends JPanel
 		/* Obstacle position selection */
 		MenuItem xPosSelection = new MenuItem("Horizontal Displacement : ");
 		MenuItem yPosSelection = new MenuItem("Vertical Displacement : ");
-		JTextField xPosInput = new JTextField("0");
-		JTextField yPosInput = new JTextField("0");
+		xPosInput = new JTextField("0");
+		yPosInput = new JTextField("0");
 		xPosInput.setPreferredSize(new Dimension(50, 20));
 		yPosInput.setPreferredSize(new Dimension(50, 20));
 		xPosSelection.add(xPosInput);
 		yPosSelection.add(yPosInput);
-		//TODO: Add BOTH handlers
+		yPosInput.addActionListener( new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				if (!CONTROLLER.selectObstacleYPos(yPosInput.getText())) yPosInput.setText("0");
+		}});
+		xPosInput.addActionListener( new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				if (!CONTROLLER.selectObstacleXPos(xPosInput.getText())) xPosInput.setText("0");
+		}});
 		add(xPosSelection);
 		add(yPosSelection);
 		
