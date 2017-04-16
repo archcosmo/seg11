@@ -73,6 +73,15 @@ public class Controller
 	{
 		try {
 			obstacles = XML.readObstacleInfoFromXML();
+			
+			if (obstacles.isEmpty()) 
+			{
+				/* If no obstacles found, add a default obstacle */
+				obstacles.add(new Obstacle("Generic Obstacle", 50, 400, 60));
+				XML.saveObstacleInfoToXML(obstacles);
+				//TODO: If file does not exist, make a new one
+			}
+			
 			return true;	
 			
 		} catch (IOException e) { 
