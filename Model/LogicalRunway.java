@@ -6,7 +6,7 @@ public class LogicalRunway {
 	Runway runway;
     int tora, toda, asda, lda, displacedThreshold, stopwayLength, clearwayLength;
 
-    public LogicalRunway(String designator, Runway runway, int tora, int toda, int asda, int lda, int stopwayLength) {
+    public LogicalRunway(String designator, Runway runway, int tora, int toda, int asda, int lda) {
     	this.runway = runway;
         this.designator = designator;
         this.tora = tora;

@@ -73,7 +73,7 @@ public class AirportSelectPanel extends JPanel {
 				}});
 			
 			/* Vertical Spacer */
-			add(Box.createRigidArea(new Dimension(0, 50)));
+			add(Box.createRigidArea(new Dimension(0, 150)));
 		}
 		/* Add a newAirport option */
 		String temp = noAirports ? "No airports found in files. Create a new airport with name: " : "or create and use a new airport with name : ";
@@ -93,8 +93,8 @@ public class AirportSelectPanel extends JPanel {
 			{
 				if (!CONTROLLER.newAirport((String) newAirportName.getText())) CONTROLLER.notify("Invalid Airport Name");
 		}});
-		
+	
 		/* Vertical Spacer */
-		add(Box.createRigidArea(new Dimension(0, 400)));
+		add(Box.createRigidArea(new Dimension(0, 600)));
 	}
 }

@@ -357,7 +357,7 @@ public class Draw
 	private void drawRecalculatedValuesTop(Graphics2D g2d, boolean lowAngle, Obstacle ob, Runway runway, int runwayX, int runwayLength, int runwayWidth, int centerlineY, float scale) {
 		Set<String> addedLabels = new HashSet<String>();
 		
-		LogicalRunway lr = new LogicalRunway("", runway, model.recalculatedValues.get(0), model.recalculatedValues.get(1),model.recalculatedValues.get(2), model.recalculatedValues.get(3),0);
+		LogicalRunway lr = new LogicalRunway("", runway, model.recalculatedValues.get(0), model.recalculatedValues.get(1),model.recalculatedValues.get(2), model.recalculatedValues.get(3));
 		
 		/*Displaced Threshold*/
 		int adjustedDisplacement = (int)(scale*lr.displacedThreshold);

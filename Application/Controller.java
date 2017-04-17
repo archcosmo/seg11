@@ -137,11 +137,8 @@ public class Controller
 		selectedAirport = new Airport(airport);
 		airports.add(selectedAirport);
 		
-		selectedRunway = new Runway(240, 300, 60, 2000, 400);
-		selectedRunway.setLogicalRunways(
-				new LogicalRunway("00", selectedRunway, 100, 100, 100, 100, 200), 
-				new LogicalRunway("18", selectedRunway, 100, 100, 100, 100, 200));
-		selectedAirport.addRunway(selectedRunway);
+		addGenericRunway();
+		selectedRunway = selectedAirport.getRunways().get(0);
 		
 		try {
 			XML.saveAirportInfoToXML(selectedAirport);
@@ -151,6 +148,15 @@ public class Controller
 		UI.loadRunningLayout();
 		UI.setVisible(true);
 		return true;
+	}
+	
+	public void addGenericRunway()
+	{
+		Runway newRunway = new Runway(240, 300, 60, 2000, 400);
+		newRunway.setLogicalRunways(
+				new LogicalRunway("00", newRunway, 100, 100, 100, 100), 
+				new LogicalRunway("18", newRunway, 100, 100, 100, 100));
+		selectedAirport.addRunway(newRunway);
 	}
 	
 	public List<Airport> getAirports()

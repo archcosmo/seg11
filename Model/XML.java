@@ -170,7 +170,7 @@ public class XML {
 			if(logicalRunwayDesignator.isEmpty())
 				throw new SAXException("Invalid file format: Threshold Designator undefined.");
 
-			int tora, toda, asda, lda, stopwayLength;
+			int tora, toda, asda, lda;
 			
 			try {
 				tora = getAttributeValue(eLogicalRunway.getElementsByTagName("tora"));
@@ -196,13 +196,7 @@ public class XML {
 				throw new SAXException("LDA value not specified.");
 			}
 			
-			try {
-				stopwayLength = getAttributeValue(eLogicalRunway.getElementsByTagName("stopwayLength"));
-			} catch(AttributeNotFoundException e) {
-				throw new SAXException("Stopway Length value not specified.");
-			}
-			
-			return new LogicalRunway(logicalRunwayDesignator, parentRunway, tora, toda, asda, lda, stopwayLength);
+			return new LogicalRunway(logicalRunwayDesignator, parentRunway, tora, toda, asda, lda);
 		}
 		else
 			throw new SAXException("Invalid file format.");

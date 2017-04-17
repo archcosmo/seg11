@@ -20,6 +20,8 @@ public class Window extends JFrame
 	SideViewPanel SIDE;
 	TopViewPanel TOP;
 	NotificationsPanel NOTIFICATION;
+	RunwayEditPanel RUNWAY;
+	ObstacleEditPanel OBSTACLE;
 	
 	JTabbedPane tabs = new JTabbedPane();
 	
@@ -83,9 +85,13 @@ public class Window extends JFrame
 		SIDE = new SideViewPanel(CONTROLLER.getDraw());
 		TOP = new TopViewPanel(CONTROLLER.getDraw());
 		DATA = new DataPanel(CONTROLLER);
+		RUNWAY = new RunwayEditPanel(CONTROLLER);
+		OBSTACLE = new ObstacleEditPanel(CONTROLLER);
 		tabs.addTab("Top View", TOP);
 		tabs.addTab("Side View", SIDE);
 		tabs.addTab("Calculations", DATA);
+		tabs.addTab("Add/Edit/Remove Runways", RUNWAY);
+		tabs.addTab("Add/Edit/Remove Obstacles", OBSTACLE);
 		add(tabs, BorderLayout.CENTER);
 	
 		add(NOTIFICATION, BorderLayout.SOUTH);

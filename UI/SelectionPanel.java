@@ -42,7 +42,7 @@ public class SelectionPanel extends JPanel
 		/* Vertical Spacer */
 		add(Box.createRigidArea(new Dimension(0, 50)));
 		
-		/* Runway Selection and Dropdown Menu : No Handler yet */
+		/* Runway Selection and Dropdown Menu */
 		MenuItem runwaySelection = new MenuItem("Runway : ");
 		JComboBox<String> runwayDropdown = new JComboBox<String>();
 		for (Runway r: CONTROLLER.getRunways()) 
