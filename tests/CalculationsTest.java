@@ -1,6 +1,6 @@
 package tests;
 
-import core.*;
+import Model.*;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
@@ -8,10 +8,10 @@ import org.junit.Test;
 public class CalculationsTest {
 	Calculations calc = new Calculations();
 	Runway testRunway = new Runway(240, 300, 60, 4000, 100); //Using default values - changeable!
-	LogicalRunway nineR = new LogicalRunway("09R", testRunway, 3660, 3660, 3660, 3353, 0);
-	LogicalRunway twentySevenL = new LogicalRunway("27L", testRunway, 3660, 3660 ,3660, 3660, 0);
-	LogicalRunway nineL = new LogicalRunway("09L", testRunway, 3902, 3902, 3902, 3595, 0);
-	LogicalRunway twentySevenR = new LogicalRunway("27R", testRunway, 3884, 3962, 3884 , 3884, 0);
+	LogicalRunway nineR = new LogicalRunway("09R", testRunway, 3660, 3660, 3660, 3353);
+	LogicalRunway twentySevenL = new LogicalRunway("27L", testRunway, 3660, 3660 ,3660, 3660);
+	LogicalRunway nineL = new LogicalRunway("09L", testRunway, 3902, 3902, 3902, 3595);
+	LogicalRunway twentySevenR = new LogicalRunway("27R", testRunway, 3884, 3962, 3884 , 3884);
 /*
 	@Test
 	public void testTORA() {
