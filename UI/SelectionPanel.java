@@ -1,22 +1,22 @@
 package UI;
 
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.GridLayout;
-import java.awt.Font;
 import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.Insets;
 
-import javax.swing.JComboBox;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.JTextField;
 
 import Application.Controller;
+import Model.ColourScheme;
 import Model.Obstacle;
 import Model.Runway;
 
@@ -165,14 +165,14 @@ public class SelectionPanel extends JPanel
 		JLabel colourSchemeLabel = new JLabel("Colour Scheme");
 		colourSchemeLabel.setFont(labelFont);
 		colourSchemePanel.add(colourSchemeLabel);
-		JComboBox<String> colourSchemeComboBox = new JComboBox<String>();
+		JComboBox<ColourScheme> colourSchemeComboBox = new JComboBox<ColourScheme>();
 		colourSchemeComboBox.setFont(notLabelFont);
-		colourSchemeComboBox.addItem("Wiked");
-		colourSchemeComboBox.addItem("Colour");
-		colourSchemeComboBox.addItem("Schemes");
+		for(ColourScheme cs : CONTROLLER.getColourSchemes()) {
+			colourSchemeComboBox.addItem(cs);
+		}
 		colourSchemeComboBox.addActionListener(e -> {
-			CONTROLLER.setTakeoffDirection((String) colourSchemeComboBox.getSelectedItem());
-			CONTROLLER.notify("Colour scheme selected : "+ (String) colourSchemeComboBox.getSelectedItem());
+			CONTROLLER.setColourScheme(colourSchemeComboBox.getItemAt(colourSchemeComboBox.getSelectedIndex()));
+			CONTROLLER.notify("Colour scheme selected : "+ colourSchemeComboBox.getSelectedItem().toString());
 		});
 		colourSchemePanel.add(colourSchemeComboBox);
 		add(colourSchemePanel);

@@ -3,6 +3,7 @@ package Application;
 import java.awt.EventQueue;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -10,13 +11,14 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.xml.sax.SAXException;
 
 import Model.Airport;
+import Model.Calculations;
+import Model.ColourScheme;
+import Model.Draw;
+import Model.LogicalRunway;
 import Model.Obstacle;
 import Model.Runway;
 import Model.XML;
 import UI.Window;
-import Model.Calculations;
-import Model.Draw;
-import Model.LogicalRunway;
 
 public class Controller 
 {
@@ -25,6 +27,7 @@ public class Controller
 	public Runway selectedRunway;
 	public Obstacle selectedObstacle;
 	List<Obstacle> obstacles;
+	List<ColourScheme> colourSchemes;
 	Window UI;	
 	public final static String TITLE = "Runway Re-Declaration Calculator";
 	public String AIRPORT_NAME = "Error: No airport selected";
@@ -51,6 +54,9 @@ public class Controller
 		/* Load XML info from files */
 		loadObstacleInfoFromFile();
 		loadAirportInfoFromFile();
+		
+		this.colourSchemes = new ArrayList<ColourScheme>();
+		Collections.addAll(colourSchemes, ColourScheme.defaultThemes());
 		
 		this.calculator = new Calculations();
 		
@@ -210,6 +216,11 @@ public class Controller
 		towardsSelectedLR = selectedItem.startsWith("Towards");
 		recalculateValues();
 	}
+	
+	public void setColourScheme(ColourScheme scheme) {
+		draw.setColourScheme(scheme);
+		UI.draw();
+	}
 
 	public void notify(String string) 
 	{
@@ -219,6 +230,11 @@ public class Controller
 	public List<Obstacle> getObstacles() 
 	{
 		return obstacles;
+	}
+	
+	public List<ColourScheme> getColourSchemes() 
+	{
+		return colourSchemes;
 	}
 
 	public void selectObstacle(String obj) 

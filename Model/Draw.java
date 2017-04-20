@@ -1,8 +1,5 @@
 package Model;
 
-import Application.*;
-
-import javax.swing.plaf.ColorUIResource;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
@@ -11,12 +8,18 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.swing.JTabbedPane;
+import javax.swing.plaf.ColorUIResource;
+
+import Application.Controller;
+
 public class Draw
 {
 
 	Controller controller;
 	private float zoom;
 	private int topPanX, sidePanX, topPanY, sidePanY;
+	private ColourScheme colourScheme;
 
 	public boolean setZoomFactor(float zf) { 
 		if(zf > 0) {
@@ -38,11 +41,18 @@ public class Draw
 		sidePanY += panY;
 	}
 	
+	public void setColourScheme(ColourScheme scheme) {
+		this.colourScheme = scheme;
+	}
+	
 	public Draw(Controller controller) {
 		this.controller = controller;
 		this.zoom = 1.0F;
 		this.topPanX = 0;
 		this.topPanY = 0;
+		
+		//Set to Default theme
+		this.colourScheme = ColourScheme.defaultThemes()[0];
 	}
 
 	public void drawTopView(Graphics2D g2d, int width, int height) {
@@ -59,6 +69,12 @@ public class Draw
 			topPanY = maxPanY;
 		if(topPanY < -maxPanY)
 			topPanY = -maxPanY;
+		
+		//Set Background Colour
+		g2d.setColor(colourScheme.background);
+		g2d.fillRect(0, 0, width, height);
+		
+		g2d.setColor(colourScheme.labels);
 		
 		/*Initial rotation to 0 so runway doesn't become unaligned*/
 		AffineTransform at = new AffineTransform();
@@ -184,7 +200,7 @@ public class Draw
 	private void drawRunwayTop(Graphics2D g2d, Runway runway, int runwayX, int runwayLength, int runwayWidth, int centerlineY, float scale) {
 		
 		/*Draw Cleared and Graded*/
-		g2d.setColor(Color.CYAN);
+		g2d.setColor(colourScheme.cga);
 		g2d.fillRect(runwayX-(int)(scale*60), centerlineY-runwayWidth/2-(int)(scale*75), runwayLength+(int)(scale*120), runwayWidth+(int)(scale*150));
 		g2d.fillRect(runwayX+(int)(scale*300), centerlineY-runwayWidth/2-(int)(scale*105), runwayLength-(int)(scale*600), runwayWidth+(int)(scale*210));
 
@@ -199,11 +215,11 @@ public class Draw
 		g2d.fillPolygon(triRightX, triBotY, 3);
 		
 		/*Draw runway*/
-		g2d.setColor(Color.gray);
+		g2d.setColor(colourScheme.runway);
 		g2d.fillRect(runwayX, centerlineY - runwayWidth/2, runwayLength, runwayWidth);
 		
 		/*Draw centerline*/
-		g2d.setColor(new Color(220, 220, 220));
+		g2d.setColor(colourScheme.centerline);
 		int lineLength = runwayLength/21;
 		int lineWidth = runwayWidth/10;
 		int lineX;
@@ -213,7 +229,7 @@ public class Draw
 		}
 
 		/*Draw Clearways*/
-		g2d.setColor(Color.GRAY);
+		g2d.setColor(colourScheme.clearwayBorders);
 		int adjustedLowClearwayLength = (int) (scale * runway.shortAngleLogicalRunway.clearwayLength);
 		int adjustedHighClearwayLength = (int) (scale * runway.longAngleLogicalRunway.clearwayLength);
 		int adjustedLowClearwayWidth = (int)(600*scale);	//TOD0:: Fix when clearwayWidth implemented
@@ -226,14 +242,14 @@ public class Draw
 			g2d.drawRect(runwayX+runwayLength-1, centerlineY-adjustedLowClearwayWidth/2, adjustedLowClearwayLength, adjustedLowClearwayWidth);
 		
 		/*Draw Stopways*/
-		g2d.setColor(Color.LIGHT_GRAY);
+		g2d.setColor(colourScheme.stopways);
 		int adjustedLowStopwayLength = (int) (scale * runway.shortAngleLogicalRunway.stopwayLength);
 		int adjustedHighStopwayLength = (int) (scale * runway.longAngleLogicalRunway.stopwayLength);
 		g2d.fillRect(runwayX - adjustedHighStopwayLength, centerlineY - runwayWidth/2, adjustedHighStopwayLength, runwayWidth);
 		g2d.fillRect(runwayX+runwayLength, centerlineY - runwayWidth/2, adjustedLowStopwayLength, runwayWidth);
 		
 		/*Label Clearway*/
-		g2d.setColor(Color.BLACK);
+		g2d.setColor(colourScheme.labels);
 
 		Font gFont = g2d.getFont();
 		
@@ -271,7 +287,7 @@ public class Draw
 		}
 		
 		/*Label Stopways*/
-		g2d.setColor(Color.BLACK);
+		g2d.setColor(colourScheme.labels);
 		
 		/*Label used if no stopway:*/
 		String noStopwayLabel = "No stopway";
@@ -309,7 +325,7 @@ public class Draw
 		String lowDesig = runway.shortAngleLogicalRunway.designator;
 		String highDesig = runway.longAngleLogicalRunway.designator;
 
-		g2d.setColor(Color.WHITE);
+		g2d.setColor(colourScheme.designators);
 
 		AffineTransform at = new AffineTransform();
 		/*Scale designator font*/
@@ -378,12 +394,12 @@ public class Draw
 		int displacementX = lowAngle ? runwayX+adjustedDisplacement-displacedThreshWidth/2 : runwayX+runwayLength-adjustedDisplacement-displacedThreshWidth/2;
 		
 		/*Make transparent so threshold designators can be read*/
-		g2d.setColor(new Color(0, 0, 0, 150));
+		g2d.setColor(colourScheme.threshold);
 		g2d.fillRect(displacementX, centerlineY - runwayWidth/2, displacedThreshWidth, runwayWidth);
 		String displacedLabel = "Displaced Threshold";
 
 		Font gFont = g2d.getFont();
-		g2d.setColor(Color.BLACK);
+		g2d.setColor(colourScheme.labels);
 		g2d.setFont(new Font(gFont.getFontName(), Font.PLAIN, (int)(60 * scale)));
 
 		g2d.drawChars(displacedLabel.toCharArray(), 0, displacedLabel.length(), displacementX, centerlineY-runwayWidth/2-5);
@@ -457,12 +473,12 @@ public class Draw
 //		}
 		
 		/*Make transparent so threshold designators can be read*/
-		g2d.setColor(new Color(255, 0, 0, 150));
+		g2d.setColor(colourScheme.recalculatedThreshold);
 		g2d.fillRect(threshX-displacedThreshWidth/2, centerlineY - runwayWidth/2, displacedThreshWidth, runwayWidth);
 		String displacedLabel = "Recalculated Displaced Threshold";
 
 		Font gFont = g2d.getFont();
-		g2d.setColor(Color.RED);
+		g2d.setColor(colourScheme.recalculatedThresholdLabel);
 		g2d.setFont(new Font(gFont.getFontName(), Font.PLAIN, (int)(60 * scale)));
 
 		g2d.drawChars(displacedLabel.toCharArray(), 0, displacedLabel.length(), threshX, centerlineY+runwayWidth/2+g2d.getFontMetrics().getHeight());
@@ -472,14 +488,14 @@ public class Draw
 	}
 
 	private void drawObstacleTop(Graphics2D g2d, Obstacle ob, int runwayX, int centerlineY, float scale) {
-		g2d.setColor(Color.WHITE);
+		g2d.setColor(colourScheme.obstacle);
 		int obX = runwayX + (int)(scale * ob.distanceFromLowAngleEndOfRunway);
 		int obY = centerlineY - (int)(scale * ob.distanceFromCenterline);
 		int obLength = (int)(scale * ob.length);
 		int obWidth = (int)(scale * ob.width);
 		g2d.fillRect(obX, obY, obLength, obWidth);
 
-		g2d.setColor(Color.BLACK);
+		g2d.setColor(colourScheme.obstacleBorder);
 		g2d.drawRect(obX, obY, obLength, obWidth);
 
 		//Scale font
@@ -500,6 +516,8 @@ public class Draw
 
 		if(shortenedLabel) planeLabel += "...";
 
+		g2d.setColor(colourScheme.obstacleLabel);
+		
 		g2d.drawChars(planeLabel.toCharArray(), 0, planeLabel.length(), obX + obLength/2 - stringWidth/2, obY + obWidth/2 + fontHeight/2);
 
 		//Reset font
@@ -512,7 +530,7 @@ public class Draw
 		int x = (int)(Math.sin(-angleR) * adjustedLength / 2);
 		int y = (int)(Math.cos(-angleR) * adjustedLength / 2);
 
-		g2d.setColor(Color.BLACK);
+		g2d.setColor(colourScheme.labels);
 		/*Draw main line*/
 		g2d.drawLine(arrowX - x, arrowY - y, arrowX + x, arrowY + y);
 
@@ -564,6 +582,12 @@ public class Draw
 		if(sidePanY < -maxPanY)
 			sidePanY = -maxPanY;
 		
+		//Set Background Colour
+		g2d.setColor(colourScheme.background);
+		g2d.fillRect(0, 0, width, height);
+		
+		g2d.setColor(colourScheme.labels);
+		
 		if (controller.getSelectedLogicalRunway() == null) {
 			return;
 		}
@@ -593,12 +617,12 @@ public class Draw
 		int drawOtherClearwayLength = (int) (otherLR.clearwayLength * scale);
 		int drawLEFT = width/2 - (int)(scale * totalRunwayLength /2) + Math.max(drawOtherStopwayLength, drawOtherClearwayLength) + (sidePanX * (reverse ? -1 : 1));
 
-		//Draw Runway
-		drawSimpleRect(g2d, drawLEFT, windowHeight, drawTora, 15, reverse, ColorUIResource.darkGray, width/2);
-		drawSimpleRect(g2d, drawLEFT + drawTora, windowHeight, drawStopwayLength, 10, reverse, ColorUIResource.darkGray, width/2);
-		drawSimpleRect(g2d, drawLEFT + drawTora, windowHeight, drawClearwayLength, 5, reverse, ColorUIResource.darkGray, width/2);
-		drawSimpleRect(g2d, drawLEFT - drawOtherStopwayLength, windowHeight, drawOtherStopwayLength, 10, reverse, ColorUIResource.darkGray, width/2);
-		drawSimpleRect(g2d, drawLEFT - drawOtherClearwayLength, windowHeight, drawOtherClearwayLength, 5, reverse, ColorUIResource.darkGray, width/2);
+		//Draw Runways
+		drawSimpleRect(g2d, drawLEFT, windowHeight, drawTora, 15, reverse, colourScheme.runwaySide, width/2);
+		drawSimpleRect(g2d, drawLEFT + drawTora, windowHeight, drawStopwayLength, 10, reverse, colourScheme.stopwaySide, width/2);
+		drawSimpleRect(g2d, drawLEFT + drawTora, windowHeight, drawClearwayLength, 5, reverse, colourScheme.clearwaySide, width/2);
+		drawSimpleRect(g2d, drawLEFT - drawOtherStopwayLength, windowHeight, drawOtherStopwayLength, 10, reverse, colourScheme.stopwaySide, width/2);
+		drawSimpleRect(g2d, drawLEFT - drawOtherClearwayLength, windowHeight, drawOtherClearwayLength, 5, reverse, colourScheme.clearwaySide, width/2);
 
 		int drawLDALEFT = drawLEFT;
 
@@ -623,7 +647,7 @@ public class Draw
 			if (!controller.lowAngleRunway) {
 				left = !left;
 			}
-			drawObstacle(g2d, drawLEFT + drawObstacleXPos, windowHeight - drawObstacleHeight, drawObstacleLength, drawObstacleHeight, reverse, ColorUIResource.white, width/2, left, ALSWidth, drawObstacleHeight);
+			drawObstacle(g2d, drawLEFT + drawObstacleXPos, windowHeight - drawObstacleHeight, drawObstacleLength, drawObstacleHeight, reverse, colourScheme.obstacle, width/2, left, ALSWidth, drawObstacleHeight);
 			ArrayList<Integer> newThreshold = controller.recalculatedValues;
 			tora = newThreshold.get(0);
 			toda = newThreshold.get(1);
@@ -634,7 +658,7 @@ public class Draw
 		}
 
 		int drawLEFTOLD = drawLEFT;
-		g2d.setColor(Color.black);
+		g2d.setColor(colourScheme.labels);
 		//TODO:: draw displaced threshold?
 		if (!controller.towardsSelectedLR) {
 			int diff = drawTora - (int) (tora * scale);
@@ -663,8 +687,8 @@ public class Draw
 		}
 		g2d.setColor(colour);
 		g2d.fillRect(x, y, width, height);
-		g2d.setColor(Color.black);
-		g2d.drawRect(x, y, width, height);
+//		g2d.setColor(colourScheme.obstacleBorder);
+//		g2d.drawRect(x, y, width, height);
 	}
 
 	private void drawSimpleMeasurement(Graphics2D g2d, int xPos, int height, int length, float scale, String label, boolean reverse, int centreOfRunway, int windowHeight) {
@@ -702,7 +726,7 @@ public class Draw
 		}
 		g2d.setColor(colour);
 		g2d.fillRect(x, y, width, height);
-		g2d.setColor(Color.black);
+		g2d.setColor(colourScheme.obstacleBorder);
 		g2d.drawRect(x, y, width, height);
 		if (left) {
 			g2d.drawLine(x, y, x - ALSWidth, y + height);
