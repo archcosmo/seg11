@@ -205,7 +205,7 @@ public class Controller
 
 	public void setTakeoffDirection(String selectedItem) 
 	{
-		towardsSelectedLR = selectedItem.equals("Towards Selected Threshold End");
+		towardsSelectedLR = selectedItem.startsWith("Towards");
 		recalculateValues();
 	}
 
