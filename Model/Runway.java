@@ -35,6 +35,6 @@ public class Runway {
     }
     
     public LogicalRunway highAngle() {
-    	return shortAngleLogicalRunway;
+    	return longAngleLogicalRunway;
     }
 }

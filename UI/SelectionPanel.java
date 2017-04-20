@@ -3,6 +3,8 @@ package UI;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.Font;
+import java.awt.FlowLayout;
+import java.awt.Insets;
 
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
@@ -33,7 +35,7 @@ public class SelectionPanel extends JPanel
 	{
 		setLayout(new GridLayout(6, 2));
 		setPreferredSize(new Dimension(500, 0));
-		this.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+		this.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		addComponents();
 	}
 
@@ -41,6 +43,7 @@ public class SelectionPanel extends JPanel
 	private void addComponents() 
 	{
 		Font labelFont = this.getFont().deriveFont(20.0f);
+		Font notLabelFont = this.getFont().deriveFont(17.0f);
 
 		JPanel emptyPanel1 = new JPanel();
 		JPanel exportViewPanel = new JPanel();
@@ -56,16 +59,16 @@ public class SelectionPanel extends JPanel
 		JPanel obstacleCentrelineDistancePanel = new JPanel(new GridLayout(2, 1));
 		
 		//Add borders to all panels
-		exportViewPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
-		runwayPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
-		designatorPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
-		planePositionPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
-		colourSchemePanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
-		scalePanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
-		rotationPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
-		obstaclePanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
-		obstacleThresholdDistancePanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
-		obstacleCentrelineDistancePanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
+		exportViewPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 18, 10));
+		runwayPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 18, 10));
+		designatorPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 18, 10));
+		planePositionPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 18, 10));
+		colourSchemePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 18, 10));
+		scalePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 18, 10));
+		rotationPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 18, 10));
+		obstaclePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 18, 10));
+		obstacleThresholdDistancePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 18, 10));
+		obstacleCentrelineDistancePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 18, 10));
 
 
 
@@ -81,10 +84,12 @@ public class SelectionPanel extends JPanel
 		JLabel runwayLabel = new JLabel("Select Runway");
 		runwayLabel.setFont(labelFont);
 		runwayPanel.add(runwayLabel);
-		JPanel runwaySelectionPanel = new JPanel();
+		JPanel runwaySelectionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
 		//Runway ComboBox
 		JComboBox<String> runwayComboBox = new JComboBox<String>();
+		runwayComboBox.setPreferredSize(new Dimension(75, 30));
+		runwayComboBox.setFont(notLabelFont);
 		for (Runway r: CONTROLLER.getRunways())
 		{
 			runwayComboBox.addItem(r.getName());
@@ -94,11 +99,23 @@ public class SelectionPanel extends JPanel
 			CONTROLLER.notify("Runway selected : "+ (String) runwayComboBox.getSelectedItem());
 		});
 		runwaySelectionPanel.add(runwayComboBox);
+		//JLabel spaceMaker = new JLabel("");
+		//spaceMaker.setPreferredSize(new Dimension(10, 20));
+		//runwaySelectionPanel.add(spaceMaker);
 
 		//Runway add, remove and edit
 		JButton addRunway = new JButton("+");
 		JButton removeRunway = new JButton("-");
 		JButton editRunway = new JButton("P");
+		addRunway.setMargin(new Insets(0, 0, 0, 0));
+		removeRunway.setMargin(new Insets(0, 0, 0, 0));
+		editRunway.setMargin(new Insets(0, 0, 0, 0));
+		addRunway.setFont(labelFont);
+		removeRunway.setFont(labelFont);
+		editRunway.setFont(labelFont);
+		addRunway.setPreferredSize(new Dimension(30, 30));
+		removeRunway.setPreferredSize(new Dimension(30, 30));
+		editRunway.setPreferredSize(new Dimension(30, 30));
 		//todo add create runway popup in button listener
 		// todo edit runway popup + event listener
 		//todo remove runway even listener
@@ -115,10 +132,11 @@ public class SelectionPanel extends JPanel
 		designatorLabel.setFont(labelFont);
 		designatorPanel.add(designatorLabel);
 		JComboBox<String> designatorComboBox = new JComboBox<String>();
-		designatorComboBox.addItem("Small Angle");//todo: change to 09R and 27L ...
-		designatorComboBox.addItem("Large Angle");
+		designatorComboBox.setFont(notLabelFont);
+		designatorComboBox.addItem(CONTROLLER.selectedRunway.lowAngle().designator);
+		designatorComboBox.addItem(CONTROLLER.selectedRunway.highAngle().designator);
 		designatorComboBox.addActionListener(e -> {
-			CONTROLLER.setRunwayAngle((String) designatorComboBox.getSelectedItem());
+			CONTROLLER.setRunwayAngle(designatorComboBox.getSelectedIndex() == 0);
 			CONTROLLER.notify("Designator selected : "+ (String) designatorComboBox.getSelectedItem());
 		});
 		designatorPanel.add(designatorComboBox);
@@ -130,6 +148,7 @@ public class SelectionPanel extends JPanel
 		planePositionLabel.setFont(labelFont);
 		planePositionPanel.add(planePositionLabel);
 		JComboBox<String> planePositionComboBox = new JComboBox<String>();
+		planePositionComboBox.setFont(notLabelFont);
 		planePositionComboBox.addItem("Towards obstacle");
 		planePositionComboBox.addItem("Away from obstacle");
 		planePositionComboBox.addActionListener(e -> {
@@ -144,15 +163,16 @@ public class SelectionPanel extends JPanel
 		JLabel colourSchemeLabel = new JLabel("Colour Scheme");
 		colourSchemeLabel.setFont(labelFont);
 		colourSchemePanel.add(colourSchemeLabel);
-		JComboBox<String> colourSchemeDropdown = new JComboBox<String>();
-		colourSchemeDropdown.addItem("Wiked");
-		colourSchemeDropdown.addItem("Colour");
-		colourSchemeDropdown.addItem("Schemes");
-		colourSchemeDropdown.addActionListener(e -> {
-			CONTROLLER.setTakeoffDirection((String) colourSchemeDropdown.getSelectedItem());
-			CONTROLLER.notify("Colour scheme selected : "+ (String) colourSchemeDropdown.getSelectedItem());
+		JComboBox<String> colourSchemeComboBox = new JComboBox<String>();
+		colourSchemeComboBox.setFont(notLabelFont);
+		colourSchemeComboBox.addItem("Wiked");
+		colourSchemeComboBox.addItem("Colour");
+		colourSchemeComboBox.addItem("Schemes");
+		colourSchemeComboBox.addActionListener(e -> {
+			CONTROLLER.setTakeoffDirection((String) colourSchemeComboBox.getSelectedItem());
+			CONTROLLER.notify("Colour scheme selected : "+ (String) colourSchemeComboBox.getSelectedItem());
 		});
-		colourSchemePanel.add(colourSchemeDropdown);
+		colourSchemePanel.add(colourSchemeComboBox);
 		add(colourSchemePanel);
 
 
@@ -179,10 +199,12 @@ public class SelectionPanel extends JPanel
 		JLabel obstacleLabel = new JLabel("Select obstacle");
 		obstacleLabel.setFont(labelFont);
 		obstaclePanel.add(obstacleLabel);
-		JPanel obstacleSelectionPanel = new JPanel();
+		JPanel obstacleSelectionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
 		//Obstacle ComboBox
 		JComboBox<String> obstacleComboBox = new JComboBox<String>();
+		obstacleComboBox.setPreferredSize(new Dimension(100, 30));
+		obstacleComboBox.setFont(notLabelFont);
 		obstacleComboBox.addItem("None");
 		for (Obstacle o: CONTROLLER.getObstacles())
 		{
@@ -199,6 +221,15 @@ public class SelectionPanel extends JPanel
 		JButton addObstacle = new JButton("+");
 		JButton removeObstacle = new JButton("-");
 		JButton editObstacle = new JButton("P");
+		addObstacle.setMargin(new Insets(0, 0, 0, 0));
+		removeObstacle.setMargin(new Insets(0, 0, 0, 0));
+		editObstacle.setMargin(new Insets(0, 0, 0, 0));
+		addObstacle.setFont(labelFont);
+		removeObstacle.setFont(labelFont);
+		editObstacle.setFont(labelFont);
+		addObstacle.setPreferredSize(new Dimension(30, 30));
+		removeObstacle.setPreferredSize(new Dimension(30, 30));
+		editObstacle.setPreferredSize(new Dimension(30, 30));
 		//todo add create obstacle popup in button listener
 		// todo edit obstacle popup + event listener
 		//todo remove obstacle even listener
@@ -230,7 +261,7 @@ public class SelectionPanel extends JPanel
 		//OBSTACLE THRESHOLD DISTANCE PANEL
 		JLabel thresholdLabel = new JLabel("Distance from threshold");
 		thresholdLabel.setFont(labelFont);
-		obstacleThresholdDistancePanel.add(new JLabel("Distance from threshold"));
+		obstacleThresholdDistancePanel.add(thresholdLabel);
 		JTextField thresholdDistanceTextField = new JTextField();
 		thresholdDistanceTextField.addActionListener(e -> {
 			if (!CONTROLLER.selectObstacleYPos(thresholdDistanceTextField.getText()))

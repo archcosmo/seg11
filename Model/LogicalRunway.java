@@ -2,7 +2,7 @@ package Model;
 
 public class LogicalRunway {
 
-	String designator;
+	public String designator;
 	Runway runway;
 	int tora, toda, asda, lda, displacedThreshold, stopwayLength, clearwayLength;
 
