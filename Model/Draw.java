@@ -52,7 +52,7 @@ public class Draw
 			g2d.drawString("Obstacle Distance From Threshold: " + (ob == null ? "N/A" : ob.distanceFromThreshold), width/10, height/10 + g2d.getFontMetrics().getHeight()*2);
 
 			g2d.drawString("Landing/Take-Off Direction: ", width/10, height/10 + g2d.getFontMetrics().getHeight()*3);
-			int dirAngle = controller.lowAngleRunway ? -90 : 90;
+			int dirAngle = controller.lowAngleRunway ? 90 : -90;
 
 			drawArrow(g2d, dirAngle, scale, width/10 + g2d.getFontMetrics().stringWidth("Landing/Take-Off Direction: ") + (dirAngle == -90 ? (int)(scale*250) : 0), height/10 + g2d.getFontMetrics().getHeight()*3, 250);
 			
@@ -99,7 +99,7 @@ public class Draw
 
 //			if (ob != null) {
 //				Runway recalculatedRunway = new Runway(runway.RESA, runway.blastAllowance, runway.stripEnd, runway.length, runway.width);
-//				if(controller.lowAngleRunway)
+//				if(!controller.lowAngleRunway)
 //					recalculatedRunway.setLogicalRunways(runway.shortAngleLogicalRunway, new LogicalRunway(runway.longAngleLogicalRunway.designator, recalculatedRunway, controller.recalculatedValues.get(0), controller.recalculatedValues.get(1), controller.recalculatedValues.get(2), controller.recalculatedValues.get(3), 0));
 //				else
 //					recalculatedRunway.setLogicalRunways(new LogicalRunway(runway.shortAngleLogicalRunway.designator, recalculatedRunway, controller.recalculatedValues.get(0), controller.recalculatedValues.get(1), controller.recalculatedValues.get(2), controller.recalculatedValues.get(3), 0), runway.longAngleLogicalRunway);
@@ -110,10 +110,10 @@ public class Draw
 
 			if (ob != null) {
 				drawObstacleTop(g2d, ob, runwayX, height/2, scale);
-				drawRecalculatedValuesTop(g2d, !controller.lowAngleRunway, ob, runway, runwayX, adjustedRunwayLength, adjustedRunwayWidth, height/2, scale);
+				drawRecalculatedValuesTop(g2d, controller.lowAngleRunway, ob, runway, runwayX, adjustedRunwayLength, adjustedRunwayWidth, height/2, scale);
 			}
 
-			drawLogicalRunwayMeasurementsTop(g2d, !controller.lowAngleRunway, runway, runwayX, adjustedRunwayLength, adjustedRunwayWidth, height/2, scale);
+			drawLogicalRunwayMeasurementsTop(g2d, controller.lowAngleRunway, runway, runwayX, adjustedRunwayLength, adjustedRunwayWidth, height/2, scale);
 
 		}
 	}
@@ -514,7 +514,7 @@ public class Draw
 			return;
 		}
 		LogicalRunway lrw = controller.getSelectedLogicalRunway();
-		boolean reverse = controller.lowAngleRunway;
+		boolean reverse = !controller.lowAngleRunway;
 		Runway runway = controller.selectedRunway;
 		int windowHeight = height/2;
 		//Draw Runway Info
@@ -525,7 +525,7 @@ public class Draw
 		float scale = 0.8F * width / totalRunwayLength;
 		g2d.drawString("Runway Designator: " + lrw.designator, ((reverse) ? width/2 -10 : 10), 30);
 		g2d.drawString("Landing/Take-Off Direction: ",((reverse) ? width/2 -10 : 10), 50);
-		int dirAngle = (controller.lowAngleRunway) ? -90 : 90;
+		int dirAngle = (controller.lowAngleRunway) ? 90 : -90;
 		drawArrow(g2d, dirAngle, scale, ((reverse) ? width/2 -10 : 10) + g2d.getFontMetrics().stringWidth("Landing/Take-Off Direction: ") + (dirAngle == -90 ? (int)(scale*250) : 0), 45, 250);
 
 
@@ -534,7 +534,7 @@ public class Draw
 		int drawTora = (int) (lrw.tora * scale);
 		int drawStopwayLength = (int) (lrw.stopwayLength * scale);
 		int drawClearwayLength = (int) (lrw.clearwayLength * scale);
-		LogicalRunway otherLR = controller.lowAngleRunway ? runway.shortAngleLogicalRunway : runway .longAngleLogicalRunway;
+		LogicalRunway otherLR = !controller.lowAngleRunway ? runway.shortAngleLogicalRunway : runway .longAngleLogicalRunway;
 		int drawOtherStopwayLength = (int) (otherLR.stopwayLength * scale);
 		int drawOtherClearwayLength = (int) (otherLR.clearwayLength * scale);
 		int drawLEFT = 50 + Math.max(drawOtherStopwayLength, drawOtherClearwayLength);
@@ -566,7 +566,7 @@ public class Draw
 			int drawObstacleLength = (int) (obstacle.length * scale);
 			int ALSWidth = (int) (obstacle.height * 50 * scale);
 			boolean left = controller.towardsSelectedLR;
-			if (controller.lowAngleRunway) {
+			if (!controller.lowAngleRunway) {
 				left = !left;
 			}
 			drawObstacle(g2d, drawLEFT + drawObstacleXPos, windowHeight - drawObstacleHeight, drawObstacleLength, drawObstacleHeight, reverse, ColorUIResource.white, width/2, left, ALSWidth, drawObstacleHeight);
