@@ -82,9 +82,8 @@ public class Window extends JFrame
 		
 		/* Adding left side (Data) tabbed panels */
 		tabs = new JTabbedPane();
-		SIDE = new SideViewPanel(CONTROLLER.getDraw());
-		TOP = new TopViewPanel(CONTROLLER.getDraw());
-
+		SIDE = new SideViewPanel(CONTROLLER.getDraw(), CONTROLLER);
+		TOP = new TopViewPanel(CONTROLLER.getDraw(), CONTROLLER);
 		//todo move to under selection panel
 		DATA = new DataPanel(CONTROLLER);
 		//todo move to popup window
