@@ -84,18 +84,21 @@ public class Window extends JFrame
 		tabs = new JTabbedPane();
 		SIDE = new SideViewPanel(CONTROLLER.getDraw(), CONTROLLER);
 		TOP = new TopViewPanel(CONTROLLER.getDraw(), CONTROLLER);
+		//todo move to under selection panel
 		DATA = new DataPanel(CONTROLLER);
+		//todo move to popup window
 		RUNWAY = new RunwayEditPanel(CONTROLLER);
 		OBSTACLE = new ObstacleEditPanel(CONTROLLER);
+
 		tabs.addTab("Top View", TOP);
 		tabs.addTab("Side View", SIDE);
+
 		tabs.addTab("Calculations", DATA);
-		tabs.addTab("Add/Edit/Remove Runways", RUNWAY);
+		//tabs.addTab("Add/Edit/Remove Runways", RUNWAY);
 		tabs.addTab("Add/Edit/Remove Obstacles", OBSTACLE);
 		add(tabs, BorderLayout.CENTER);
 	
 		add(NOTIFICATION, BorderLayout.SOUTH);
-		//TODO: New tab: Add/edit/remove Runways + Objects
 	}
 	
 	public void draw()

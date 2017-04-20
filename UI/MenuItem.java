@@ -3,6 +3,7 @@ package UI;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import java.awt.Font;
 
 @SuppressWarnings("serial")
 public class MenuItem extends JPanel 
@@ -11,6 +12,14 @@ public class MenuItem extends JPanel
 	{
 		setOpaque(false);
 		JLabel string = new JLabel(s);
+		add(string);
+	}
+
+	public MenuItem(String s, Font font)
+	{
+		setOpaque(false);
+		JLabel string = new JLabel(s);
+		string.setFont(font);
 		add(string);
 	}
 	
