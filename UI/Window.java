@@ -82,8 +82,8 @@ public class Window extends JFrame
 		
 		/* Adding left side (Data) tabbed panels */
 		tabs = new JTabbedPane();
-		SIDE = new SideViewPanel(CONTROLLER.getDraw());
-		TOP = new TopViewPanel(CONTROLLER.getDraw());
+		SIDE = new SideViewPanel(CONTROLLER.getDraw(), CONTROLLER);
+		TOP = new TopViewPanel(CONTROLLER.getDraw(), CONTROLLER);
 		DATA = new DataPanel(CONTROLLER);
 		RUNWAY = new RunwayEditPanel(CONTROLLER);
 		OBSTACLE = new ObstacleEditPanel(CONTROLLER);

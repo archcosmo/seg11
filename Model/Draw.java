@@ -15,13 +15,51 @@ public class Draw
 {
 
 	Controller controller;
+	private float zoom;
+	private int topPanX, sidePanX, topPanY, sidePanY;
 
-
+	public boolean setZoomFactor(float zf) { 
+		if(zf > 0) {
+			this.zoom = zf;
+			return true;
+		}
+		return false;
+	}
+	
+	public float getZoomFactor() { return this.zoom; }
+	
+	public void setTopPan(int panX, int panY) {
+		topPanX += panX;
+		topPanY += panY;
+	}
+	
+	public void setSidePan(int panX, int panY) {
+		sidePanX += panX;
+		sidePanY += panY;
+	}
+	
 	public Draw(Controller controller) {
 		this.controller = controller;
+		this.zoom = 1.0F;
+		this.topPanX = 0;
+		this.topPanY = 0;
 	}
 
 	public void drawTopView(Graphics2D g2d, int width, int height) {
+		
+		//Pan Limit Checks
+		int maxPanX = Math.abs((int)((this.zoom * width) - width)/2);
+		int maxPanY = Math.abs((int)((this.zoom * height) - height)/2);
+		
+		if(topPanX > maxPanX)
+			topPanX = maxPanX;
+		if(topPanX < -maxPanX)
+			topPanX = -maxPanX;
+		if(topPanY > maxPanY)
+			topPanY = maxPanY;
+		if(topPanY < -maxPanY)
+			topPanY = -maxPanY;
+		
 		/*Initial rotation to 0 so runway doesn't become unaligned*/
 		AffineTransform at = new AffineTransform();
 		g2d.setTransform(at);
@@ -35,7 +73,7 @@ public class Draw
 			int totalLength = runwayLength + Math.max(runway.shortAngleLogicalRunway.stopwayLength, runway.shortAngleLogicalRunway.clearwayLength)
 					+ Math.max(runway.longAngleLogicalRunway.stopwayLength, runway.longAngleLogicalRunway.clearwayLength);
 
-			float scale = 0.8F * width / totalLength;
+			float scale = (0.8F * width / totalLength) * zoom;
 
 			/*Show selected logical runway*/
 			String selectedLogRun = "None";
@@ -54,7 +92,7 @@ public class Draw
 			g2d.drawString("Landing/Take-Off Direction: ", width/10, height/10 + g2d.getFontMetrics().getHeight()*3);
 			int dirAngle = controller.lowAngleRunway ? 90 : -90;
 
-			drawArrow(g2d, dirAngle, scale, width/10 + g2d.getFontMetrics().stringWidth("Landing/Take-Off Direction: ") + (dirAngle == -90 ? (int)(scale*250) : 0), height/10 + g2d.getFontMetrics().getHeight()*3, 250);
+			drawArrow(g2d, dirAngle, scale, width/10 + g2d.getFontMetrics().stringWidth("Landing/Take-Off Direction: ") + (dirAngle == -90 ? (int)(scale*250) : 0), height/10 + g2d.getFontMetrics().getHeight()*3, 250, false);
 			
 			/*Draw Compass*/
 			int angle = Integer.parseInt(runway.shortAngleLogicalRunway.designator.substring(0,2)) * 10;
@@ -63,7 +101,7 @@ public class Draw
 
 			int startX = width-width/10;
 			int startY = height/5;
-			drawArrow(g2d, lowAngle, scale, startX, startY, 250);
+			drawArrow(g2d, lowAngle, scale, startX, startY, 250, false);
 
 
 			////////////////////////////////////////////////////////////////////////////
@@ -86,7 +124,7 @@ public class Draw
 				totalLength = runwayLength + 10+noClearwayLabelWidth +
 						(runway.shortAngleLogicalRunway.stopwayLength > runway.shortAngleLogicalRunway.clearwayLength ? runway.shortAngleLogicalRunway.stopwayLength : runway.shortAngleLogicalRunway.clearwayLength);
 
-			scale = 0.8F * width / totalLength;
+			scale = (0.8F * width / totalLength) * zoom;
 
 			//////////////////////////////////////////////////////////////////////////////////////
 
@@ -94,8 +132,8 @@ public class Draw
 			int adjustedRunwayLength = (int)(scale * runwayLength);
 			int adjustedRunwayWidth = (int)(scale * runwayWidth);
 
-			int runwayX = width/2 - adjustedRunwayLength/2;
-
+			int runwayX = width/2 - adjustedRunwayLength/2 + topPanX;
+			int centerLine = height/2 + topPanY;
 
 //			if (ob != null) {
 //				Runway recalculatedRunway = new Runway(runway.RESA, runway.blastAllowance, runway.stripEnd, runway.length, runway.width);
@@ -106,19 +144,22 @@ public class Draw
 //				runway = recalculatedRunway;
 //			}
 
-			drawRunwayTop(g2d, runway, runwayX, adjustedRunwayLength, adjustedRunwayWidth, height/2, scale);
+			drawRunwayTop(g2d, runway, runwayX, adjustedRunwayLength, adjustedRunwayWidth, centerLine, scale);
 
 			if (ob != null) {
-				drawObstacleTop(g2d, ob, runwayX, height/2, scale);
-				drawRecalculatedValuesTop(g2d, controller.lowAngleRunway, ob, runway, runwayX, adjustedRunwayLength, adjustedRunwayWidth, height/2, scale);
+				drawObstacleTop(g2d, ob, runwayX, centerLine, scale);
+				drawRecalculatedValuesTop(g2d, controller.lowAngleRunway, ob, runway, runwayX, adjustedRunwayLength, adjustedRunwayWidth, centerLine, scale);
 			}
 
-			drawLogicalRunwayMeasurementsTop(g2d, controller.lowAngleRunway, runway, runwayX, adjustedRunwayLength, adjustedRunwayWidth, height/2, scale);
+			drawLogicalRunwayMeasurementsTop(g2d, controller.lowAngleRunway, runway, runwayX, adjustedRunwayLength, adjustedRunwayWidth, centerLine, scale);
 
 		}
 	}
 
-	private void drawArrow(Graphics2D g2d, int angle, float scale, int startX, int startY, int length) {
+	private void drawArrow(Graphics2D g2d, int angle, float scale, int startX, int startY, int length, boolean zooms) {
+		float zoomAdjustment = zooms ? 1.0F : this.zoom;
+		scale /= zoomAdjustment;
+		
 		double angleR = angle * Math.PI / 180;
 		int endX = (int) (startX + scale*length * Math.sin(angleR));
 		int endY = (int) (startY - scale*length * Math.cos(angleR));
@@ -510,23 +551,36 @@ public class Draw
 	}
 
 	public void drawSideView(Graphics2D g2d, int width, int height) {
+		//Pan Limit Checks
+		int maxPanX = Math.abs((int)((this.zoom * width) - width)/2);
+		int maxPanY = Math.abs((int)((this.zoom * height) - height)/2);
+
+		if(sidePanX > maxPanX)
+			sidePanX = maxPanX;
+		if(sidePanX < -maxPanX)
+			sidePanX = -maxPanX;
+		if(sidePanY > maxPanY)
+			sidePanY = maxPanY;
+		if(sidePanY < -maxPanY)
+			sidePanY = -maxPanY;
+		
 		if (controller.getSelectedLogicalRunway() == null) {
 			return;
 		}
 		LogicalRunway lrw = controller.getSelectedLogicalRunway();
 		boolean reverse = !controller.lowAngleRunway;
 		Runway runway = controller.selectedRunway;
-		int windowHeight = height/2;
+		int windowHeight = height/2 + sidePanY;
 		//Draw Runway Info
 		g2d.setFont(new Font(g2d.getFont().getFontName(), Font.PLAIN, 20));
 		int totalRunwayLength = Math.max(runway.shortAngleLogicalRunway.tora, runway.longAngleLogicalRunway.tora) +
 				Math.max(runway.shortAngleLogicalRunway.stopwayLength, runway.shortAngleLogicalRunway.clearwayLength) +
 				Math.max(runway.longAngleLogicalRunway.stopwayLength, runway.longAngleLogicalRunway.clearwayLength);
-		float scale = 0.8F * width / totalRunwayLength;
+		float scale = (0.8F * width / totalRunwayLength) * zoom;
 		g2d.drawString("Runway Designator: " + lrw.designator, ((reverse) ? width/2 -10 : 10), 30);
 		g2d.drawString("Landing/Take-Off Direction: ",((reverse) ? width/2 -10 : 10), 50);
 		int dirAngle = (controller.lowAngleRunway) ? 90 : -90;
-		drawArrow(g2d, dirAngle, scale, ((reverse) ? width/2 -10 : 10) + g2d.getFontMetrics().stringWidth("Landing/Take-Off Direction: ") + (dirAngle == -90 ? (int)(scale*250) : 0), 45, 250);
+		drawArrow(g2d, dirAngle, scale, ((reverse) ? width/2 -10 : 10) + g2d.getFontMetrics().stringWidth("Landing/Take-Off Direction: ") + (dirAngle == -90 ? (int)(scale*250) : 0), 45, 250, false);
 
 
 		//Drawing Values
@@ -537,7 +591,7 @@ public class Draw
 		LogicalRunway otherLR = !controller.lowAngleRunway ? runway.shortAngleLogicalRunway : runway .longAngleLogicalRunway;
 		int drawOtherStopwayLength = (int) (otherLR.stopwayLength * scale);
 		int drawOtherClearwayLength = (int) (otherLR.clearwayLength * scale);
-		int drawLEFT = 50 + Math.max(drawOtherStopwayLength, drawOtherClearwayLength);
+		int drawLEFT = width/2 - (int)(scale * totalRunwayLength /2) + Math.max(drawOtherStopwayLength, drawOtherClearwayLength) + (sidePanX * (reverse ? -1 : 1));
 
 		//Draw Runway
 		drawSimpleRect(g2d, drawLEFT, windowHeight, drawTora, 15, reverse, ColorUIResource.darkGray, width/2);

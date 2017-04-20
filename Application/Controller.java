@@ -28,8 +28,11 @@ public class Controller
 	Window UI;	
 	public final static String TITLE = "Runway Re-Declaration Calculator";
 	public String AIRPORT_NAME = "Error: No airport selected";
+	public final float MAX_ZOOM = 10.0F;
 	public boolean lowAngleRunway = true;
 	public boolean towardsSelectedLR = true;
+	
+	public float zoom = 1.0F;
 	
 	Draw draw = new Draw(this);
 	
@@ -295,6 +298,30 @@ public class Controller
 	{
 		selectedObstacle.setPosition(distanceFromThreshold, getSelectedLogicalRunway(), lowAngleRunway, lowAngleRunway,distanceFromCenterline);
 		recalculateValues();
+	}
+	
+	/*Sets the factor to zoom the view by*/
+	public float setViewZoom(float zoom) throws Exception {
+		float percent = zoom / 100.0F;
+		float zoomFactor = 1.0F + (percent * (MAX_ZOOM - 1));
+		
+		if(!draw.setZoomFactor(zoomFactor))
+			throw new Exception("Zoom Factor cannot be negative!");
+		UI.draw();
+		
+		return zoomFactor;
+	}
+	
+	/*Adjusts the panning offset for the top view by a given amount*/
+	public void adjustTopPan(int panX, int panY) {
+		draw.setTopPan(panX, panY);
+		UI.draw();
+	}
+	
+	/*Adjusts the panning offset for the side view by a given amount*/
+	public void adjustSidePan(int panX, int panY) {
+		draw.setSidePan(panX, panY);
+		UI.draw();
 	}
 
 	public String getCalculations() 

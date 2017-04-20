@@ -1,6 +1,7 @@
 package UI;
 
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.GridLayout;
 
 import javax.swing.JComboBox;
@@ -9,6 +10,7 @@ import javax.swing.JTextField;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JSlider;
 
 import Application.Controller;
@@ -151,7 +153,15 @@ public class SelectionPanel extends JPanel
 		//SCALE PANEL
 		JLabel scaleLabel = new JLabel("View Scale: x1");
 		scalePanel.add(scaleLabel);
-		JSlider scaleSlider = new JSlider(1, 10, 1);
+		JSlider scaleSlider = new JSlider(0, 100, 1);
+		scaleSlider.addChangeListener(l -> {
+			try {
+				float result = CONTROLLER.setViewZoom(scaleSlider.getValue());
+				scaleLabel.setText(String.format("View Scale: x%.2f", result));
+			} catch (Exception e1) {
+				JOptionPane.showMessageDialog(this, e1.getMessage());
+			}
+		});
 		scalePanel.add(scaleSlider);
 		add(scalePanel);
 
