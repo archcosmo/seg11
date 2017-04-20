@@ -28,7 +28,7 @@ public class Controller
 	Window UI;	
 	public final static String TITLE = "Runway Re-Declaration Calculator";
 	public String AIRPORT_NAME = "Error: No airport selected";
-	
+	//TODO: mpf change variables to methods
 	public boolean lowAngleRunway = true;
 	public boolean towardsSelectedLR = true;
 	
@@ -294,7 +294,7 @@ public class Controller
 	
 	private void setObstaclePos() 
 	{
-		selectedObstacle.setPosition(distanceFromThreshold, getSelectedLogicalRunway(), lowAngleRunway, distanceFromCenterline);
+		selectedObstacle.setPosition(distanceFromThreshold, getSelectedLogicalRunway(), lowAngleRunway, lowAngleRunway,distanceFromCenterline);
 		recalculateValues();
 	}
 
