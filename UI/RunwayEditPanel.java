@@ -4,17 +4,13 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.BorderLayout;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 import Application.Controller;
 import Model.Runway;
+
 
 @SuppressWarnings("serial")
 public class RunwayEditPanel extends JPanel {
@@ -29,7 +25,14 @@ public class RunwayEditPanel extends JPanel {
 		LEFT = new JPanel();
 		RIGHT = new JPanel();
 
+		JFrame frame = new JFrame("Manage Runways");
+		frame.setSize(1200, 800);
+		frame.setLocationRelativeTo(null);
+		frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+
 		addComponents();
+		frame.add(this);
+		frame.setVisible(true);
 	}
 	
 	public void addComponents() 
