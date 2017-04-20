@@ -1,16 +1,15 @@
 package UI;
 
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.GridLayout;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
-import javax.swing.JSeparator;
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JSlider;
 
 import Application.Controller;
 import Model.Obstacle;
@@ -31,112 +30,194 @@ public class SelectionPanel extends JPanel
 
 	private void initPanel() 
 	{
-		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		setPreferredSize(new Dimension(300, 0));
+		setLayout(new GridLayout(6, 2));
+		setPreferredSize(new Dimension(500, 0));
+		this.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 		addComponents();
 	}
 
 	/* Create menu */
 	private void addComponents() 
 	{
-		/* Vertical Spacer */
-		add(Box.createRigidArea(new Dimension(0, 50)));
+		JPanel emptyPanel1 = new JPanel();
+		JPanel exportViewPanel = new JPanel();
+		JPanel runwayPanel = new JPanel(new GridLayout(2, 1));
+		JPanel designatorPanel = new JPanel(new GridLayout(2, 1));
+		JPanel planePositionPanel = new JPanel(new GridLayout(2, 1));
+		JPanel colourSchemePanel = new JPanel(new GridLayout(2, 1));
+		JPanel scalePanel = new JPanel(new GridLayout(2, 1));
+		JPanel rotationPanel = new JPanel(new GridLayout(2, 1));
+		JPanel obstaclePanel = new JPanel(new GridLayout(2, 1));
+		JPanel emptyPanel2 = new JPanel();
+		JPanel obstacleThresholddistancePanel = new JPanel(new GridLayout(2, 1));
+		JPanel obstacleCentrelineDistancePanel = new JPanel(new GridLayout(2, 1));
 		
-		/* Runway Selection and Dropdown Menu */
-		MenuItem runwaySelection = new MenuItem("Runway : ");
-		JComboBox<String> runwayDropdown = new JComboBox<String>();
-		for (Runway r: CONTROLLER.getRunways()) 
+		//Add borders to all panels
+		exportViewPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
+		runwayPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
+		designatorPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
+		planePositionPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
+		colourSchemePanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
+		scalePanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
+		rotationPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
+		obstaclePanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
+		obstacleThresholddistancePanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
+		obstacleCentrelineDistancePanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
+
+
+
+		add(emptyPanel1);
+
+		//Export view button
+		JButton exportViewButton = new JButton("Export view");
+		//todo add export view functionality
+		exportViewPanel.add(exportViewButton);
+		add(exportViewPanel);
+
+		//RUNWAY PANEL
+		runwayPanel.add(new JLabel("Select Runway"));
+		JPanel runwaySelectionPanel = new JPanel();
+
+		//Runway ComboBox
+		JComboBox<String> runwayComboBox = new JComboBox<String>();
+		for (Runway r: CONTROLLER.getRunways())
 		{
-			runwayDropdown.addItem(r.getName());
+			runwayComboBox.addItem(r.getName());
 		}
-		runwayDropdown.addActionListener( new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				CONTROLLER.selectRunway((String) runwayDropdown.getSelectedItem());
-		}});
-		runwaySelection.addComponent(runwayDropdown);
-		add(runwaySelection);
+		runwayComboBox.addActionListener(e -> {
+			CONTROLLER.selectRunway((String) runwayComboBox.getSelectedItem());
+			CONTROLLER.notify("Runway selected : "+ (String) runwayComboBox.getSelectedItem());
+		});
+		runwaySelectionPanel.add(runwayComboBox);
+
+		//Runway add, remove and edit
+		JButton addRunway = new JButton("+");
+		JButton removeRunway = new JButton("-");
+		JButton editRunway = new JButton("P");
+		//todo add create runway popup in button listener
+		// todo edit runway popup + event listener
+		//todo remove runway even listener
+		runwaySelectionPanel.add(addRunway);
+		runwaySelectionPanel.add(removeRunway);
+		runwaySelectionPanel.add(editRunway);
+
+		runwayPanel.add(runwaySelectionPanel);
+		add(runwayPanel);
+
 		
-		/* Threshold selector */
-		MenuItem angleSelection = new MenuItem("Threshold Angle (For Calculations) : ");
-		JComboBox<String> angleDropdown = new JComboBox<String>();
-		angleDropdown.addItem("Small Angle");
-		angleDropdown.addItem("Large Angle");
-		angleDropdown.addActionListener( new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				CONTROLLER.setRunwayAngle((String) angleDropdown.getSelectedItem());
-				CONTROLLER.notify("Angle Threshold Selected : "+ (String) angleDropdown.getSelectedItem());
-		}});
-		angleSelection.add(angleDropdown);
-		add(angleSelection);
+		//DESIGNATOR PANEL
+		designatorPanel.add(new JLabel("Select Designator"));
+		JComboBox<String> designatorComboBox = new JComboBox<String>();
+		designatorComboBox.addItem("Small Angle");//todo: change to 09R and 27L ...
+		designatorComboBox.addItem("Large Angle");
+		designatorComboBox.addActionListener(e -> {
+			CONTROLLER.setRunwayAngle((String) designatorComboBox.getSelectedItem());
+			CONTROLLER.notify("Designator selected : "+ (String) designatorComboBox.getSelectedItem());
+		});
+		designatorPanel.add(designatorComboBox);
+		add(designatorPanel);
+
 		
-		/* Take-off Direction Selector */
-		MenuItem directionSelection = new MenuItem("Take-off Direction : ");
-		JComboBox<String> directionDropdown = new JComboBox<String>();
-		directionDropdown.addItem("Towards Selected Threshold End");
-		directionDropdown.addItem("Away From Selected Threshold End");
-		directionDropdown.addActionListener( new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				CONTROLLER.setTakeoffDirection((String) directionDropdown.getSelectedItem());
-				CONTROLLER.notify("Take-Off Direction Selected : "+ (String) directionDropdown.getSelectedItem());
-		}});
-		directionSelection.add(directionDropdown);
-		add(directionSelection);
+		//PLANE POSITION PANEL
+		planePositionPanel.add(new JLabel("Plane Position"));
+		JComboBox<String> planePositionDropdown = new JComboBox<String>();
+		planePositionDropdown.addItem("Towards obstacle");
+		planePositionDropdown.addItem("Away from obstacle");
+		planePositionDropdown.addActionListener(e -> {
+			CONTROLLER.setTakeoffDirection((String) planePositionDropdown.getSelectedItem());
+			CONTROLLER.notify("Plane position selected : "+ (String) planePositionDropdown.getSelectedItem());
+		});
+		planePositionPanel.add(planePositionDropdown);
+		add(planePositionPanel);
 		
-		/* Horizontal Line */
-		add(new JSeparator(SwingConstants.HORIZONTAL));
 		
-		/* Obstacle Selection and Dropdown Menu */
-		MenuItem obsacleSelection = new MenuItem("Obstacle : ");
-		JComboBox<String> obsacleDropdown = new JComboBox<String>();
-		obsacleDropdown.addItem("None");
-		for (Obstacle o: CONTROLLER.getObstacles()) 
+		//COLOUR SCHEME PANEL
+		colourSchemePanel.add(new JLabel("Colour Scheme"));
+		JComboBox<String> colourSchemeDropdown = new JComboBox<String>();
+		colourSchemeDropdown.addItem("Wiked");
+		colourSchemeDropdown.addItem("Colour");
+		colourSchemeDropdown.addItem("Schemes");
+		colourSchemeDropdown.addActionListener(e -> {
+			CONTROLLER.setTakeoffDirection((String) colourSchemeDropdown.getSelectedItem());
+			CONTROLLER.notify("Colour scheme selected : "+ (String) colourSchemeDropdown.getSelectedItem());
+		});
+		colourSchemePanel.add(colourSchemeDropdown);
+		add(colourSchemePanel);
+
+
+		//todo add scale and rotation listeners to update labels and view
+		//todo notify controller when scale/rotation changed?
+		//todo change label when scale changed, only change picture when released
+		//SCALE PANEL
+		JLabel scaleLabel = new JLabel("View Scale: x1");
+		scalePanel.add(scaleLabel);
+		JSlider scaleSlider = new JSlider(1, 10, 1);
+		scalePanel.add(scaleSlider);
+		add(scalePanel);
+
+		//ROTATION PANEL
+		JLabel rotationLabel = new JLabel("View Rotation: 90°"); //Alt + 248 = °
+		rotationPanel.add(rotationLabel);
+		JSlider rotationSlider = new JSlider(0, 359, 90);
+		rotationPanel.add(rotationSlider);
+		add(rotationPanel);
+
+		//OBSTACLE PANEL
+		obstaclePanel.add(new JLabel("Select obstacle"));
+		JPanel obstacleSelectionPanel = new JPanel();
+
+		//Obstacle ComboBox
+		JComboBox<String> obstacleComboBox = new JComboBox<String>();
+		obstacleComboBox.addItem("None");
+		for (Obstacle o: CONTROLLER.getObstacles())
 		{
-			obsacleDropdown.addItem(o.getName());
+			obstacleComboBox.addItem(o.getName());
 		}
-		obsacleDropdown.addActionListener( new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				CONTROLLER.notify("Obstacle Selected : "+ (String) obsacleDropdown.getSelectedItem());
-				CONTROLLER.selectObstacle((String) obsacleDropdown.getSelectedItem());
-		}});
-		obsacleSelection.addComponent(obsacleDropdown);
-		add(obsacleSelection);
-		
-		/* Obstacle position selection */
-		MenuItem xPosSelection = new MenuItem("<html>Displacement From Runway Centerline : <br> <center>(meters)");
-		MenuItem yPosSelection = new MenuItem("<html>Displacement From Runway Start : <br> <center>(meters)");
-		xPosInput = new JTextField("0");
-		yPosInput = new JTextField("0");
-		xPosInput.setPreferredSize(new Dimension(50, 20));
-		yPosInput.setPreferredSize(new Dimension(50, 20));
-		xPosSelection.add(xPosInput);
-		yPosSelection.add(yPosInput);
-		yPosInput.addActionListener( new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				if (!CONTROLLER.selectObstacleYPos(yPosInput.getText())) yPosInput.setText("0");
-		}});
-		xPosInput.addActionListener( new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				if (!CONTROLLER.selectObstacleXPos(xPosInput.getText())) xPosInput.setText("0");
-		}});
-		add(xPosSelection);
-		add(yPosSelection);
-		
-		/* Horizontal Line */
-		add(new JSeparator(SwingConstants.HORIZONTAL));
-		
-		/* Vertical Spacer */
-		add(Box.createRigidArea(new Dimension(0, 200)));
+		obstacleComboBox.addActionListener(e -> {
+			CONTROLLER.selectObstacle((String) obstacleComboBox.getSelectedItem());
+			CONTROLLER.notify("Obstacle selected : "+ (String) obstacleComboBox.getSelectedItem());
+		});
+		obstacleSelectionPanel.add(obstacleComboBox);
+		obstacleSelectionPanel.add(obstacleComboBox);
+
+		//Obstacle add, remove and edit
+		JButton addObstacle = new JButton("+");
+		JButton removeObstacle = new JButton("-");
+		JButton editObstacle = new JButton("P");
+		//todo add create obstacle popup in button listener
+		// todo edit obstacle popup + event listener
+		//todo remove obstacle even listener
+		obstacleSelectionPanel.add(addObstacle);
+		obstacleSelectionPanel.add(removeObstacle);
+		obstacleSelectionPanel.add(editObstacle);
+
+		obstaclePanel.add(obstacleSelectionPanel);
+		add(obstaclePanel);
+
+
+		//EMPTY PANEL
+		add(emptyPanel2);
+
+
+		//OBSTACLE CENTRELINE DISTANCE PANEL
+		obstacleThresholddistancePanel.add(new JLabel("Distance from centreline"));
+		JTextField centrelineDistanceTextField = new JTextField();
+		centrelineDistanceTextField.addActionListener(e -> {
+			if (!CONTROLLER.selectObstacleYPos(centrelineDistanceTextField.getText()))
+				centrelineDistanceTextField.setText("0");
+		});
+		obstacleThresholddistancePanel.add(centrelineDistanceTextField);
+		add(obstacleThresholddistancePanel);
+
+
+		//OBSTACLE THRESHOLD DISTANCE PANEL
+		obstacleCentrelineDistancePanel.add(new JLabel("Distance from threshold"));
+		JTextField thresholdDistanceTextField = new JTextField();
+		thresholdDistanceTextField.addActionListener(e -> {
+			if (!CONTROLLER.selectObstacleXPos(thresholdDistanceTextField.getText()))
+				thresholdDistanceTextField.setText("0");
+		});
+		obstacleCentrelineDistancePanel.add(thresholdDistanceTextField);
+		add(obstacleCentrelineDistancePanel);
 	}
 }
