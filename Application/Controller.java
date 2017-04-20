@@ -115,6 +115,7 @@ public class Controller
 			if (airport.equals(a.getName())) 
 			{
 				selectedAirport = a;
+				selectedRunway = getRunways().get(0);
 				break;
 			}
 		}
@@ -123,9 +124,7 @@ public class Controller
 		EventQueue.invokeLater(() -> {
 			UI.loadRunningLayout();
 			UI.setVisible(true);
-			
 			if (getRunways().size() >= 1) {
-				selectedRunway = getRunways().get(0);
 				recalculateValues();
 			}
         });
@@ -185,9 +184,9 @@ public class Controller
 		recalculateValues();
 	}
 
-	public void setRunwayAngle(String selectedItem) 
+	public void setRunwayAngle(boolean lowAngle)
 	{
-		lowAngleRunway = selectedItem.equals("Small Angle");
+		lowAngleRunway = lowAngle;
 		recalculateValues();
 	}
 	
@@ -208,7 +207,7 @@ public class Controller
 
 	public void setTakeoffDirection(String selectedItem) 
 	{
-		towardsSelectedLR = selectedItem.equals("Towards Selected Threshold End");
+		towardsSelectedLR = selectedItem.startsWith("Towards");
 		recalculateValues();
 	}
 

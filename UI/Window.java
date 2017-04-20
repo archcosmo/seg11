@@ -33,7 +33,7 @@ public class Window extends JFrame
 	{ 
 		NOTIFICATION = new NotificationsPanel();
 		CONTROLLER = c;
-		initFrame(); 
+		initFrame();
 	}
 
 	private void initFrame() 
