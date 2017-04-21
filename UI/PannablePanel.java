@@ -32,6 +32,7 @@ public abstract class PannablePanel extends JPanel /*a PANel...geddit?*/ {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				PannablePanel.this.panning = false;
+				updateCursor();
 			}
 
 			@Override
@@ -40,10 +41,15 @@ public abstract class PannablePanel extends JPanel /*a PANel...geddit?*/ {
 					PannablePanel.this.panning = true;
 				PannablePanel.this.clickPointX = e.getX();
 				PannablePanel.this.clickPointY = e.getY();
+				updateCursor();
 			}
 
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				updateCursor();
+			}
+			
 			public void mouseExited(MouseEvent e) {}
-			public void mouseEntered(MouseEvent e) {}
 			public void mouseClicked(MouseEvent e) {}
 		});
 
@@ -66,13 +72,7 @@ public abstract class PannablePanel extends JPanel /*a PANel...geddit?*/ {
 	
 	private void updateCursor() {
 		this.pannable = drawingModule.getZoomFactor() > 1.0F ? true : false;
-		Cursor cursor = new Cursor(pannable ? Cursor.HAND_CURSOR : Cursor.DEFAULT_CURSOR);
+		Cursor cursor = new Cursor(pannable ? (panning ? Cursor.MOVE_CURSOR : Cursor.HAND_CURSOR) : Cursor.DEFAULT_CURSOR);
 		this.setCursor(cursor);
-	}
-	
-	@Override
-	public void paintComponent(Graphics g) 
-	{
-		updateCursor();
 	}
 }
