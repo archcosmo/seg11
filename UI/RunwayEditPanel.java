@@ -25,14 +25,17 @@ public class RunwayEditPanel extends JPanel {
 		LEFT = new JPanel();
 		RIGHT = new JPanel();
 
-		JFrame frame = new JFrame("Manage Runways");
-		frame.setSize(1200, 800);
-		frame.setLocationRelativeTo(null);
-		frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-
-		addComponents();
-		frame.add(this);
-		frame.setVisible(true);
+		
+		//What are you doing? Don't create a frame inside the panel that the frame contains????
+		
+//		JFrame frame = new JFrame("Manage Runways");
+//		frame.setSize(1200, 800);
+//		frame.setLocationRelativeTo(null);
+//		frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+//
+//		addComponents();
+//		frame.add(this);
+//		frame.setVisible(true);
 	}
 	
 	public void addComponents() 

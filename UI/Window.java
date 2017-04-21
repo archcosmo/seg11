@@ -1,10 +1,12 @@
 package UI;
 
 import java.awt.BorderLayout;
+import java.awt.Insets;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.UIManager;
 
 import Application.Controller;
 
@@ -74,14 +76,18 @@ public class Window extends JFrame
 		
 		/* Adding top bar panel */
 		TOP_BAR = new TopBarPanel(CONTROLLER);
-		add(TOP_BAR, BorderLayout.PAGE_START);
+		//add(TOP_BAR, BorderLayout.PAGE_START); //TODO: Doing this fucks up the top of the tabbed pane
 		
 		/* Adding right hand (Selection) panel */
 		SELECTION = new SelectionPanel(CONTROLLER);
 		add(SELECTION, BorderLayout.EAST);
 		
+		//Reduce border so view header looks better
+		UIManager.getDefaults().put("TabbedPane.contentBorderInsets", new Insets(2,1,1,1));
+		
 		/* Adding left side (Data) tabbed panels */
 		tabs = new JTabbedPane();
+		
 		SIDE = new SideViewPanel(CONTROLLER.getDraw(), CONTROLLER);
 		TOP = new TopViewPanel(CONTROLLER.getDraw(), CONTROLLER);
 		//todo move to under selection panel
@@ -99,6 +105,9 @@ public class Window extends JFrame
 		add(tabs, BorderLayout.CENTER);
 	
 		add(NOTIFICATION, BorderLayout.SOUTH);
+		
+		//TODO Add a button to bring up this frame
+		new DrawPreferencesFrame(this, CONTROLLER);
 	}
 	
 	public void draw()

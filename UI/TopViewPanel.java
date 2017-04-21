@@ -18,7 +18,7 @@ public class TopViewPanel extends PannablePanel
 	{
 		super(drawingModule);
 		this.CONTROLLER = controller;
-		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
 		this.drawingModule = drawingModule;
 		
 	}

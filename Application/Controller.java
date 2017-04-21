@@ -315,6 +315,15 @@ public class Controller
 		recalculateValues();
 	}
 	
+	public String getCalculations() 
+	{
+		return calcBreakdown;
+	}
+	
+	/////////////////
+	//DRAW CONTROLS//
+	/////////////////
+	
 	/*Sets the factor to zoom the view by*/
 	public float setViewZoom(float zoom) throws Exception {
 		float percent = zoom / 100.0F;
@@ -338,11 +347,13 @@ public class Controller
 		draw.setSidePan(panX, panY);
 		UI.draw();
 	}
-
-	public String getCalculations() 
-	{
-		return calcBreakdown;
+	
+	public void setDrawPreference(String pref, boolean val) throws Exception {
+		if(!draw.setPreference(pref, val))
+			throw new Exception(pref + " is not a valid draw property!");
+		UI.draw();
 	}
+	
 }
 
 

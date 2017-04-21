@@ -20,6 +20,8 @@ public class Draw
 	private float zoom;
 	private int topPanX, sidePanX, topPanY, sidePanY;
 	private ColourScheme colourScheme;
+	private boolean drawLabels, labelMeasurements, displayDistancesOnMeasurements, drawOrigMeasurements, 
+					drawLegend, floatingLegend, floatingCompassAndDirection, drawCompass, drawDirection;
 
 	public boolean setZoomFactor(float zf) { 
 		if(zf > 0) {
@@ -45,12 +47,60 @@ public class Draw
 		this.colourScheme = scheme;
 	}
 	
+	public boolean setPreference(String pref, boolean val) {
+		switch(pref) {
+			case "drawLabels":
+				drawLabels = val;
+				break;
+			case "labelMeasurements":
+				labelMeasurements = val;
+				break;
+			case "displayDistancesOnMeasurements":
+				displayDistancesOnMeasurements = val;
+				break;
+			case "drawOrigMeasurements":
+				drawOrigMeasurements = val;
+				break;
+			case "drawLegend":
+				drawLegend = val;
+				break;
+			case "floatingLegend":
+				floatingLegend = val;
+				break;
+			case "floatingCompassAndDirection":
+				floatingCompassAndDirection = val;
+				break;
+			case "drawCompass":
+				drawCompass = val;
+				break;
+			case "drawDirection":
+				drawDirection = val;
+				break;
+			
+			default:
+				return false;
+		}
+		
+		return true;
+	}
+	
 	public Draw(Controller controller) {
 		this.controller = controller;
 		this.zoom = 1.0F;
 		this.topPanX = 0;
 		this.topPanY = 0;
 		
+		//Draw Preferences
+		drawLabels = true;
+		labelMeasurements = true;
+		displayDistancesOnMeasurements = false;
+		drawOrigMeasurements = true;
+		drawLegend = true;
+		floatingLegend = false;
+		floatingCompassAndDirection = false;
+		drawCompass = true;
+		drawDirection = true;
+
 		//Set to Default theme
 		this.colourScheme = ColourScheme.defaultThemes()[0];
 	}
@@ -74,8 +124,6 @@ public class Draw
 		g2d.setColor(colourScheme.background);
 		g2d.fillRect(0, 0, width, height);
 		
-		g2d.setColor(colourScheme.labels);
-		
 		/*Initial rotation to 0 so runway doesn't become unaligned*/
 		AffineTransform at = new AffineTransform();
 		g2d.setTransform(at);
@@ -89,36 +137,13 @@ public class Draw
 			int totalLength = runwayLength + Math.max(runway.shortAngleLogicalRunway.stopwayLength, runway.shortAngleLogicalRunway.clearwayLength)
 					+ Math.max(runway.longAngleLogicalRunway.stopwayLength, runway.longAngleLogicalRunway.clearwayLength);
 
-			float scale = (0.8F * width / totalLength) * zoom;
+			float scale = (0.8F * width / totalLength);
 
 			/*Show selected logical runway*/
 			String selectedLogRun = "None";
 			if (controller.getSelectedLogicalRunway() != null) {
 				selectedLogRun = controller.getSelectedLogicalRunway().designator;
 			}
-
-			Font gFont = g2d.getFont();
-			g2d.setFont(new Font(gFont.getFontName(), gFont.getStyle(), 20));
-			g2d.setFont(new Font(g2d.getFont().getFontName(), Font.PLAIN, 20));
-			g2d.drawString("Logical Runway Selected: "+selectedLogRun, width/10, height/10);
-
-			g2d.drawString("Obstacle Distance From Centerline: " + (ob == null ? "N/A" : ob.distanceFromCenterline), width/10, height/10 + g2d.getFontMetrics().getHeight());
-			g2d.drawString("Obstacle Distance From Threshold: " + (ob == null ? "N/A" : ob.distanceFromThreshold), width/10, height/10 + g2d.getFontMetrics().getHeight()*2);
-
-			g2d.drawString("Landing/Take-Off Direction: ", width/10, height/10 + g2d.getFontMetrics().getHeight()*3);
-			int dirAngle = controller.lowAngleRunway ? 90 : -90;
-
-			drawArrow(g2d, dirAngle, scale, width/10 + g2d.getFontMetrics().stringWidth("Landing/Take-Off Direction: ") + (dirAngle == -90 ? (int)(scale*250) : 0), height/10 + g2d.getFontMetrics().getHeight()*3, 250, false);
-			
-			/*Draw Compass*/
-			int angle = Integer.parseInt(runway.shortAngleLogicalRunway.designator.substring(0,2)) * 10;
-
-			int lowAngle = -90 - angle;
-
-			int startX = width-width/10;
-			int startY = height/5;
-			drawArrow(g2d, lowAngle, scale, startX, startY, 250, false);
-
 
 			////////////////////////////////////////////////////////////////////////////
 			///////Re-adjust scale and width to fit No Clearway/No Stopway labels if needed///////
@@ -140,10 +165,11 @@ public class Draw
 				totalLength = runwayLength + 10+noClearwayLabelWidth +
 						(runway.shortAngleLogicalRunway.stopwayLength > runway.shortAngleLogicalRunway.clearwayLength ? runway.shortAngleLogicalRunway.stopwayLength : runway.shortAngleLogicalRunway.clearwayLength);
 
-			scale = (0.8F * width / totalLength) * zoom;
+			scale = (0.8F * width / totalLength);
 
 			//////////////////////////////////////////////////////////////////////////////////////
 
+			scale *= zoom;
 
 			int adjustedRunwayLength = (int)(scale * runwayLength);
 			int adjustedRunwayWidth = (int)(scale * runwayWidth);
@@ -169,12 +195,87 @@ public class Draw
 
 			drawLogicalRunwayMeasurementsTop(g2d, controller.lowAngleRunway, runway, runwayX, adjustedRunwayLength, adjustedRunwayWidth, centerLine, scale);
 
+			if(drawLegend)
+				drawLegend(g2d, width, height, true);
+			
+			drawCompassAndDirection(g2d, runway, width, height, true);
 		}
 	}
+	
+	private void drawCompassAndDirection(Graphics2D g2d, Runway runway, int width, int height, boolean topView) {
+		float scale = (1.0F * width / 698) * (floatingCompassAndDirection ? 1 : zoom);
+		
+		Font gFont = g2d.getFont();
+		g2d.setFont(new Font(gFont.getFontName(), gFont.getStyle(), (int)(20 * scale)));
+		g2d.setColor(colourScheme.labels);
+		
+		//Biggest Direction
+		int drawWidth = g2d.getFontMetrics().stringWidth("Landing/Take-Off Direction: ") + (int)(50*scale);
+		if(!drawDirection)
+			drawWidth = g2d.getFontMetrics().stringWidth("Compass Heading: ") + (int)(60*scale);
+		
+		int localX = width/2 + (int)(339 * scale) - drawWidth + (floatingCompassAndDirection ? 0 : (topView ? topPanX : sidePanX));
+		int localY = height/2 - (int)(240 * height * (floatingCompassAndDirection ? 1 : zoom) / 601) + (floatingCompassAndDirection ? 0 : (topView ? topPanY : sidePanY));
+		
+		
+//		g2d.drawString("Logical Runway Selected: "+selectedLogRun, width/10, height/10);
 
-	private void drawArrow(Graphics2D g2d, int angle, float scale, int startX, int startY, int length, boolean zooms) {
-		float zoomAdjustment = zooms ? 1.0F : this.zoom;
-		scale /= zoomAdjustment;
+//		g2d.drawString("Obstacle Distance From Centerline: " + (ob == null ? "N/A" : ob.distanceFromCenterline), width/10, height/10 + g2d.getFontMetrics().getHeight());
+//		g2d.drawString("Obstacle Distance From Threshold: " + (ob == null ? "N/A" : ob.distanceFromThreshold), width/10, height/10 + g2d.getFontMetrics().getHeight()*2);
+
+		if(drawDirection) {
+			g2d.drawString("Landing/Take-Off Direction: ", localX, localY);
+			int dirAngle = controller.lowAngleRunway ? 90 : -90;
+
+			drawArrow(g2d, dirAngle, scale, localX + g2d.getFontMetrics().stringWidth("Landing/Take-Off Direction: ") + (dirAngle == -90 ? (int)(scale*50) : 0), localY, 50);
+		}
+		
+		/*Draw Compass*/
+		if(drawCompass) {
+			int angle = Integer.parseInt(runway.shortAngleLogicalRunway.designator.substring(0,2)) * 10;
+
+			int lowAngle = -90 - angle;
+			
+			g2d.drawString("Compass Heading: ", localX, localY + (drawDirection ? g2d.getFontMetrics().getHeight() : 0));
+			drawArrow(g2d, lowAngle, scale, localX + g2d.getFontMetrics().stringWidth("Compass Heading: ") + (lowAngle < 0 ? (int)(scale*50) : ((lowAngle == 0 || lowAngle == 180) ? (int)(scale*25) : 0)), localY + (drawDirection ? g2d.getFontMetrics().getHeight() : 0), 50);
+		}
+	}
+	
+	private void drawLegend(Graphics2D g2d, int width, int height, boolean topView) {
+		float scale = (1.3F * width / 698) * (floatingLegend ? 1 : zoom);
+		
+		int legendX = width/2 - (int)(329 * width * (floatingLegend ? 1 : zoom) / 698) + (floatingLegend ? 0 : (topView ? topPanX : sidePanX));
+		int legendY = height/2 - (int)(260 * height * (floatingLegend ? 1 : zoom) / 601) + (floatingLegend ? 0 : (topView ? topPanY : sidePanY));
+		
+		g2d.setColor(new Color(255, 255, 255, 100));
+		g2d.fillRect(legendX, legendY, (int)(190*scale), (int)(131*scale));
+		
+		int legendKeyX = legendX + (int)(8*scale);
+		int legendKeyY = legendY + (int)(8*scale);
+		
+		drawLegendKey(g2d, scale, legendKeyX, legendKeyY, topView ? colourScheme.runway : colourScheme.runwaySide, "Runway");
+		drawLegendKey(g2d, scale, legendKeyX, legendKeyY + (int)(15*scale), colourScheme.centerline, "Centerline");
+		drawLegendKey(g2d, scale, legendKeyX, legendKeyY + (int)(30*scale), colourScheme.threshold, "Threshold Marker");
+		drawLegendKey(g2d, scale, legendKeyX, legendKeyY + (int)(45*scale), colourScheme.cga, "Cleared And Graded Area");
+		drawLegendKey(g2d, scale, legendKeyX, legendKeyY + (int)(60*scale), colourScheme.obstacle, "Obstacle");
+		drawLegendKey(g2d, scale, legendKeyX, legendKeyY + (int)(75*scale), colourScheme.recalculatedThreshold, "Recalculated Threshold");
+		drawLegendKey(g2d, scale, legendKeyX, legendKeyY + (int)(90*scale), topView ? colourScheme.clearwayBorders : colourScheme.clearwaySide, "Clearway");
+		drawLegendKey(g2d, scale, legendKeyX, legendKeyY + (int)(105*scale), topView ? colourScheme.stopways : colourScheme.stopwaySide, "Stopway");
+	}
+	
+	private void drawLegendKey(Graphics2D g2d, float scale, int x, int y, Color col, String label) {
+		g2d.setColor(col);
+		g2d.fillRect(x, y, (int)(10*scale), (int)(10*scale));
+		g2d.setColor(colourScheme.labels);
+		g2d.drawRect(x, y, (int)(10*scale), (int)(10*scale));
+		
+		Font gFont = g2d.getFont();
+		g2d.setFont(new Font(gFont.getFontName(), gFont.getStyle(), (int)(12*scale)));
+		
+		g2d.drawChars(label.toCharArray(), 0, label.length(), x + (int)(15*scale), y + (int)(10*scale));
+	}
+
+	private void drawArrow(Graphics2D g2d, int angle, float scale, int startX, int startY, int length) {
 		
 		double angleR = angle * Math.PI / 180;
 		int endX = (int) (startX + scale*length * Math.sin(angleR));
@@ -185,14 +286,14 @@ public class Draw
 		double headAngle = angleR-(135* Math.PI / 180);
 		int startHeadX = endX;
 		int startHeadY = endY;
-		int endHeadX   = (int) (endX + scale*100 * Math.sin(headAngle));
-		int endHeadY   = (int) (endY - scale*100 * Math.cos(headAngle));
+		int endHeadX   = (int) (endX + (scale*100.F*length/250.F) * Math.sin(headAngle));
+		int endHeadY   = (int) (endY - (scale*100.F*length/250.F) * Math.cos(headAngle));
 
 		g2d.drawLine(startHeadX, startHeadY, endHeadX, endHeadY);
 
 		headAngle = (angleR-(225* Math.PI / 180));
-		endHeadX   = (int) (endX + scale*100 * Math.sin(headAngle));
-		endHeadY   = (int) (endY - scale*100 * Math.cos(headAngle));
+		endHeadX   = (int) (endX + (scale*100.F*length/250.F) * Math.sin(headAngle));
+		endHeadY   = (int) (endY - (scale*100.F*length/250.F) * Math.cos(headAngle));
 
 		g2d.drawLine(startHeadX, startHeadY, endHeadX, endHeadY);
 	}
@@ -267,11 +368,13 @@ public class Draw
 		int clearwayLabelWidth = g2d.getFontMetrics().stringWidth(clearwayLabel);
 		int clearwayLabelHeight = g2d.getFontMetrics().getHeight();
 
-		if(adjustedLowClearwayLength > 0 && adjustedLowClearwayWidth > 0)
-			g2d.drawChars(clearwayLabel.toCharArray(), 0, clearwayLabel.length(), runwayX + runwayLength + adjustedLowClearwayLength/2 - clearwayLabelWidth/2, centerlineY-adjustedHighClearwayWidth/2 + 3*clearwayLabelHeight/4);
-		else {
-			g2d.setFont(noClearwayFont);
-			g2d.drawChars(noClearwayLabel.toCharArray(), 0, noClearwayLabel.length(), runwayX + runwayLength + 10 + adjustedLowStopwayLength, centerlineY-runwayWidth/2 + noClearwayLabelHeight);
+		if(drawLabels) {
+			if(adjustedLowClearwayLength > 0 && adjustedLowClearwayWidth > 0)
+				g2d.drawChars(clearwayLabel.toCharArray(), 0, clearwayLabel.length(), runwayX + runwayLength + adjustedLowClearwayLength/2 - clearwayLabelWidth/2, centerlineY-adjustedHighClearwayWidth/2 + 3*clearwayLabelHeight/4);
+			else {
+				g2d.setFont(noClearwayFont);
+				g2d.drawChars(noClearwayLabel.toCharArray(), 0, noClearwayLabel.length(), runwayX + runwayLength + 10 + adjustedLowStopwayLength, centerlineY-runwayWidth/2 + noClearwayLabelHeight);
+			}
 		}
 		
 		/*High Angle Clearway*/
@@ -279,11 +382,13 @@ public class Draw
 		clearwayLabelWidth = g2d.getFontMetrics().stringWidth(clearwayLabel);
 		clearwayLabelHeight = g2d.getFontMetrics().getHeight();
 
-		if(adjustedHighClearwayLength > 0 && adjustedHighClearwayWidth > 0)
-			g2d.drawChars(clearwayLabel.toCharArray(), 0, clearwayLabel.length(), runwayX - adjustedHighClearwayLength/2 - clearwayLabelWidth/2, centerlineY-adjustedLowClearwayWidth/2 + 3*clearwayLabelHeight/4);
-		else {
-			g2d.setFont(noClearwayFont);
-			g2d.drawChars(noClearwayLabel.toCharArray(), 0, noClearwayLabel.length(), runwayX - noClearwayLabelWidth - 10 - adjustedHighStopwayLength, centerlineY-runwayWidth/2 + noClearwayLabelHeight);
+		if(drawLabels) {
+			if(adjustedHighClearwayLength > 0 && adjustedHighClearwayWidth > 0)
+				g2d.drawChars(clearwayLabel.toCharArray(), 0, clearwayLabel.length(), runwayX - adjustedHighClearwayLength/2 - clearwayLabelWidth/2, centerlineY-adjustedLowClearwayWidth/2 + 3*clearwayLabelHeight/4);
+			else {
+				g2d.setFont(noClearwayFont);
+				g2d.drawChars(noClearwayLabel.toCharArray(), 0, noClearwayLabel.length(), runwayX - noClearwayLabelWidth - 10 - adjustedHighStopwayLength, centerlineY-runwayWidth/2 + noClearwayLabelHeight);
+			}
 		}
 		
 		/*Label Stopways*/
@@ -302,11 +407,13 @@ public class Draw
 		int stopwayLabelWidth = g2d.getFontMetrics().stringWidth(stopwayLabel);
 		int stopwayLabelHeight = g2d.getFontMetrics().getHeight();
 
-		if(adjustedLowStopwayLength > 0)
-			g2d.drawChars(stopwayLabel.toCharArray(), 0, stopwayLabel.length(), runwayX + runwayLength + adjustedLowStopwayLength/2 - stopwayLabelWidth/2, centerlineY + stopwayLabelHeight/2);
-		else {
-			g2d.setFont(noStopwayFont);
-			g2d.drawChars(noStopwayLabel.toCharArray(), 0, noStopwayLabel.length(), runwayX + runwayLength + 10 + adjustedLowStopwayLength, centerlineY-runwayWidth/2 + 2*noClearwayLabelHeight);
+		if(drawLabels) {
+			if(adjustedLowStopwayLength > 0)
+				g2d.drawChars(stopwayLabel.toCharArray(), 0, stopwayLabel.length(), runwayX + runwayLength + adjustedLowStopwayLength/2 - stopwayLabelWidth/2, centerlineY + stopwayLabelHeight/2);
+			else {
+				g2d.setFont(noStopwayFont);
+				g2d.drawChars(noStopwayLabel.toCharArray(), 0, noStopwayLabel.length(), runwayX + runwayLength + 10 + adjustedLowStopwayLength, centerlineY-runwayWidth/2 + 2*noClearwayLabelHeight);
+			}
 		}
 		
 		/*High Angle Stopway*/
@@ -314,11 +421,13 @@ public class Draw
 		stopwayLabelWidth = g2d.getFontMetrics().stringWidth(stopwayLabel);
 		stopwayLabelHeight = g2d.getFontMetrics().getHeight();
 
-		if(adjustedHighStopwayLength > 0)
-			g2d.drawChars(stopwayLabel.toCharArray(), 0, stopwayLabel.length(), runwayX - adjustedHighStopwayLength/2 - stopwayLabelWidth/2, centerlineY + stopwayLabelHeight/2);
-		else {
-			g2d.setFont(noStopwayFont);
-			g2d.drawChars(noStopwayLabel.toCharArray(), 0, noStopwayLabel.length(), runwayX - noStopwayLabelWidth - 10 - adjustedHighStopwayLength, centerlineY-runwayWidth/2 + 2*noClearwayLabelHeight);
+		if(drawLabels) {
+			if(adjustedHighStopwayLength > 0)
+				g2d.drawChars(stopwayLabel.toCharArray(), 0, stopwayLabel.length(), runwayX - adjustedHighStopwayLength/2 - stopwayLabelWidth/2, centerlineY + stopwayLabelHeight/2);
+			else {
+				g2d.setFont(noStopwayFont);
+				g2d.drawChars(noStopwayLabel.toCharArray(), 0, noStopwayLabel.length(), runwayX - noStopwayLabelWidth - 10 - adjustedHighStopwayLength, centerlineY-runwayWidth/2 + 2*noClearwayLabelHeight);
+			}
 		}
 		
 		/*Draw Runway designators*/
@@ -385,7 +494,8 @@ public class Draw
 				arrowX = lowAngle ? (int)(runwayX+adjustedDisplacement + scale*selectedValue/2) : (int)(runwayX+runwayLength-adjustedDisplacement - scale*selectedValue/2);
 			}
 			int arrowY = (int)(centerlineY + runwayWidth/2 + 150*(i+1)*scale);
-			drawMeasurement(g2d, scale, selectedValue, arrowX, arrowY, 90, selectedLabel, (int)(150*(i+1)*scale), (int)(150*(i+1)*scale));
+			if(drawOrigMeasurements)
+				drawMeasurement(g2d, scale, selectedValue, arrowX, arrowY, 90, selectedLabel, (int)(150*(i+1)*scale), (int)(150*(i+1)*scale));
 		}
 		
 		/*Displaced Threshold*/
@@ -402,8 +512,10 @@ public class Draw
 		g2d.setColor(colourScheme.labels);
 		g2d.setFont(new Font(gFont.getFontName(), Font.PLAIN, (int)(60 * scale)));
 
-		g2d.drawChars(displacedLabel.toCharArray(), 0, displacedLabel.length(), displacementX, centerlineY-runwayWidth/2-5);
-
+		if(drawLabels) {
+			g2d.drawChars(displacedLabel.toCharArray(), 0, displacedLabel.length(), displacementX, centerlineY-runwayWidth/2-5);
+		}
+		
 		//Reset Font
 		g2d.setFont(gFont);
 	}
@@ -481,8 +593,10 @@ public class Draw
 		g2d.setColor(colourScheme.recalculatedThresholdLabel);
 		g2d.setFont(new Font(gFont.getFontName(), Font.PLAIN, (int)(60 * scale)));
 
-		g2d.drawChars(displacedLabel.toCharArray(), 0, displacedLabel.length(), threshX, centerlineY+runwayWidth/2+g2d.getFontMetrics().getHeight());
-
+		if(drawLabels) {
+			g2d.drawChars(displacedLabel.toCharArray(), 0, displacedLabel.length(), threshX, centerlineY+runwayWidth/2+g2d.getFontMetrics().getHeight());
+		}
+		
 		//Reset Font
 		g2d.setFont(gFont);
 	}
@@ -518,7 +632,8 @@ public class Draw
 
 		g2d.setColor(colourScheme.obstacleLabel);
 		
-		g2d.drawChars(planeLabel.toCharArray(), 0, planeLabel.length(), obX + obLength/2 - stringWidth/2, obY + obWidth/2 + fontHeight/2);
+		if(drawLabels)
+			g2d.drawChars(planeLabel.toCharArray(), 0, planeLabel.length(), obX + obLength/2 - stringWidth/2, obY + obWidth/2 + fontHeight/2);
 
 		//Reset font
 		g2d.setFont(gFont);
@@ -552,8 +667,16 @@ public class Draw
 		/*Draw label*/
 		Font gFont = g2d.getFont();
 		g2d.setFont(new Font(gFont.getFontName(), gFont.getStyle(), (int)(scale*80)));
-		String stringData = new String( ((identifier != null && !identifier.isEmpty()) ? identifier + ": " : "") + measurementLength + "m");
-		g2d.drawChars(stringData.toCharArray(), 0, stringData.length(), arrowX - g2d.getFontMetrics().stringWidth(identifier + ": " + measurementLength)/2, arrowY-2);
+		String stringData = "";
+		
+		if(labelMeasurements)
+			stringData += new String(identifier != null && !identifier.isEmpty() ? identifier : "");
+		if(labelMeasurements && displayDistancesOnMeasurements)
+			stringData += identifier != null && !identifier.isEmpty() ? ": " : "";
+		if(displayDistancesOnMeasurements)
+			stringData += new String(measurementLength + "m");
+		
+		g2d.drawChars(stringData.toCharArray(), 0, stringData.length(), arrowX - g2d.getFontMetrics().stringWidth(stringData)/2, arrowY-2);
 
 		/*Draw extrapolation lines*/
 		int e1x = -(int)(Math.cos(-angleR) * extrapolation1);
@@ -601,11 +724,6 @@ public class Draw
 				Math.max(runway.shortAngleLogicalRunway.stopwayLength, runway.shortAngleLogicalRunway.clearwayLength) +
 				Math.max(runway.longAngleLogicalRunway.stopwayLength, runway.longAngleLogicalRunway.clearwayLength);
 		float scale = (0.8F * width / totalRunwayLength) * zoom;
-		g2d.drawString("Runway Designator: " + lrw.designator, ((reverse) ? width/2 -10 : 10), 30);
-		g2d.drawString("Landing/Take-Off Direction: ",((reverse) ? width/2 -10 : 10), 50);
-		int dirAngle = (controller.lowAngleRunway) ? 90 : -90;
-		drawArrow(g2d, dirAngle, scale, ((reverse) ? width/2 -10 : 10) + g2d.getFontMetrics().stringWidth("Landing/Take-Off Direction: ") + (dirAngle == -90 ? (int)(scale*250) : 0), 45, 250, false);
-
 
 		//Drawing Values
 		int drawLda = (int) (lrw.lda * scale);
@@ -674,7 +792,11 @@ public class Draw
 		drawSimpleMeasurement(g2d, drawLEFTOLD + drawTora, 50, stopway, scale, "Stopway", reverse, width/2, windowHeight);
 		drawSimpleMeasurement(g2d, drawLEFTOLD + drawTora, 90, clearway, scale, "Clearway", reverse, width/2, windowHeight);
 
-
+		if(drawLegend)
+			drawLegend(g2d, width, height, false);
+		
+		drawCompassAndDirection(g2d, runway, width, height, false);
+		
 		g2d.dispose();
 	}
 
@@ -710,7 +832,17 @@ public class Draw
 		g2d.drawLine(endX, startY, endX - 10, startY + 10);
 		g2d.drawLine(endX, startY, endX - 10, startY - 10);
 		g2d.drawLine(endX, runwayYPos, endX, startY);
-		String measurementText = label + ": " + length + "m";
+		
+		
+		String measurementText = "";
+		
+		if(labelMeasurements)
+			measurementText += new String(label != null && !label.isEmpty() ? label : "");
+		if(labelMeasurements && displayDistancesOnMeasurements)
+			measurementText += label != null && !label.isEmpty() ? ": " : "";
+		if(displayDistancesOnMeasurements)
+			measurementText += new String(length + "m");
+		
 		int textWidth = g2d.getFontMetrics().stringWidth(measurementText);
 
 		int textstartX = startX + (scaleLength - textWidth) / 2;
