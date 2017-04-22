@@ -1,6 +1,7 @@
 package UI;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Insets;
 
 import javax.swing.JFrame;
@@ -50,7 +51,7 @@ public class Window extends JFrame
 	
 	public DataPanel getDATA() {return DATA;}
 	public TopViewPanel getTOP() {return TOP;}
-	public SideViewPanel getBOTTOM() {return SIDE;}
+	public SideViewPanel getSIDE() {return SIDE;}
 
 	/* Initial Screen on load up, 
 	 * - gets user to choose or make a new airport 

@@ -1,11 +1,16 @@
 package Application;
 
+import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
@@ -318,6 +323,37 @@ public class Controller
 	public String getCalculations() 
 	{
 		return calcBreakdown;
+	}
+	
+	//Exports the Graphical Views to files in the given directory
+	public void exportGraphs(File dir) throws Exception {
+		if(!dir.isDirectory())
+			throw new Exception(dir.getName() + " is not a directory!");
+		
+		Dimension topSize = UI.getTOP().getSize();
+		Dimension sideSize = UI.getSIDE().getSize();
+		
+		BufferedImage topImage = new BufferedImage(topSize.width, topSize.height, BufferedImage.TYPE_INT_RGB);
+		BufferedImage sideImage = new BufferedImage(sideSize.width, sideSize.height, BufferedImage.TYPE_INT_RGB);
+		
+		this.draw.drawTopView(topImage.createGraphics(), topSize.width, topSize.height);
+		this.draw.drawSideView(sideImage.createGraphics(), sideSize.width, sideSize.height);
+		
+		long timeStamp = (new Date()).getTime();
+		File topFile = new File(dir, timeStamp + "-topView.jpg");
+		File sideFile = new File(dir, timeStamp + "-sideView.jpg");
+		
+		if(topFile.exists()) topFile.delete();
+		if(sideFile.exists()) sideFile.delete();
+		
+		topFile.createNewFile();
+		sideFile.createNewFile();
+		
+		ImageIO.write(topImage, "jpg", topFile);
+		ImageIO.write(sideImage, "jpg", sideFile);
+		
+		UI.notify("Exported top view to " + topFile.getAbsolutePath());
+		UI.notify("Exported side view to " + sideFile.getAbsolutePath());
 	}
 	
 	/////////////////

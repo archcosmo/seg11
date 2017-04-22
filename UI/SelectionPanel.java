@@ -9,6 +9,7 @@ import java.awt.Insets;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -78,7 +79,20 @@ public class SelectionPanel extends JPanel
 
 		//Export view button
 		JButton exportViewButton = new JButton("Export view");
-		//todo add export view functionality
+		exportViewButton.addActionListener(e -> {
+			JFileChooser fc = new JFileChooser();
+			fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+			fc.setDialogTitle("Select directory to save graphs in...");
+			
+			if(fc.showDialog(this, "Export") == JFileChooser.APPROVE_OPTION) {
+				try {
+					CONTROLLER.exportGraphs(fc.getSelectedFile());
+				} catch (Exception e1) {
+					e1.printStackTrace();
+					JOptionPane.showMessageDialog(this, "Error: " + e1.getMessage());
+				}
+			}
+		});
 		exportViewPanel.add(exportViewButton);
 		add(exportViewPanel);
 
