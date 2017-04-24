@@ -28,7 +28,7 @@ import UI.Window;
 public class Controller 
 {
 	List<Airport> airports;
-	Airport selectedAirport;
+	public Airport selectedAirport;
 	public Runway selectedRunway;
 	public Obstacle selectedObstacle;
 	List<Obstacle> obstacles;
