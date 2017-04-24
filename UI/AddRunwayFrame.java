@@ -58,7 +58,7 @@ public class AddRunwayFrame {
 	
 	public void init() {
 		JFrame frame = new JFrame();
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		frame.setLayout(gridBagLayout);
@@ -228,12 +228,12 @@ public class AddRunwayFrame {
 	}
 	
 	public boolean checkValues(){
+		//todo new runway L/R designator
 		boolean ang = false;
 		if (angleField.getText().matches("\\d+")) {
 			angle = Integer.parseInt(angleField.getText());
 			if (angle >= 0 && angle <= 360) ang = true;
-			int firstAngle = angle/10;
-			angle = (firstAngle + 18) % 36;
+			angle = angle/10;
 		}
 		
 		boolean len = false;
@@ -275,7 +275,7 @@ public class AddRunwayFrame {
 		boolean sTODA = false;
 		if (sTORAField.getText().matches("\\d+")) {
 			sTod = Integer.parseInt(sTORAField.getText());
-			if (sTod >= 0 && sTod <= 10000 && sTor <= sTod) sTODA = true;
+			if (sTod >= 0 && sTod <= 10000 && sAsd <= sTod) sTODA = true;
 		}
 		
 		boolean sASDA = false;
@@ -287,7 +287,7 @@ public class AddRunwayFrame {
 		boolean sLDA = false;
 		if (sLDAField.getText().matches("\\d+")) {
 			sLd = Integer.parseInt(sLDAField.getText());
-			if (sLd >= 0 && sLd <= 10000 && sLd >= sTor) sLDA = true;
+			if (sLd >= 0 && sLd <= 10000 && sLd <= sTor) sLDA = true;
 		}
 		
 		boolean lTORA = false;
@@ -299,7 +299,7 @@ public class AddRunwayFrame {
 		boolean lTODA = false;
 		if (lTORAField.getText().matches("\\d+")) {
 			lTod = Integer.parseInt(lTORAField.getText());
-			if (lTod >= 0 && lTod <= 10000 && lTor <= lTod) lTODA = true;
+			if (lTod >= 0 && lTod <= 10000 && lAsd <= lTod) lTODA = true;
 		}
 		
 		boolean lASDA = false;
@@ -311,7 +311,7 @@ public class AddRunwayFrame {
 		boolean lLDA = false;
 		if (lLDAField.getText().matches("\\d+")) {
 			lLd = Integer.parseInt(lLDAField.getText());
-			if (lLd >= 0 && lLd <= 10000 && lLd >= lTor) lLDA = true;
+			if (lLd >= 0 && lLd <= 10000 && lLd <= lTor) lLDA = true;
 		}
 		
 		if (!(ang && len && wid && res && ba && se && sTORA && sTODA && sASDA && sLDA && lTORA && lTODA && lASDA && lLDA)) {
@@ -413,7 +413,7 @@ public class AddRunwayFrame {
 			errorFrame.add(sTORAValid, c);
 
 			c.gridx = 1; c.gridy = 7;
-			errorFrame.add(new JLabel("Short Angle Log. Runway TODA must be integer between 0 and 10000 and can't be less than TORA"), c);
+			errorFrame.add(new JLabel("Short Angle Log. Runway TODA must be integer between 0 and 10000 and can't be less than ASDA"), c);
 			c.gridx = 0;
 			JLabel sTODAValid = new JLabel();
 			if (sTODA) {
@@ -465,7 +465,7 @@ public class AddRunwayFrame {
 			errorFrame.add(lTORAValid, c);
 
 			c.gridx = 1; c.gridy = 11;
-			errorFrame.add(new JLabel("Long Angle Log. Runway TODA must be integer between 0 and 10000 and can't be less than TORA"), c);
+			errorFrame.add(new JLabel("Long Angle Log. Runway TODA must be integer between 0 and 10000 and can't be less than ASDA"), c);
 			c.gridx = 0;
 			JLabel lTODAValid = new JLabel();
 			if (lTODA) {
@@ -514,9 +514,17 @@ public class AddRunwayFrame {
 
 	public void makeRunway() {
 		runway = new Runway(resa, blast, strip, length, width);
-		//TODO: Set designators
-		String sDes = "";
-		String lDes = "";
+		int sAngle, lAngle;
+		if (angle >= 18) {
+			lAngle = angle;
+			sAngle = (angle + 18) % 36;
+		} else {
+			sAngle = angle;
+			lAngle = (angle + 18) % 36;
+		}
+
+		String sDes = Integer.toString(sAngle);
+		String lDes = Integer.toString(lAngle);
 		LogicalRunway s = new LogicalRunway(sDes, runway, sTor, sTod, sAsd, sLd);
 		LogicalRunway l = new LogicalRunway(lDes, runway, lTor, lTod, lAsd, lLd);
 		runway.setLogicalRunways(s, l);
@@ -526,5 +534,6 @@ public class AddRunwayFrame {
 		if (!edit) {
 			controller.selectedAirport.addRunway(runway);
 		}
+		//todo add to combobox
 	}
 }
