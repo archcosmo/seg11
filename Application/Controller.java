@@ -31,7 +31,7 @@ public class Controller
 	public Airport selectedAirport;
 	public Runway selectedRunway;
 	public Obstacle selectedObstacle;
-	List<Obstacle> obstacles;
+	public List<Obstacle> obstacles;
 	List<ColourScheme> colourSchemes;
 	Window UI;	
 	public final static String TITLE = "Runway Re-Declaration Calculator";

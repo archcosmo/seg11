@@ -269,6 +269,18 @@ public class SelectionPanel extends JPanel
 		//todo add create obstacle popup in button listener
 		// todo edit obstacle popup + event listener
 		//todo remove obstacle even listener
+
+		
+		addObstacle.addActionListener(e -> {
+			new AddObstacleFrame(CONTROLLER);
+		});
+		editObstacle.addActionListener(e -> {
+			//todo
+		});
+		removeObstacle.addActionListener(e -> {
+			if (CONTROLLER.selectedObstacle != null) CONTROLLER.obstacles.remove(CONTROLLER.selectedObstacle);
+		});
+		
 		obstacleSelectionPanel.add(addObstacle);
 		obstacleSelectionPanel.add(removeObstacle);
 		obstacleSelectionPanel.add(editObstacle);
