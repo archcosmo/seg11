@@ -275,7 +275,7 @@ public class SelectionPanel extends JPanel
 			new AddObstacleFrame(CONTROLLER);
 		});
 		editObstacle.addActionListener(e -> {
-			//todo
+			if (CONTROLLER.selectedObstacle != null) new AddObstacleFrame(CONTROLLER, CONTROLLER.selectedObstacle);
 		});
 		removeObstacle.addActionListener(e -> {
 			if (CONTROLLER.selectedObstacle != null) CONTROLLER.obstacles.remove(CONTROLLER.selectedObstacle);

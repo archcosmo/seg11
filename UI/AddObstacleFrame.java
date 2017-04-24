@@ -27,6 +27,18 @@ public class AddObstacleFrame {
 		controller = c;
 		init();
 	}
+	
+	public AddObstacleFrame(Controller c, Obstacle o) {
+		controller = c;
+		edit = true;
+		obstacle = o;
+		init();
+		nameField.setText(o.getName());
+		nameField.setEditable(false);
+		lengthField.setText(Integer.toString(o.length));
+		widthField.setText(Integer.toString(o.width));
+		heightField.setText(Integer.toString(o.height));
+	}
 
 	public void init() {
 		JFrame frame = new JFrame();
@@ -82,7 +94,6 @@ public class AddObstacleFrame {
 		confirm.addActionListener(e -> {
 			if (checkValues()) {
 				/* ================================================== */
-				obstacle = new Obstacle(name, width, length, height);
 				addObstacle();
 				frame.dispose();
 			}
@@ -193,7 +204,13 @@ public class AddObstacleFrame {
 	
 	public void addObstacle() {
 		if (!edit) {
+			obstacle = new Obstacle(name, width, length, height);
 			controller.obstacles.add(obstacle);
+		}
+		else {
+			obstacle.length = length;
+			obstacle.width = width;
+			obstacle.height = height;
 		}
 	}
 }
