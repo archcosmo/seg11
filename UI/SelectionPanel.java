@@ -134,11 +134,19 @@ public class SelectionPanel extends JPanel
 		editRunway.setPreferredSize(new Dimension(30, 30));
 		addRunway.addActionListener(e -> {
 			RunwayEditPanel runwayEditPanel = new RunwayEditPanel(CONTROLLER);
+			new AddRunwayFrame(CONTROLLER);
 		});
 
 		//todo add create runway popup in button listener
 		// todo edit runway popup + event listener
 		//todo remove runway even listener
+		removeRunway.addActionListener(e -> {
+			CONTROLLER.selectedAirport.removeRunway(CONTROLLER.selectedRunway);
+		});
+		editRunway.addActionListener(e -> {
+			new AddRunwayFrame(CONTROLLER, CONTROLLER.selectedRunway);
+		});
+		
 		runwaySelectionPanel.add(addRunway);
 		runwaySelectionPanel.add(removeRunway);
 		runwaySelectionPanel.add(editRunway);
