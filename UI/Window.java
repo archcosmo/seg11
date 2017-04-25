@@ -53,6 +53,7 @@ public class Window extends JFrame
 	public DataPanel getDATA() {return DATA;}
 	public TopViewPanel getTOP() {return TOP;}
 	public SideViewPanel getSIDE() {return SIDE;}
+	public SelectionPanel getSELECTION() {return SIDE_BAR.SELECTION;}
 
 	/* Initial Screen on load up, 
 	 * - gets user to choose or make a new airport 
@@ -78,7 +79,9 @@ public class Window extends JFrame
 		
 		/* Adding top bar panel */
 		TOP_BAR = new TopBarPanel(CONTROLLER);
+
 		contentPanel.add(TOP_BAR, BorderLayout.PAGE_START); //TODO: Doing this fucks up the top of the tabbed pane
+
 		
 		/* Adding right hand (Selection) panel */
 		SIDE_BAR = new SideBarPanel(CONTROLLER);
@@ -104,9 +107,9 @@ public class Window extends JFrame
 		
 		SIDE = new SideViewPanel(CONTROLLER.getDraw(), CONTROLLER);
 		TOP = new TopViewPanel(CONTROLLER.getDraw(), CONTROLLER);
-		//todo move to under selection panel
+		//TODO move to under selection panel
 		DATA = new DataPanel(CONTROLLER);
-		//todo move to popup window
+		//TODO move to popup window
 		RUNWAY = new RunwayEditPanel(CONTROLLER);
 		OBSTACLE = new ObstacleEditPanel(CONTROLLER);
 
@@ -114,6 +117,7 @@ public class Window extends JFrame
 		tabs.addTab("Side View", SIDE);
 
 		tabs.addTab("Calculations", DATA);
+
 		//tabs.addTab("Add/Edit/Remove Runways", RUNWAY);
 		tabs.addTab("Add/Edit/Remove Obstacles", OBSTACLE);
 		tabsExportWrapper.add(tabs, BorderLayout.CENTER);

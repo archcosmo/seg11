@@ -28,7 +28,9 @@ public class SelectionPanel extends JPanel
 	Controller CONTROLLER;
 	JTextField xPosInput;
 	JTextField yPosInput;
-	
+	JComboBox<String> runwayComboBox;
+	JComboBox<String> obstacleComboBox;
+
 	public SelectionPanel(Controller c) 
 	{
 		CONTROLLER = c;
@@ -46,6 +48,7 @@ public class SelectionPanel extends JPanel
 	/* Create menu */
 	private void addComponents() 
 	{
+
 		Font labelFont = this.getFont().deriveFont(16.0f);
 		Font notLabelFont = this.getFont().deriveFont(16.0f);
 
@@ -98,6 +101,7 @@ public class SelectionPanel extends JPanel
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		
 		JComboBox<String> runwayComboBox = new JComboBox<String>();
+		
 		runwayComboBox.setPreferredSize(new Dimension(75, 30));
 		runwayComboBox.setFont(notLabelFont);
 		for (Runway r: CONTROLLER.getRunways())
@@ -172,7 +176,7 @@ public class SelectionPanel extends JPanel
 		gbc.gridx = 4;
 		gbc.gridy = 0;
 		gbc.gridwidth = 1;
-		
+
 		JLabel designatorLabel = new JLabel("Select Designator");
 		designatorLabel.setFont(labelFont);
 		add(designatorLabel, gbc);
@@ -372,12 +376,14 @@ public class SelectionPanel extends JPanel
 		// todo edit obstacle popup + event listener
 		//todo remove obstacle even listener
 
-		
+
 		addObstacle.addActionListener(e -> {
 			new AddObstacleFrame(CONTROLLER);
 		});
 		editObstacle.addActionListener(e -> {
-			if (CONTROLLER.selectedObstacle != null) new AddObstacleFrame(CONTROLLER, CONTROLLER.selectedObstacle);
+			if (CONTROLLER.selectedObstacle != null) {
+				new AddObstacleFrame(CONTROLLER, CONTROLLER.selectedObstacle);
+			}
 		});
 		removeObstacle.addActionListener(e -> {
 			if (CONTROLLER.selectedObstacle != null) CONTROLLER.obstacles.remove(CONTROLLER.selectedObstacle);
@@ -457,5 +463,13 @@ public class SelectionPanel extends JPanel
 		gbc.insets.right = 0;
 		gbc.fill = GridBagConstraints.NONE;
 		gbc.ipady = 0;
+	}
+
+	public void updateRunways(Runway r) {
+		runwayComboBox.addItem(r.getName());
+	}
+
+	public void updateObstacles(Obstacle o) {
+		obstacleComboBox.addItem(o.getName());
 	}
 }
