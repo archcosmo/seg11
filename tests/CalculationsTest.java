@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+@SuppressWarnings("unused")
 public class CalculationsTest {
 	Calculations calc = new Calculations();
 	Runway testRunway = new Runway(240, 300, 60, 4000, 100); //Using default values - changeable!

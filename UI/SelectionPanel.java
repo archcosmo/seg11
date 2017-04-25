@@ -138,6 +138,7 @@ public class SelectionPanel extends JPanel
 		
 		addRunway.addActionListener(e -> {
 			RunwayEditPanel runwayEditPanel = new RunwayEditPanel(CONTROLLER);
+			new AddRunwayFrame(CONTROLLER);
 		});
 		
 		removeRunway.addActionListener(e -> {
@@ -147,6 +148,13 @@ public class SelectionPanel extends JPanel
 		//todo add create runway popup in button listener
 		// todo edit runway popup + event listener
 		//todo remove runway even listener
+		removeRunway.addActionListener(e -> {
+			CONTROLLER.selectedAirport.removeRunway(CONTROLLER.selectedRunway);
+		});
+		editRunway.addActionListener(e -> {
+			new AddRunwayFrame(CONTROLLER, CONTROLLER.selectedRunway);
+		});
+		
 		runwaySelectionPanel.add(addRunway);
 		runwaySelectionPanel.add(removeRunway);
 		runwaySelectionPanel.add(editRunway);
@@ -268,6 +276,18 @@ public class SelectionPanel extends JPanel
 		//todo add create obstacle popup in button listener
 		// todo edit obstacle popup + event listener
 		//todo remove obstacle even listener
+
+		
+		addObstacle.addActionListener(e -> {
+			new AddObstacleFrame(CONTROLLER);
+		});
+		editObstacle.addActionListener(e -> {
+			if (CONTROLLER.selectedObstacle != null) new AddObstacleFrame(CONTROLLER, CONTROLLER.selectedObstacle);
+		});
+		removeObstacle.addActionListener(e -> {
+			if (CONTROLLER.selectedObstacle != null) CONTROLLER.obstacles.remove(CONTROLLER.selectedObstacle);
+		});
+		
 		obstacleSelectionPanel.add(addObstacle);
 		obstacleSelectionPanel.add(removeObstacle);
 		obstacleSelectionPanel.add(editObstacle);

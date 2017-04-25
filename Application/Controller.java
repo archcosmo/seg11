@@ -28,10 +28,10 @@ import UI.Window;
 public class Controller 
 {
 	List<Airport> airports;
-	Airport selectedAirport;
+	public Airport selectedAirport;
 	public Runway selectedRunway;
 	public Obstacle selectedObstacle;
-	List<Obstacle> obstacles;
+	public List<Obstacle> obstacles;
 	List<ColourScheme> colourSchemes;
 	Window UI;	
 	public final static String TITLE = "Runway Re-Declaration Calculator";

@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 
 import Application.Controller;
 
+@SuppressWarnings("serial")
 public class DrawPreferencesFrame extends JFrame {
 
 	Window PARENT;

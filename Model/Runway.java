@@ -8,8 +8,8 @@ public class Runway {
 	String designator;
 	LogicalRunway shortAngleLogicalRunway; //Logical runway with angle 0 to 17
 	LogicalRunway longAngleLogicalRunway;
-	int RESA, blastAllowance, stripEnd;
-	int width, length;
+	public int RESA, blastAllowance, stripEnd;
+	public int width, length;
 
 	public Runway(int RESA, int blastAllowance, int stripEnd, int length, int width) {
 		this.RESA = RESA;

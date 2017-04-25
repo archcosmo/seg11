@@ -8,9 +8,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.swing.JTabbedPane;
-import javax.swing.plaf.ColorUIResource;
-
 import Application.Controller;
 
 public class Draw

@@ -16,6 +16,10 @@ public class Airport {
 		runways.add(runway);
 	}
 	
+	public void removeRunway(Runway runway) {
+		runways.remove(runway);
+	}
+	
 	public String getName() {
 		return name;
 	}

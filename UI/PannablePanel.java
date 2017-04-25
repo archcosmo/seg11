@@ -1,7 +1,6 @@
 package UI;
 
 import java.awt.Cursor;
-import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -10,6 +9,7 @@ import javax.swing.JPanel;
 
 import Model.Draw;
 
+@SuppressWarnings("serial")
 public abstract class PannablePanel extends JPanel /*a PANel...geddit?*/ {
 
 	Draw drawingModule;

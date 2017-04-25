@@ -4,7 +4,7 @@ public class LogicalRunway {
 
 	public String designator;
 	Runway runway;
-	int tora, toda, asda, lda, displacedThreshold, stopwayLength, clearwayLength;
+	public int tora, toda, asda, lda, displacedThreshold, stopwayLength, clearwayLength;
 
     public LogicalRunway(String designator, Runway runway, int tora, int toda, int asda, int lda) {
     	this.runway = runway;

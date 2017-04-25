@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
-import javax.swing.BoxLayout;
-
 import Application.Controller;
 import Model.Draw;
 
