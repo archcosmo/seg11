@@ -1,6 +1,8 @@
 package UI;
 
 import java.awt.BorderLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 import javax.swing.JFrame;
@@ -17,7 +19,7 @@ public class Window extends JFrame
 	Controller CONTROLLER;
 	
 	TopBarPanel TOP_BAR;
-	SelectionPanel SELECTION;
+	SideBarPanel SIDE_BAR;
 	DataPanel DATA;
 	SideViewPanel SIDE;
 	TopViewPanel TOP;
@@ -79,8 +81,20 @@ public class Window extends JFrame
 		contentPanel.add(TOP_BAR, BorderLayout.PAGE_START); //TODO: Doing this fucks up the top of the tabbed pane
 		
 		/* Adding right hand (Selection) panel */
-		SELECTION = new SelectionPanel(CONTROLLER);
-		contentPanel.add(SELECTION, BorderLayout.EAST);
+		SIDE_BAR = new SideBarPanel(CONTROLLER);
+		contentPanel.add(SIDE_BAR, BorderLayout.EAST);
+		
+		JPanel tabsExportWrapper = new JPanel();
+		tabsExportWrapper.setLayout(new BorderLayout());
+		
+		JPanel exportWrapper = new JPanel();
+		exportWrapper.setLayout(new GridBagLayout());
+		GridBagConstraints gbc = new GridBagConstraints();
+		gbc.weightx = gbc.weighty = 1.0;
+		gbc.insets.top = 5;
+		gbc.anchor = GridBagConstraints.EAST;
+		exportWrapper.add(new ExportButton(CONTROLLER), gbc);
+		tabsExportWrapper.add(exportWrapper, BorderLayout.NORTH);
 		
 		//Reduce border so view header looks better
 		UIManager.getDefaults().put("TabbedPane.contentBorderInsets", new Insets(2,1,1,1));
@@ -102,8 +116,10 @@ public class Window extends JFrame
 		tabs.addTab("Calculations", DATA);
 		//tabs.addTab("Add/Edit/Remove Runways", RUNWAY);
 		tabs.addTab("Add/Edit/Remove Obstacles", OBSTACLE);
-		contentPanel.add(tabs, BorderLayout.CENTER);
+		tabsExportWrapper.add(tabs, BorderLayout.CENTER);
 	
+		contentPanel.add(tabsExportWrapper, BorderLayout.CENTER);
+		
 		contentPanel.add(NOTIFICATION, BorderLayout.SOUTH);
 		
 		//TODO Add a button to bring up this frame
