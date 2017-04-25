@@ -3,6 +3,8 @@ package UI;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
+import javax.swing.BoxLayout;
+
 import Application.Controller;
 import Model.Draw;
 
@@ -16,7 +18,7 @@ public class TopViewPanel extends PannablePanel
 	{
 		super(drawingModule);
 		this.CONTROLLER = controller;
-
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.drawingModule = drawingModule;
 		
 	}
@@ -29,8 +31,6 @@ public class TopViewPanel extends PannablePanel
 	@Override
 	public void paintComponent(Graphics g) 
 	{
-		super.paintComponent(g);
 		this.drawingModule.drawTopView((Graphics2D)g, this.getWidth(), this.getHeight());
-
 	}
 }

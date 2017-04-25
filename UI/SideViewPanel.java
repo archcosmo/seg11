@@ -1,5 +1,6 @@
 package UI;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
@@ -30,7 +31,6 @@ public class SideViewPanel extends PannablePanel
 	@Override
 	public void paintComponent(Graphics g) 
 	{
-		super.paintComponent(g);
 		drawModule.drawSideView((Graphics2D) g, this.getWidth(), this.getHeight());
 	}
 }
