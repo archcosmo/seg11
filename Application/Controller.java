@@ -390,6 +390,12 @@ public class Controller
 		UI.draw();
 	}
 	
+	public void updateCombo(Obstacle o) {
+		UI.getSELECTION().updateObstacles(o);
+	}
+	public void updateCombo(Runway r) {
+		UI.getSELECTION().updateRunways(r);
+	}
 }
 
 

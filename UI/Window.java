@@ -51,6 +51,7 @@ public class Window extends JFrame
 	public DataPanel getDATA() {return DATA;}
 	public TopViewPanel getTOP() {return TOP;}
 	public SideViewPanel getSIDE() {return SIDE;}
+	public SelectionPanel getSELECTION() {return SELECTION;}
 
 	/* Initial Screen on load up, 
 	 * - gets user to choose or make a new airport 

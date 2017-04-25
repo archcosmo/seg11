@@ -27,7 +27,9 @@ public class SelectionPanel extends JPanel
 	Controller CONTROLLER;
 	JTextField xPosInput;
 	JTextField yPosInput;
-	
+	JComboBox<String> runwayComboBox;
+	JComboBox<String> obstacleComboBox;
+
 	public SelectionPanel(Controller c) 
 	{
 		CONTROLLER = c;
@@ -60,7 +62,7 @@ public class SelectionPanel extends JPanel
 		JPanel emptyPanel2 = new JPanel();
 		JPanel obstacleThresholdDistancePanel = new JPanel(new GridLayout(2, 1));
 		JPanel obstacleCentrelineDistancePanel = new JPanel(new GridLayout(2, 1));
-		
+
 		//Add borders to all panels
 		exportViewPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 18, 10));
 		runwayPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 18, 10));
@@ -83,7 +85,7 @@ public class SelectionPanel extends JPanel
 			JFileChooser fc = new JFileChooser();
 			fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 			fc.setDialogTitle("Select directory to save graphs in...");
-			
+
 			if(fc.showDialog(this, "Export") == JFileChooser.APPROVE_OPTION) {
 				try {
 					CONTROLLER.exportGraphs(fc.getSelectedFile());
@@ -103,7 +105,7 @@ public class SelectionPanel extends JPanel
 		JPanel runwaySelectionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
 		//Runway ComboBox
-		JComboBox<String> runwayComboBox = new JComboBox<String>();
+		runwayComboBox = new JComboBox<String>();
 		runwayComboBox.setPreferredSize(new Dimension(75, 30));
 		runwayComboBox.setFont(notLabelFont);
 		for (Runway r: CONTROLLER.getRunways())
@@ -146,7 +148,7 @@ public class SelectionPanel extends JPanel
 		editRunway.addActionListener(e -> {
 			new AddRunwayFrame(CONTROLLER, CONTROLLER.selectedRunway);
 		});
-		
+
 		runwaySelectionPanel.add(addRunway);
 		runwaySelectionPanel.add(removeRunway);
 		runwaySelectionPanel.add(editRunway);
@@ -154,7 +156,7 @@ public class SelectionPanel extends JPanel
 		runwayPanel.add(runwaySelectionPanel);
 		add(runwayPanel);
 
-		
+
 		//DESIGNATOR PANEL
 		JLabel designatorLabel = new JLabel("Select Designator");
 		designatorLabel.setFont(labelFont);
@@ -170,7 +172,7 @@ public class SelectionPanel extends JPanel
 		designatorPanel.add(designatorComboBox);
 		add(designatorPanel);
 
-		
+
 		//PLANE POSITION PANEL
 		JLabel planePositionLabel = new JLabel("Plane Position");
 		planePositionLabel.setFont(labelFont);
@@ -185,8 +187,8 @@ public class SelectionPanel extends JPanel
 		});
 		planePositionPanel.add(planePositionComboBox);
 		add(planePositionPanel);
-		
-		
+
+
 		//COLOUR SCHEME PANEL
 		JLabel colourSchemeLabel = new JLabel("Colour Scheme");
 		colourSchemeLabel.setFont(labelFont);
@@ -238,7 +240,7 @@ public class SelectionPanel extends JPanel
 		JPanel obstacleSelectionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
 		//Obstacle ComboBox
-		JComboBox<String> obstacleComboBox = new JComboBox<String>();
+		obstacleComboBox = new JComboBox<String>();
 		obstacleComboBox.setPreferredSize(new Dimension(100, 30));
 		obstacleComboBox.setFont(notLabelFont);
 		obstacleComboBox.addItem("None");
@@ -270,17 +272,19 @@ public class SelectionPanel extends JPanel
 		// todo edit obstacle popup + event listener
 		//todo remove obstacle even listener
 
-		
+
 		addObstacle.addActionListener(e -> {
 			new AddObstacleFrame(CONTROLLER);
 		});
 		editObstacle.addActionListener(e -> {
-			if (CONTROLLER.selectedObstacle != null) new AddObstacleFrame(CONTROLLER, CONTROLLER.selectedObstacle);
+			if (CONTROLLER.selectedObstacle != null) {
+				new AddObstacleFrame(CONTROLLER, CONTROLLER.selectedObstacle);
+			}
 		});
 		removeObstacle.addActionListener(e -> {
 			if (CONTROLLER.selectedObstacle != null) CONTROLLER.obstacles.remove(CONTROLLER.selectedObstacle);
 		});
-		
+
 		obstacleSelectionPanel.add(addObstacle);
 		obstacleSelectionPanel.add(removeObstacle);
 		obstacleSelectionPanel.add(editObstacle);
@@ -317,5 +321,13 @@ public class SelectionPanel extends JPanel
 		});
 		obstacleThresholdDistancePanel.add(thresholdDistanceTextField);
 		add(obstacleThresholdDistancePanel);
+	}
+
+	public void updateRunways(Runway r) {
+		runwayComboBox.addItem(r.getName());
+	}
+
+	public void updateObstacles(Obstacle o) {
+		obstacleComboBox.addItem(o.getName());
 	}
 }

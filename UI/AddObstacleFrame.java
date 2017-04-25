@@ -118,19 +118,19 @@ public class AddObstacleFrame {
 		boolean len = false;
 		if (lengthField.getText().matches("\\d+")) {
 			length = Integer.parseInt(lengthField.getText());
-			if (length > 0) len = true;
+			if (length <= 10000 && length > 0) len = true;
 		}
 		
 		boolean wid = false;
 		if (widthField.getText().matches("\\d+")) {
 			width = Integer.parseInt(widthField.getText());
-			if (width > 0) len = true;
+			if (width <= 5000 && width > 0) wid = true;
 		}
 		
 		boolean hei = false;
 		if (heightField.getText().matches("\\d+")) {
 			height = Integer.parseInt(heightField.getText());
-			if (length > 0) len = true;
+			if (height <= 100 && height > 0) hei = true;
 		}
 		
 		if (!(named && len && wid && hei)) {
@@ -206,6 +206,7 @@ public class AddObstacleFrame {
 		if (!edit) {
 			obstacle = new Obstacle(name, width, length, height);
 			controller.obstacles.add(obstacle);
+			controller.updateCombo(obstacle);
 		}
 		else {
 			obstacle.length = length;
