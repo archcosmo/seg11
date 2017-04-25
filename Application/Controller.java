@@ -390,6 +390,10 @@ public class Controller
 		UI.draw();
 	}
 	
+	public void uiDraw() {
+		UI.draw();
+	}
+	
 }
 
 

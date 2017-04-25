@@ -61,10 +61,10 @@ public class Window extends JFrame
 		JPanel contentPanel = (JPanel) this.getContentPane();
 		contentPanel.removeAll();
 		
-		setLayout(new BorderLayout());
+		contentPanel.setLayout(new BorderLayout());
 		AirportSelectPanel AIRPORT = new AirportSelectPanel(CONTROLLER);
-		add(AIRPORT, BorderLayout.CENTER);
-		add(NOTIFICATION, BorderLayout.SOUTH);
+		contentPanel.add(AIRPORT, BorderLayout.CENTER);
+		contentPanel.add(NOTIFICATION, BorderLayout.SOUTH);
 	}
 
 	/* Main program running screen,
@@ -77,11 +77,11 @@ public class Window extends JFrame
 		
 		/* Adding top bar panel */
 		TOP_BAR = new TopBarPanel(CONTROLLER);
-		//add(TOP_BAR, BorderLayout.PAGE_START); //TODO: Doing this fucks up the top of the tabbed pane
+		contentPanel.add(TOP_BAR, BorderLayout.PAGE_START); //TODO: Doing this fucks up the top of the tabbed pane
 		
 		/* Adding right hand (Selection) panel */
 		SELECTION = new SelectionPanel(CONTROLLER);
-		add(SELECTION, BorderLayout.EAST);
+		contentPanel.add(SELECTION, BorderLayout.EAST);
 		
 		//Reduce border so view header looks better
 		UIManager.getDefaults().put("TabbedPane.contentBorderInsets", new Insets(2,1,1,1));
@@ -103,12 +103,14 @@ public class Window extends JFrame
 		tabs.addTab("Calculations", DATA);
 		//tabs.addTab("Add/Edit/Remove Runways", RUNWAY);
 		tabs.addTab("Add/Edit/Remove Obstacles", OBSTACLE);
-		add(tabs, BorderLayout.CENTER);
+		contentPanel.add(tabs, BorderLayout.CENTER);
 	
-		add(NOTIFICATION, BorderLayout.SOUTH);
+		contentPanel.add(NOTIFICATION, BorderLayout.SOUTH);
 		
 		//TODO Add a button to bring up this frame
 		new DrawPreferencesFrame(this, CONTROLLER);
+		
+		draw();
 	}
 	
 	public void draw()
@@ -118,9 +120,9 @@ public class Window extends JFrame
 		DATA.repaint();
 		
 		/* Nasty hack to get the UI to work */
-		int temp = tabs.getSelectedIndex();
-		tabs.setSelectedIndex(temp - 1);
-		tabs.setSelectedIndex(temp);
+//		int temp = tabs.getSelectedIndex();
+//		tabs.setSelectedIndex(temp - 1);
+//		tabs.setSelectedIndex(temp);
 	}
 	
 	public void notify(String s)

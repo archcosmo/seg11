@@ -123,17 +123,25 @@ public class SelectionPanel extends JPanel
 		JButton addRunway = new JButton("+");
 		JButton removeRunway = new JButton("-");
 		JButton editRunway = new JButton("P");
+		
 		addRunway.setMargin(new Insets(0, 0, 0, 0));
 		removeRunway.setMargin(new Insets(0, 0, 0, 0));
 		editRunway.setMargin(new Insets(0, 0, 0, 0));
+		
 		addRunway.setFont(labelFont);
 		removeRunway.setFont(labelFont);
 		editRunway.setFont(labelFont);
+		
 		addRunway.setPreferredSize(new Dimension(30, 30));
 		removeRunway.setPreferredSize(new Dimension(30, 30));
 		editRunway.setPreferredSize(new Dimension(30, 30));
+		
 		addRunway.addActionListener(e -> {
 			RunwayEditPanel runwayEditPanel = new RunwayEditPanel(CONTROLLER);
+		});
+		
+		removeRunway.addActionListener(e -> {
+			CONTROLLER.uiDraw();
 		});
 
 		//todo add create runway popup in button listener
@@ -198,7 +206,6 @@ public class SelectionPanel extends JPanel
 
 		//todo add scale and rotation listeners to update labels and view
 		//todo notify controller when scale/rotation changed?
-		//todo change label when scale changed, only change picture when released
 		//SCALE PANEL
 		JLabel scaleLabel = new JLabel("View Scale: x1");
 		scaleLabel.setFont(labelFont);
