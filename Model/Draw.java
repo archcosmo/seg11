@@ -27,7 +27,7 @@ public class Draw
 		}
 		return false;
 	}
-	
+	int rangus = 0;
 	public float getZoomFactor() { return this.zoom; }
 	
 	public void setTopPan(int panX, int panY) {
@@ -120,10 +120,6 @@ public class Draw
 		//Set Background Colour
 		g2d.setColor(colourScheme.background);
 		g2d.fillRect(0, 0, width, height);
-		
-		/*Initial rotation to 0 so runway doesn't become unaligned*/
-		AffineTransform at = new AffineTransform();
-		g2d.setTransform(at);
 
 		Runway runway = controller.selectedRunway;
 		Obstacle ob = controller.selectedObstacle;
@@ -433,26 +429,16 @@ public class Draw
 
 		g2d.setColor(colourScheme.designators);
 
-		AffineTransform at = new AffineTransform();
 		/*Scale designator font*/
 		g2d.setFont(new Font(gFont.getFontName(), gFont.getStyle(), (int)(80 * scale)));
 
 		int lowDesigWidth = g2d.getFontMetrics().stringWidth(lowDesig);
 		int highDesigWidth = g2d.getFontMetrics().stringWidth(highDesig);
 
-		//Rotate text 90 deg
-		at.setToRotation(90 * Math.PI/180, (int)(runwayX + runwayLength * 0.05), centerlineY - lowDesigWidth/2);
-		g2d.setTransform(at);
-		g2d.drawChars(lowDesig.toCharArray(), 0, lowDesig.length(), (int)(runwayX + runwayLength * 0.05), centerlineY - lowDesigWidth/2);
-
-		//Rotate text -90 deg
-		at.setToRotation(-90 * Math.PI/180, (int)(runwayX + runwayLength * 0.95), centerlineY + highDesigWidth/2);
-		g2d.setTransform(at);
-		g2d.drawChars(highDesig.toCharArray(), 0, highDesig.length(), (int)(runwayX + runwayLength * 0.95), centerlineY + highDesigWidth/2);
-
-		//Reset rotation
-		at.setToRotation(0);
-		g2d.setTransform(at);
+		
+		
+		g2d.drawChars(lowDesig.toCharArray(), 0, lowDesig.length(), (int)(runwayX + runwayLength * 0.05) + lowDesigWidth/2, centerlineY + g2d.getFont().getSize()/2);
+		g2d.drawChars(highDesig.toCharArray(), 0, highDesig.length(), (int)(runwayX + runwayLength * 0.95) - highDesigWidth/2, centerlineY + g2d.getFont().getSize()/2);
 
 		//Reset font
 		g2d.setFont(gFont);
@@ -793,8 +779,6 @@ public class Draw
 			drawLegend(g2d, width, height, false);
 		
 		drawCompassAndDirection(g2d, runway, width, height, false);
-		
-		g2d.dispose();
 	}
 
 	private void drawSimpleRect(Graphics2D g2d, int x, int y, int width, int height, boolean reverse, Color colour, int centreOfRunway) {
