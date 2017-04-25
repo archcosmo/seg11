@@ -110,8 +110,14 @@ public class AddObstacleFrame {
 	
 	public boolean checkValues() {
 		boolean named = false;
-		if (nameField.getText().matches("\\w+")) {
-			name = nameField.getText();
+		String nameFieldText = nameField.getText();
+		if (nameFieldText.matches("\\w+")) {
+			for (Obstacle obstacle : controller.getObstacles()) {
+				if (nameFieldText.equals(obstacle)) {
+					break;
+				}
+			}
+			name = nameFieldText;
 			named = true;
 		}
 		
