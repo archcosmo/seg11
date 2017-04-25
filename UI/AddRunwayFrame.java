@@ -525,6 +525,8 @@ public class AddRunwayFrame {
 
 		String sDes = Integer.toString(sAngle);
 		String lDes = Integer.toString(lAngle);
+		if (sDes.length()==1) sDes = "0"+sDes;
+		if (lDes.length()==1) lDes = "0"+lDes;
 		LogicalRunway s = new LogicalRunway(sDes, runway, sTor, sTod, sAsd, sLd);
 		LogicalRunway l = new LogicalRunway(lDes, runway, lTor, lTod, lAsd, lLd);
 		runway.setLogicalRunways(s, l);
@@ -533,7 +535,7 @@ public class AddRunwayFrame {
 	public void addRunway() {
 		if (!edit) {
 			controller.selectedAirport.addRunway(runway);
+			controller.updateCombo(runway);
 		}
-		//todo add to combobox
 	}
 }
