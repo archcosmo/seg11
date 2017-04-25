@@ -76,7 +76,7 @@ public class Window extends JFrame
 		
 		/* Adding top bar panel */
 		TOP_BAR = new TopBarPanel(CONTROLLER);
-		//add(TOP_BAR, BorderLayout.PAGE_START); //TODO: Doing this fucks up the top of the tabbed pane
+		//add(TOP_BAR, BorderLayout.PAGE_END); //TODO: Doing this fucks up the top of the tabbed panel
 		
 		/* Adding right hand (Selection) panel */
 		SELECTION = new SelectionPanel(CONTROLLER);
@@ -90,9 +90,9 @@ public class Window extends JFrame
 		
 		SIDE = new SideViewPanel(CONTROLLER.getDraw(), CONTROLLER);
 		TOP = new TopViewPanel(CONTROLLER.getDraw(), CONTROLLER);
-		//todo move to under selection panel
+		//TODO move to under selection panel
 		DATA = new DataPanel(CONTROLLER);
-		//todo move to popup window
+		//TODO move to popup window
 		RUNWAY = new RunwayEditPanel(CONTROLLER);
 		OBSTACLE = new ObstacleEditPanel(CONTROLLER);
 
@@ -100,8 +100,8 @@ public class Window extends JFrame
 		tabs.addTab("Side View", SIDE);
 
 		tabs.addTab("Calculations", DATA);
-		//tabs.addTab("Add/Edit/Remove Runways", RUNWAY);
-		tabs.addTab("Add/Edit/Remove Obstacles", OBSTACLE);
+
+		tabs.addTab("Add/Edit/Remove Obstacles", OBSTACLE); //TODO replace this
 		add(tabs, BorderLayout.CENTER);
 	
 		add(NOTIFICATION, BorderLayout.SOUTH);

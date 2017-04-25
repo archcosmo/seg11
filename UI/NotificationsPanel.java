@@ -15,6 +15,7 @@ public class NotificationsPanel extends JPanel
 	
 	public NotificationsPanel()
 	{
+		
 		notifications = new JTextArea();
 		setLayout(new BorderLayout());
 		JScrollPane scroll = new JScrollPane (notifications, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
