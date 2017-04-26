@@ -25,10 +25,13 @@ public class AddRunwayFrame {
 	Controller controller;
 	JTextField angleField, lengthField, widthField, resaField, baField, 
 		seField, sTODAField, sTORAField, sASDAField, sLDAField, lTODAField, lTORAField, lASDAField, lLDAField;
-	int angle, length, width, resa, blast, strip, sTor, sTod, sAsd, sLd, lTor, lTod, lAsd, lLd;
+	ValidateValue angleVal, lengthVal, widthVal, resaVal, blastVal, stripVal, sTorVal, sTodVal, sAsdVal, sLdVal, lTorVal, lTodVal, lAsdVal, lLdVal;
 	Runway runway;
 	Boolean edit = false;
 	JFrame errorFrame;
+	String sDes, lDes;
+	String r1Des, r2Des;
+	JComboBox<String> choiceBox1, choiceBox2, choiceBox3;
 
 	public AddRunwayFrame(Controller c) {
 		controller = c;
@@ -234,93 +237,64 @@ public class AddRunwayFrame {
 	}
 	
 	public boolean checkValues(){
-		//todo new runway L/R designator
-		boolean ang = false;
-		if (angleField.getText().matches("\\d+")) {
-			angle = Integer.parseInt(angleField.getText());
-			if (angle >= 0 && angle <= 360) ang = true;
-			angle = angle/10;
-		}
 		
-		boolean len = false;
-		if (lengthField.getText().matches("\\d+")) {
-			length = Integer.parseInt(lengthField.getText());
-			if (length >= 100 && length < 10001) len = true;
+		//Input validation
+
+
+
+		angleVal = validateNumber(angleField.getText(), 0, 359);
+		angleVal.value = angleVal.value /10;
+		lengthVal = validateNumber(lengthField.getText(), 100, 10000);
+		widthVal = validateNumber(widthField.getText(), 5, 2000);
+		resaVal = validateNumber(resaField.getText(), 0, 1000);
+		blastVal = validateNumber(baField.getText(), 0, 1000);
+		stripVal = validateNumber(seField.getText(), 0, 1000);
+		sTorVal = validateNumber(sTORAField.getText(), 0, 10000);
+		sTodVal = validateNumber(sTODAField.getText(), 0, 10000);
+		sAsdVal = validateNumber(sASDAField.getText(), 0, 10000);
+		sLdVal = validateNumber(sLDAField.getText(), 0, 10000);
+		lTorVal = validateNumber(lTORAField.getText(), 0, 10000);
+		lTodVal = validateNumber(lTODAField.getText(), 0, 10000);
+		lAsdVal = validateNumber(lASDAField.getText(), 0, 10000);
+		lLdVal = validateNumber(lLDAField.getText(), 0, 10000);
+		
+		if (sTorVal.value > lengthVal.value) {
+			sTorVal.validationString = appendHTMLToString(sTorVal.validationString, "TORA must not be greater than runway length.");
+
+			sTorVal.valid = false;			
+		}
+		if (sTodVal.value < sTorVal.value) {
+			sTodVal.validationString = appendHTMLToString(sTodVal.validationString, "TODA must not be less than TORA.");
+			sTodVal.valid = false;
+		}
+		if (sAsdVal.value < sTorVal.value) {
+			sAsdVal.validationString = appendHTMLToString(sAsdVal.validationString, "ASDA must not be less than TORA.");
+			sAsdVal.valid = false;
+		}
+		if (sTorVal.value < sLdVal.value) {
+			sLdVal.validationString = appendHTMLToString(sLdVal.validationString, "LDA must not be greater than TORA.");
+			sLdVal.valid = false;
 		}
 
-		boolean wid = false;
-		if (widthField.getText().matches("\\d+")) {
-			width = Integer.parseInt(widthField.getText());
-			if (width >= 5 && width < 2001) wid = true;
+		if (lTorVal.value > lengthVal.value) {
+			lTorVal.validationString = appendHTMLToString(lTorVal.validationString, "TORA must not be greater than runway length.");
+			lTorVal.valid = false;
+		}
+		if (lTodVal.value < lTorVal.value) {
+			lTodVal.validationString = appendHTMLToString(lTodVal.validationString, "TODA must not be less than TORA.");
+			lTodVal.valid = false;
+		}
+		if (lAsdVal.value < lTorVal.value) {
+			lAsdVal.validationString = appendHTMLToString(lAsdVal.validationString, "ASDA must not be less than TORA.");
+			lAsdVal.valid = false;
+		}
+		if (lTorVal.value < lLdVal.value) {
+			lLdVal.validationString = appendHTMLToString(lLdVal.validationString, "LDA must not be greater than TORA.");
+			lLdVal.valid = false;
 		}
 
-		boolean res = false;
-		if (resaField.getText().matches("\\d+")) {
-			resa = Integer.parseInt(resaField.getText());
-			res = true;
-		}
-
-		boolean ba = false;
-		if (baField.getText().matches("\\d+")) {
-			blast = Integer.parseInt(baField.getText());
-			ba = true;
-		}
-
-		boolean se = false;
-		if (angleField.getText().matches("\\d+")) {
-			strip = Integer.parseInt(seField.getText());
-			se = true;
-		}
-		
-		boolean sTORA = false;
-		if (sTORAField.getText().matches("\\d+")) {
-			sTor = Integer.parseInt(sTORAField.getText());
-			if (sTor >= 0 && sTor <= 10000 && sTor <= length) sTORA = true;
-		}
-		
-		boolean sTODA = false;
-		if (sTORAField.getText().matches("\\d+")) {
-			sTod = Integer.parseInt(sTORAField.getText());
-			if (sTod >= 0 && sTod <= 10000 && sAsd <= sTod) sTODA = true;
-		}
-		
-		boolean sASDA = false;
-		if (sASDAField.getText().matches("\\d+")) {
-			sAsd = Integer.parseInt(sASDAField.getText());
-			if (sAsd >= 0 && sAsd <= 10000 && sTor <= sAsd) sASDA = true;
-		}	
-
-		boolean sLDA = false;
-		if (sLDAField.getText().matches("\\d+")) {
-			sLd = Integer.parseInt(sLDAField.getText());
-			if (sLd >= 0 && sLd <= 10000 && sLd <= sTor) sLDA = true;
-		}
-		
-		boolean lTORA = false;
-		if (lTORAField.getText().matches("\\d+")) {
-			lTor = Integer.parseInt(lTORAField.getText());
-			if (lTor >= 0 && lTor <= 10000 && lTor <= length) lTORA = true;
-		}
-		
-		boolean lTODA = false;
-		if (lTORAField.getText().matches("\\d+")) {
-			lTod = Integer.parseInt(lTORAField.getText());
-			if (lTod >= 0 && lTod <= 10000 && lAsd <= lTod) lTODA = true;
-		}
-		
-		boolean lASDA = false;
-		if (lASDAField.getText().matches("\\d+")) {
-			lAsd = Integer.parseInt(lASDAField.getText());
-			if (lAsd >= 0 && lAsd <= 10000 && lTor <= lAsd) lASDA = true;
-		}	
-
-		boolean lLDA = false;
-		if (lLDAField.getText().matches("\\d+")) {
-			lLd = Integer.parseInt(lLDAField.getText());
-			if (lLd >= 0 && lLd <= 10000 && lLd <= lTor) lLDA = true;
-		}
-		
-		if (!(ang && len && wid && res && ba && se && sTORA && sTODA && sASDA && sLDA && lTORA && lTODA && lASDA && lLDA)) {
+	
+		if (!(angleVal.valid && lengthVal.valid && widthVal.valid && resaVal.valid && blastVal.valid && stripVal.valid && sTorVal.valid && sTodVal.valid && sAsdVal.valid && sLdVal.valid && lTorVal.valid && lTodVal.valid && lAsdVal.valid && lLdVal.valid)) {
 			if (errorFrame !=  null) errorFrame.dispose();
 			errorFrame = new JFrame();
 			errorFrame.setLayout(new GridBagLayout());
@@ -328,188 +302,76 @@ public class AddRunwayFrame {
 			c.anchor = GridBagConstraints.WEST;
 			c.insets = new Insets(2,2,2,2);
 			
-			c.gridx = 1; c.gridy = 0;
-			errorFrame.add(new JLabel("Angle must be integer between 0 and 360"), c);
-			c.gridx = 0;
-			JLabel angValid = new JLabel();
-			if (ang) {
-				angValid.setForeground(Color.GREEN);
-				angValid.setText("Valid Input");
-			} else {
-				angValid.setForeground(Color.RED);
-				angValid.setText("Invalid Input");
-			}
-			errorFrame.add(angValid, c);
+			c.gridx = 0; c.gridy = 0;
+			errorFrame.add(createValidationTitleJLabel(angleVal, "Angle"), c);
+			c.gridx = 1;
+			errorFrame.add(new JLabel(angleVal.validationString), c);
 
-			c.gridx = 1; c.gridy = 1;
-			errorFrame.add(new JLabel("Length must be integer between 100 and 10000"), c);
-			c.gridx = 0;
-			JLabel lenValid = new JLabel();
-			if (len) {
-				lenValid.setForeground(Color.GREEN);
-				lenValid.setText("Valid Input");
-			} else {
-				lenValid.setForeground(Color.RED);
-				lenValid.setText("Invalid Input");
-			}
-			errorFrame.add(lenValid, c);
-			
-			c.gridx = 1; c.gridy = 2;
-			errorFrame.add(new JLabel("Width must be integer between 5 and 2000"), c);
-			c.gridx = 0;
-			JLabel widValid = new JLabel();
-			if (wid) {
-				widValid.setForeground(Color.GREEN);
-				widValid.setText("Valid Input");
-			} else {
-				widValid.setForeground(Color.RED);
-				widValid.setText("Invalid Input");
-			}
-			errorFrame.add(widValid, c);
-			
-			c.gridx = 1; c.gridy = 3;
-			errorFrame.add(new JLabel("RESA must be integer"), c);
-			c.gridx = 0;
-			JLabel resValid = new JLabel();
-			if (res) {
-				resValid.setForeground(Color.GREEN);
-				resValid.setText("Valid Input");
-			} else {
-				resValid.setForeground(Color.RED);
-				resValid.setText("Invalid Input");
-			}
-			errorFrame.add(resValid, c);
-			
-			c.gridx = 1; c.gridy = 4;
-			errorFrame.add(new JLabel("Blast Allowance must be integer"), c);
-			c.gridx = 0;
-			JLabel baValid = new JLabel();
-			if (ba) {
-				baValid.setForeground(Color.GREEN);
-				baValid.setText("Valid Input");
-			} else {
-				baValid.setForeground(Color.RED);
-				baValid.setText("Invalid Input");
-			}
-			errorFrame.add(baValid, c);
-			
-			c.gridx = 1; c.gridy = 5;
-			errorFrame.add(new JLabel("Strip End must be integer"), c);
-			c.gridx = 0;
-			JLabel seValid = new JLabel();
-			if (se) {
-				seValid.setForeground(Color.GREEN);
-				seValid.setText("Valid Input");
-			} else {
-				seValid.setForeground(Color.RED);
-				seValid.setText("Invalid Input");
-			}
-			errorFrame.add(seValid, c);
-			
-			c.gridx = 1; c.gridy = 6;
-			errorFrame.add(new JLabel("Short Angle Log. Runway TORA must be integer between 0 and 10000 and can't be less than runway length"), c);
-			c.gridx = 0;
-			JLabel sTORAValid = new JLabel();
-			if (sTORA) {
-				sTORAValid.setForeground(Color.GREEN);
-				sTORAValid.setText("Valid Input");
-			} else {
-				sTORAValid.setForeground(Color.RED);
-				sTORAValid.setText("Invalid Input");
-			}
-			errorFrame.add(sTORAValid, c);
+			c.gridx = 0; c.gridy = 1;
+			errorFrame.add(createValidationTitleJLabel(lengthVal, "Length"), c);
+			c.gridx = 1;
+			errorFrame.add(new JLabel(lengthVal.validationString), c);
 
-			c.gridx = 1; c.gridy = 7;
-			errorFrame.add(new JLabel("Short Angle Log. Runway TODA must be integer between 0 and 10000 and can't be less than ASDA"), c);
-			c.gridx = 0;
-			JLabel sTODAValid = new JLabel();
-			if (sTODA) {
-				sTODAValid.setForeground(Color.GREEN);
-				sTODAValid.setText("Valid Input");
-			} else {
-				sTODAValid.setForeground(Color.RED);
-				sTODAValid.setText("Invalid Input");
-			}
-			errorFrame.add(sTODAValid, c);
-			
-			c.gridx = 1; c.gridy = 8;
-			errorFrame.add(new JLabel("Short Angle Log. Runway ASDA must be integer between 0 and 10000 and can't be less than TORA"), c);
-			c.gridx = 0;
-			JLabel sASDAValid = new JLabel();
-			if (sASDA) {
-				sASDAValid.setForeground(Color.GREEN);
-				sASDAValid.setText("Valid Input");
-			} else {
-				sASDAValid.setForeground(Color.RED);
-				sASDAValid.setText("Invalid Input");
-			}
-			errorFrame.add(sASDAValid, c);
-			
-			c.gridx = 1; c.gridy = 9;
-			errorFrame.add(new JLabel("Short Angle Log. Runway LDA must be integer between 0 and 10000 and can't be more than TORA"), c);
-			c.gridx = 0;
-			JLabel sLDAValid = new JLabel();
-			if (sLDA) {
-				sLDAValid.setForeground(Color.GREEN);
-				sLDAValid.setText("Valid Input");
-			} else {
-				sLDAValid.setForeground(Color.RED);
-				sLDAValid.setText("Invalid Input");
-			}
-			errorFrame.add(sLDAValid, c);
-			
-			c.gridx = 1; c.gridy = 10;
-			errorFrame.add(new JLabel("Long Angle Log. Runway TORA must be integer between 0 and 10000 and can't be less than runway length"), c);
-			c.gridx = 0;
-			JLabel lTORAValid = new JLabel();
-			if (lTORA) {
-				lTORAValid.setForeground(Color.GREEN);
-				lTORAValid.setText("Valid Input");
-			} else {
-				lTORAValid.setForeground(Color.RED);
-				lTORAValid.setText("Invalid Input");
-			}
-			errorFrame.add(lTORAValid, c);
+			c.gridx = 0; c.gridy = 2;
+			errorFrame.add(createValidationTitleJLabel(widthVal, "Width"), c);
+			c.gridx = 1;
+			errorFrame.add(new JLabel(widthVal.validationString), c);
 
-			c.gridx = 1; c.gridy = 11;
-			errorFrame.add(new JLabel("Long Angle Log. Runway TODA must be integer between 0 and 10000 and can't be less than ASDA"), c);
-			c.gridx = 0;
-			JLabel lTODAValid = new JLabel();
-			if (lTODA) {
-				lTODAValid.setForeground(Color.GREEN);
-				lTODAValid.setText("Valid Input");
-			} else {
-				lTODAValid.setForeground(Color.RED);
-				lTODAValid.setText("Invalid Input");
-			}
-			errorFrame.add(lTODAValid, c);
-			
-			c.gridx = 1; c.gridy = 12;
-			errorFrame.add(new JLabel("Long Angle Log. Runway ASDA must be integer between 0 and 10000 and can't be less than TORA"), c);
-			c.gridx = 0;
-			JLabel lASDAValid = new JLabel();
-			if (lASDA) {
-				lASDAValid.setForeground(Color.GREEN);
-				lASDAValid.setText("Valid Input");
-			} else {
-				lASDAValid.setForeground(Color.RED);
-				lASDAValid.setText("Invalid Input");
-			}
-			errorFrame.add(lASDAValid, c);
-			
-			c.gridx = 1; c.gridy = 13;
-			errorFrame.add(new JLabel("Long Angle Log. Runway LDA must be integer between 0 and 10000 and can't be more than TORA"), c);
-			c.gridx = 0;
-			JLabel lLDAValid = new JLabel();
-			if (lLDA) {
-				lLDAValid.setForeground(Color.GREEN);
-				lLDAValid.setText("Valid Input");
-			} else {
-				lLDAValid.setForeground(Color.RED);
-				lLDAValid.setText("Invalid Input");
-			}
-			errorFrame.add(lLDAValid, c);
-			
+			c.gridx = 0; c.gridy = 3;
+			errorFrame.add(createValidationTitleJLabel(resaVal, "RESA"), c);
+			c.gridx = 1;
+			errorFrame.add(new JLabel(resaVal.validationString), c);
+
+			c.gridx = 0; c.gridy = 4;
+			errorFrame.add(createValidationTitleJLabel(blastVal, "Blast Allowance"), c);
+			c.gridx = 1;
+			errorFrame.add(new JLabel(blastVal.validationString), c);
+
+			c.gridx = 0; c.gridy = 5;
+			errorFrame.add(createValidationTitleJLabel(stripVal, "Strip End"), c);
+			c.gridx = 1;
+			errorFrame.add(new JLabel(stripVal.validationString), c);
+
+			c.gridx = 0; c.gridy = 6;
+			errorFrame.add(createValidationTitleJLabel(sTorVal, "Short Angle TORA"), c);
+			c.gridx = 1;
+			errorFrame.add(new JLabel(sTorVal.validationString), c);
+
+			c.gridx = 0; c.gridy = 7;
+			errorFrame.add(createValidationTitleJLabel(sTodVal, "Short Angle TODA"), c);
+			c.gridx = 1;
+			errorFrame.add(new JLabel(sTodVal.validationString), c);
+
+			c.gridx = 0; c.gridy = 8;
+			errorFrame.add(createValidationTitleJLabel(sAsdVal, "Short Angle ASDA"), c);
+			c.gridx = 1;
+			errorFrame.add(new JLabel(sAsdVal.validationString), c);
+
+			c.gridx = 0; c.gridy = 9;
+			errorFrame.add(createValidationTitleJLabel(sLdVal, "Short Angle LDA"), c);
+			c.gridx = 1;
+			errorFrame.add(new JLabel(sLdVal.validationString), c);
+
+			c.gridx = 0; c.gridy = 10;
+			errorFrame.add(createValidationTitleJLabel(lTorVal, "Long Angle TORA"), c);
+			c.gridx = 1;
+			errorFrame.add(new JLabel(lTorVal.validationString), c);
+
+			c.gridx = 0; c.gridy = 11;
+			errorFrame.add(createValidationTitleJLabel(lTodVal, "Long Angle TODA"), c);
+			c.gridx = 1;
+			errorFrame.add(new JLabel(lTodVal.validationString), c);
+
+			c.gridx = 0; c.gridy = 12;
+			errorFrame.add(createValidationTitleJLabel(lAsdVal, "Long Angle ASDA"), c);
+			c.gridx = 1;
+			errorFrame.add(new JLabel(lAsdVal.validationString), c);
+
+			c.gridx = 0; c.gridy = 13;
+			errorFrame.add(createValidationTitleJLabel(lLdVal, "Long Angle LDA"), c);
+			c.gridx = 1;
+			errorFrame.add(new JLabel(lLdVal.validationString), c);
+
 			errorFrame.pack();
 			errorFrame.setLocationRelativeTo(null);
 			errorFrame.setVisible(true);
@@ -519,16 +381,16 @@ public class AddRunwayFrame {
 		return true;
 	}
 
-	String sDes, lDes;
+
 	public void makeRunway() {
-		runway = new Runway(resa, blast, strip, length, width);
+		runway = new Runway(resaVal.value, blastVal.value, stripVal.value, lengthVal.value, widthVal.value);
 		int sAngle, lAngle;
-		if (angle >= 18) {
-			lAngle = angle;
-			sAngle = (angle + 18) % 36;
+		if (angleVal.value >= 18) {
+			lAngle = angleVal.value;
+			sAngle = (angleVal.value + 18) % 36;
 		} else {
-			sAngle = angle;
-			lAngle = (angle + 18) % 36;
+			sAngle = angleVal.value;
+			lAngle = (angleVal.value + 18) % 36;
 		}
 
 		sDes = Integer.toString(sAngle);
@@ -548,13 +410,12 @@ public class AddRunwayFrame {
 		}
 		if (i>1 && !edit) setLR(sDes, run1, run2);
 		
-		LogicalRunway s = new LogicalRunway(sDes, runway, sTor, sTod, sAsd, sLd);
-		LogicalRunway l = new LogicalRunway(lDes, runway, lTor, lTod, lAsd, lLd);
+		LogicalRunway s = new LogicalRunway(sDes, runway, sTorVal.value, sTodVal.value, sAsdVal.value, sLdVal.value);
+		LogicalRunway l = new LogicalRunway(lDes, runway, lTorVal.value, lTodVal.value, lAsdVal.value, lLdVal.value);
 		runway.setLogicalRunways(s, l);
 	}
 	
-	String r1Des, r2Des;
-	JComboBox<String> choiceBox1, choiceBox2, choiceBox3;
+
 	public boolean setLR(String r, Runway r1, Runway r2) {
 		String rDes = r; 
 		r1Des = null; r2Des = null;
@@ -704,5 +565,44 @@ public class AddRunwayFrame {
 			controller.selectedAirport.addRunway(runway);
 			controller.updateCombo(runway);
 		}
+	}
+
+	private ValidateValue validateNumber(String input, int min, int max) {
+		boolean valid = true;
+		int value = 0;
+		String validation = "<html>";
+		if (input.matches("\\d+")) {
+			value = Integer.parseInt(input);
+			if (value < min) {
+				validation += "Value must be a greater than " + min + ".<br>";
+				valid = false;
+			}
+			if (value > max) {
+				validation += "Value must be less than " + max + ".<br>";
+				valid = false;
+			}
+		} else {
+			validation += "Input not valid.<br>";
+			valid = false;
+		}
+		validation += "</html>";
+		return new ValidateValue(valid, value, validation);
+	}
+
+	private JLabel createValidationTitleJLabel (ValidateValue validateValue, String labelTitle) {
+		JLabel label = new JLabel(labelTitle);
+		if (validateValue.valid) {
+			label.setForeground(Color.GREEN);
+		} else {
+			label.setForeground(Color.RED);
+		}
+		return  label;
+	}
+
+	private String appendHTMLToString(String htmlString, String appendString) {
+		htmlString = htmlString.substring(0, htmlString.length() - 7);
+		htmlString += appendString;
+		htmlString += "</html>";
+		return htmlString;
 	}
 }

@@ -217,7 +217,7 @@ public class Controller
 			
 			LogicalRunway temp = getSelectedLogicalRunway();
 			originalValues = 
-				"Recalculated Threshold Values: <br> <br>" +
+				"Original Values: <br> <br>" +
 				"TORA = " + temp.tora + "<br>" +
 				"TODA = " + temp.toda + "<br>" +
 				"ASDA = " + temp.tora + "<br>" +
@@ -399,6 +399,17 @@ public class Controller
 	public void setDrawPreference(String pref, boolean val) throws Exception {
 		if(!draw.setPreference(pref, val))
 			throw new Exception(pref + " is not a valid draw property!");
+		UI.draw();
+	}
+	
+	//Tracks mouse position, so legend can be made invisible
+	public void setTopMousePos(int x, int y) {
+		draw.setTopMousePos(x,y);
+		UI.draw();
+	}
+	
+	public void setSideMousePos(int x, int y) {
+		draw.setSideMousePos(x,y);
 		UI.draw();
 	}
 	
