@@ -119,8 +119,14 @@ public class AddObstacleFrame {
 	
 	public boolean checkValues() {
 		boolean named = false;
-		if (nameField.getText().matches("[a-zA-Z0-9][a-zA-Z0-9 ]+")) {
-			name = nameField.getText();
+		String nameFieldText = nameField.getText();
+		if (nameFieldText.matches("[a-zA-Z0-9][a-zA-Z0-9 ]+")) {
+			for (Obstacle obstacle : controller.getObstacles()) {
+				if (nameFieldText.equals(obstacle)) {
+					break;
+				}
+			}
+			name = nameFieldText;
 			named = true;
 		}
 		
