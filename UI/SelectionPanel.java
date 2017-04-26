@@ -116,8 +116,12 @@ public class SelectionPanel extends JPanel
 
 		removeRunway.addActionListener(e -> {
 			if (runwayComboBox.getItemCount() > 1) {
-				CONTROLLER.selectedAirport.removeRunway(CONTROLLER.selectedRunway);
-				updateRunways();
+				int reply = JOptionPane.showConfirmDialog(null, "Are you sure you want to remove the runway " + 
+						CONTROLLER.selectedRunway.getName() + "?", "Remove Runway?",  JOptionPane.YES_NO_OPTION);
+				if (reply == JOptionPane.YES_OPTION) {
+					CONTROLLER.selectedAirport.removeRunway(CONTROLLER.selectedRunway);
+					updateRunways();
+				}
 			}
 		});
 		editRunway.addActionListener(e -> {
@@ -352,8 +356,12 @@ public class SelectionPanel extends JPanel
 		});
 		removeObstacle.addActionListener(e -> {
 			if (CONTROLLER.selectedObstacle != null) {
-				CONTROLLER.obstacles.remove(CONTROLLER.selectedObstacle);
-				updateObstacles();
+				int reply = JOptionPane.showConfirmDialog(null, "Are you sure you want to remove " + 
+						CONTROLLER.selectedObstacle.getName() + "?", "Remove Obstacle",  JOptionPane.YES_NO_OPTION);
+				if (reply == JOptionPane.YES_OPTION) {
+					CONTROLLER.obstacles.remove(CONTROLLER.selectedObstacle);
+					updateObstacles();
+				}
 			}
 		});
 
