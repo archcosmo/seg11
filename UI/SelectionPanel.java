@@ -152,6 +152,7 @@ public class SelectionPanel extends JPanel
 		});
 		editRunway.addActionListener(e -> {
 			new AddRunwayFrame(CONTROLLER, CONTROLLER.selectedRunway);
+			CONTROLLER.selectRunway((String) runwayComboBox.getSelectedItem());
 		});
 		
 		gbc.gridy = 1;
@@ -381,6 +382,7 @@ public class SelectionPanel extends JPanel
 		editObstacle.addActionListener(e -> {
 			if (CONTROLLER.selectedObstacle != null) {
 				new AddObstacleFrame(CONTROLLER, CONTROLLER.selectedObstacle);
+				CONTROLLER.selectObstacle((String) obstacleComboBox.getSelectedItem());
 			}
 		});
 		removeObstacle.addActionListener(e -> {
