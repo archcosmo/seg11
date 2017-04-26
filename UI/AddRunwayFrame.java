@@ -546,7 +546,7 @@ public class AddRunwayFrame {
 				i++;
 			}
 		}
-		if (i>1) setLR(sDes, run1, run2);
+		if (i>1 && !edit) setLR(sDes, run1, run2);
 		
 		LogicalRunway s = new LogicalRunway(sDes, runway, sTor, sTod, sAsd, sLd);
 		LogicalRunway l = new LogicalRunway(lDes, runway, lTor, lTod, lAsd, lLd);
