@@ -48,6 +48,7 @@ public class Controller
 	public ArrayList<Integer> recalculatedValues;
 	String calcBreakdown = "";
 	String calcValues = "";
+	String originalValues = "";
 	
 	public Draw getDraw() { return draw; }
 	
@@ -213,6 +214,15 @@ public class Controller
 			calcBreakdown = calculator.getLastCalculationBreakdown();
 			calcValues = calculator.getLastCalculationValues();
 			if (selectedObstacle == null) { calcBreakdown = ""; }
+			
+			LogicalRunway temp = getSelectedLogicalRunway();
+			originalValues = 
+				"Recalculated Threshold Values: <br> <br>" +
+				"TORA = " + temp.tora + "<br>" +
+				"TODA = " + temp.toda + "<br>" +
+				"ASDA = " + temp.tora + "<br>" +
+				"LDA  = " + temp.lda + "<br>";
+			
 			UI.draw();
 			notify("Printed Calculations Breakdown, Updated Diagrams");
 		}
@@ -410,6 +420,11 @@ public class Controller
 	public String getCalculationValues() 
 	{
 		return calcValues;
+	}
+
+	public String getOriginalValues() 
+	{
+		return originalValues;
 	}
 	
 

@@ -105,9 +105,7 @@ public class Calculations {
 				"TORA = " + newTora + "<br>" +
 				"TODA = " + newToda + "<br>" +
 				"ASDA = " + newTora + "<br>" +
-				"LDA  = " + newLda + "<br>"
-				
-				;
+				"LDA  = " + newLda + "<br>";
 
 		ArrayList<Integer> thresholds = new ArrayList<>();
 		thresholds.add(newTora);
