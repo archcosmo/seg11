@@ -243,7 +243,7 @@ public class AddRunwayFrame {
 
 
 		angleVal = validateNumber(angleField.getText(), 0, 359);
-		angleVal.value = angleVal.value /10;
+		angleVal.value = (angleVal.value+5) /10;
 		lengthVal = validateNumber(lengthField.getText(), 100, 10000);
 		widthVal = validateNumber(widthField.getText(), 5, 2000);
 		resaVal = validateNumber(resaField.getText(), 0, 1000);
