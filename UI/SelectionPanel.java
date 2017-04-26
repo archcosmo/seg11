@@ -14,6 +14,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import Application.Controller;
 import Model.ColourScheme;
@@ -424,9 +426,22 @@ public class SelectionPanel extends JPanel
 		gbc.ipady = 5;
 
 		JTextField centrelineDistanceTextField = new JTextField();
-		centrelineDistanceTextField.addActionListener(e -> {
-			if (!CONTROLLER.selectObstacleXPos(centrelineDistanceTextField.getText()))
-				centrelineDistanceTextField.setText("0");
+		centrelineDistanceTextField.getDocument().addDocumentListener( new DocumentListener() {
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				if (CONTROLLER.selectedObstacle == null || centrelineDistanceTextField.getText() == "" || !CONTROLLER.selectObstacleXPos(centrelineDistanceTextField.getText()));	
+			}
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				if (CONTROLLER.selectedObstacle == null || centrelineDistanceTextField.getText() == "" || !CONTROLLER.selectObstacleXPos(centrelineDistanceTextField.getText()));	
+			}
+
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				if (CONTROLLER.selectedObstacle == null || centrelineDistanceTextField.getText() == "" || !CONTROLLER.selectObstacleXPos(centrelineDistanceTextField.getText()));	
+			}
 		});
 		add(centrelineDistanceTextField, gbc);
 
@@ -454,10 +469,32 @@ public class SelectionPanel extends JPanel
 		gbc.ipady = 5;
 
 		JTextField thresholdDistanceTextField = new JTextField();
-		thresholdDistanceTextField.addActionListener(e -> {
+		thresholdDistanceTextField.getDocument().addDocumentListener(new DocumentListener()
+				{
+
+					@Override
+					public void changedUpdate(DocumentEvent arg0) {
+						if (CONTROLLER.selectedObstacle == null || thresholdDistanceTextField.getText() == "" || !CONTROLLER.selectObstacleYPos(thresholdDistanceTextField.getText()));	
+					}
+
+					@Override
+					public void insertUpdate(DocumentEvent arg0) {
+						if (CONTROLLER.selectedObstacle == null || thresholdDistanceTextField.getText() == "" || !CONTROLLER.selectObstacleYPos(thresholdDistanceTextField.getText()));	
+					}
+
+					@Override
+					public void removeUpdate(DocumentEvent arg0) {
+						if (CONTROLLER.selectedObstacle == null || thresholdDistanceTextField.getText() == "" || !CONTROLLER.selectObstacleYPos(thresholdDistanceTextField.getText()));	
+					}
+				}
+				);
+				
+				
+				
+				/*e -> {
 			if (!CONTROLLER.selectObstacleYPos(thresholdDistanceTextField.getText()))
 				thresholdDistanceTextField.setText("0");
-		});
+		}); */
 		add(thresholdDistanceTextField, gbc);
 
 		gbc.insets.right = 0;

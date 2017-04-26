@@ -115,11 +115,7 @@ public class Window extends JFrame
 
 		tabs.addTab("Top View", TOP);
 		tabs.addTab("Side View", SIDE);
-
-		tabs.addTab("Calculations", DATA);
-
-		//tabs.addTab("Add/Edit/Remove Runways", RUNWAY);
-		tabs.addTab("Add/Edit/Remove Obstacles", OBSTACLE);
+		
 		tabsExportWrapper.add(tabs, BorderLayout.CENTER);
 	
 		contentPanel.add(tabsExportWrapper, BorderLayout.CENTER);
