@@ -1,5 +1,6 @@
 package UI;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -22,7 +23,8 @@ public class AddObstacleFrame {
 	String name; 
 	int length, width, height;
 	Boolean edit = false;
-
+	JFrame errorFrame;
+	
 	public AddObstacleFrame(Controller c) {
 		controller = c;
 		init();
@@ -43,16 +45,21 @@ public class AddObstacleFrame {
 	public void init() {
 		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame.setLocationRelativeTo(null);
 		
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		frame.setLayout(gridBagLayout);
 		GridBagConstraints c = new GridBagConstraints();
+		c.insets = new Insets(5,5,5,5);
+		c.weightx = 1.0;
+		c.weighty = 1.0;
 		
 		/* ========================================== */
 		
 		JPanel panel = new JPanel();
 		panel.setBorder(BorderFactory.createEtchedBorder());
 		panel.setLayout(gridBagLayout);
+		c.fill = GridBagConstraints.BOTH;
 		
 		c.gridx = 0; c.gridy = 0;
 		panel.add(new JLabel("Name"), c);
@@ -85,6 +92,7 @@ public class AddObstacleFrame {
 		c.gridx = 0; c.gridy = 4;
 		JButton cancel = new JButton("Cancel");
 		cancel.addActionListener(e -> {
+			if (errorFrame != null) errorFrame.dispose();
 			frame.dispose();
 		});
 		panel.add(cancel, c);
@@ -95,22 +103,23 @@ public class AddObstacleFrame {
 			if (checkValues()) {
 				/* ================================================== */
 				addObstacle();
+				if (errorFrame != null) errorFrame.dispose();
 				frame.dispose();
 			}
 		});
 		panel.add(confirm, c);
-		
-		frame.add(panel);
+
+		c.insets = new Insets(2,2,1,1);
+		frame.add(panel, c);
 
 		frame.setTitle("Add/Edit Obstacle");
-		frame.setLocationRelativeTo(null);
 		frame.pack();
 		frame.setVisible(true);
 	}
 	
 	public boolean checkValues() {
 		boolean named = false;
-		if (nameField.getText().matches("\\w+")) {
+		if (nameField.getText().matches("[a-zA-Z0-9][a-zA-Z0-9 ]+")) {
 			name = nameField.getText();
 			named = true;
 		}
@@ -134,7 +143,8 @@ public class AddObstacleFrame {
 		}
 		
 		if (!(named && len && wid && hei)) {
-			JFrame errorFrame = new JFrame();
+			if (errorFrame != null)	errorFrame.dispose();
+			errorFrame = new JFrame();
 			errorFrame.setLayout(new GridBagLayout());
 			GridBagConstraints c = new GridBagConstraints();
 			c.anchor = GridBagConstraints.WEST;
