@@ -402,6 +402,17 @@ public class Controller
 		UI.draw();
 	}
 	
+	//Tracks mouse position, so legend can be made invisible
+	public void setTopMousePos(int x, int y) {
+		draw.setTopMousePos(x,y);
+		UI.draw();
+	}
+	
+	public void setSideMousePos(int x, int y) {
+		draw.setSideMousePos(x,y);
+		UI.draw();
+	}
+	
 
 	public void updateCombo(Obstacle o) {
 		UI.getSELECTION().updateObstacles(o);

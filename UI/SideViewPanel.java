@@ -2,6 +2,8 @@ package UI;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionListener;
 
 import javax.swing.BoxLayout;
 
@@ -20,6 +22,15 @@ public class SideViewPanel extends PannablePanel
 		this.CONTROLLER = controller;
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.drawModule = drawModule;
+		
+		this.addMouseMotionListener(new MouseMotionListener() {
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				CONTROLLER.setSideMousePos(e.getX(), e.getY());
+			}
+
+			public void mouseDragged(MouseEvent e) {}
+		});
 	}
 	
 	@Override
