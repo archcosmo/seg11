@@ -1,11 +1,9 @@
 package UI;
 
 import java.awt.Dimension;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
 
 import javax.swing.BorderFactory;
@@ -154,6 +152,7 @@ public class SelectionPanel extends JPanel
 		});
 		editRunway.addActionListener(e -> {
 			new AddRunwayFrame(CONTROLLER, CONTROLLER.selectedRunway);
+			CONTROLLER.selectRunway((String) runwayComboBox.getSelectedItem());
 		});
 		
 		gbc.gridy = 1;
@@ -383,6 +382,7 @@ public class SelectionPanel extends JPanel
 		editObstacle.addActionListener(e -> {
 			if (CONTROLLER.selectedObstacle != null) {
 				new AddObstacleFrame(CONTROLLER, CONTROLLER.selectedObstacle);
+				CONTROLLER.selectObstacle((String) obstacleComboBox.getSelectedItem());
 			}
 		});
 		removeObstacle.addActionListener(e -> {

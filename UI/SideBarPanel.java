@@ -1,15 +1,13 @@
 package UI;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
 
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import Application.Controller;
 
+@SuppressWarnings("serial")
 public class SideBarPanel extends JPanel {
 	
 	OrigValPanel ORIG; 

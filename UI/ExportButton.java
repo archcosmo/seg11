@@ -6,6 +6,7 @@ import javax.swing.JOptionPane;
 
 import Application.Controller;
 
+@SuppressWarnings("serial")
 public class ExportButton extends JButton {
 	
 	public ExportButton(Controller CONTROLLER) {
