@@ -1,8 +1,9 @@
-package Model;
+		package Model;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -702,11 +703,10 @@ public class Draw
 		int windowHeight = height/2 + sidePanY;
 		//Draw Runway Info
 		g2d.setFont(new Font(g2d.getFont().getFontName(), Font.PLAIN, 20));
-		int totalRunwayLength = runway.length;
-				//Math.max(runway.shortAngleLogicalRunway.tora, runway.longAngleLogicalRunway.tora) +
-				//Math.max(runway.shortAngleLogicalRunway.stopwayLength, runway.shortAngleLogicalRunway.clearwayLength) +
-				//Math.max(runway.longAngleLogicalRunway.stopwayLength, runway.longAngleLogicalRunway.clearwayLength);
-		float scale = (0.5F * width / totalRunwayLength) * zoom;
+		int totalRunwayLength = Math.max(runway.shortAngleLogicalRunway.tora, runway.longAngleLogicalRunway.tora) +
+				Math.max(runway.shortAngleLogicalRunway.stopwayLength, runway.shortAngleLogicalRunway.clearwayLength) +
+				Math.max(runway.longAngleLogicalRunway.stopwayLength, runway.longAngleLogicalRunway.clearwayLength);
+		float scale = (0.8F * width / totalRunwayLength) * zoom;
 
 		//Drawing Values
 		int drawLda = (int) (lrw.lda * scale);
@@ -741,7 +741,7 @@ public class Draw
 		} else {
 			float heightScale = 2f;
 			int drawObstacleHeight = (int) (obstacle.height * heightScale);
-			int drawObstacleXPos = (int) ((lrw.displacedThreshold + obstacle.distanceFromThreshold) * scale);
+			int drawObstacleXPos = (int) (obstacle.distanceFromLowAngleEndOfRunway * scale);
 			int drawObstacleLength = (int) (obstacle.length * scale);
 			int ALSWidth = (int) (obstacle.height * 50 * scale);
 			boolean left = controller.towardsSelectedLR;
