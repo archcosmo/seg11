@@ -397,6 +397,9 @@ public class Controller
 	public void updateCombo(Runway r) {
 		UI.getSELECTION().updateRunways(r);
 	}
+	public void updateRunways() {
+		UI.getSELECTION().updateRunways();
+	}
 
 	public void uiDraw() {
 		UI.draw();
