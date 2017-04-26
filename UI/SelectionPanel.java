@@ -118,7 +118,10 @@ public class SelectionPanel extends JPanel
 		// TODO edit runway popup + event listener
 		//TODO remove runway even listener
 		removeRunway.addActionListener(e -> {
-			CONTROLLER.selectedAirport.removeRunway(CONTROLLER.selectedRunway);
+			if (runwayComboBox.getItemCount() > 1) {
+				CONTROLLER.selectedAirport.removeRunway(CONTROLLER.selectedRunway);
+				updateRunways();
+			}
 		});
 		editRunway.addActionListener(e -> {
 			new AddRunwayFrame(CONTROLLER, CONTROLLER.selectedRunway);
@@ -339,10 +342,6 @@ public class SelectionPanel extends JPanel
 		addObstacle.setPreferredSize(new Dimension(30, 30));
 		removeObstacle.setPreferredSize(new Dimension(30, 30));
 		editObstacle.setPreferredSize(new Dimension(30, 30));
-
-		// TODO add create obstacle popup in button listener
-		// TODO edit obstacle popup + event listener
-		// TODO remove obstacle event listener
 
 
 		addObstacle.addActionListener(e -> {
