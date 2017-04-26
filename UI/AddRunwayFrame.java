@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -517,6 +518,7 @@ public class AddRunwayFrame {
 		return true;
 	}
 
+	String sDes, lDes;
 	public void makeRunway() {
 		runway = new Runway(resa, blast, strip, length, width);
 		int sAngle, lAngle;
@@ -528,13 +530,154 @@ public class AddRunwayFrame {
 			lAngle = (angle + 18) % 36;
 		}
 
-		String sDes = Integer.toString(sAngle);
-		String lDes = Integer.toString(lAngle);
+		sDes = Integer.toString(sAngle);
+		lDes = Integer.toString(lAngle);
 		if (sDes.length()==1) sDes = "0"+sDes;
 		if (lDes.length()==1) lDes = "0"+lDes;
+		
+		/* Check if a runway exists with same angle */
+		Runway run1 = null, run2 = null;
+		int i = 1;
+		for (Runway r : controller.selectedAirport.getRunways()) {
+			if (r.lowAngle().designator.substring(0, 2).equals(sDes)) {
+				if (i == 1) run1 = r;
+				if (i == 2) run2 = r;
+				i++;
+			}
+		}
+		if (i>1) setLR(sDes, run1, run2);
+		
 		LogicalRunway s = new LogicalRunway(sDes, runway, sTor, sTod, sAsd, sLd);
 		LogicalRunway l = new LogicalRunway(lDes, runway, lTor, lTod, lAsd, lLd);
 		runway.setLogicalRunways(s, l);
+	}
+	
+	String r1Des, r2Des;
+	JComboBox<String> choiceBox1, choiceBox2, choiceBox3;
+	public boolean setLR(String r, Runway r1, Runway r2) {
+		String rDes = r; 
+		r1Des = null; r2Des = null;
+		if (r1 != null && r2 !=null) {
+			r1Des = r1.getName().substring(0, 3);
+			r2Des = r2.getName().substring(0, 3);
+		}
+		if (r1 != null && r2 == null) r1Des = r1.getName().substring(0, 2); 
+		
+		String[] choices = new String[] {"L", "R", "C"};
+		if (r2 == null) choices = new String[] {"L", "R"};
+		
+		
+		JFrame lrFrame = new JFrame("Designator for "+rDes);
+		lrFrame.setLocationRelativeTo(null);
+		lrFrame.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		c.insets = new Insets(5,5,5,5);
+		
+		JPanel panel = new JPanel();
+		panel.setBorder(BorderFactory.createEtchedBorder());
+		panel.setLayout(new GridBagLayout());
+		
+		c.gridx = 0; c.gridy = 0;
+		JPanel newPan = new JPanel();
+		newPan.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "New Runway"));
+		JLabel newPos = new JLabel(rDes + " Position");
+		newPan.add(newPos, c);
+		
+		c.gridx = 1;
+		choiceBox1 = new JComboBox<String>(choices);
+		newPan.add(choiceBox1, c);
+		
+		int y = 0;
+		c.gridx = 0; c.gridy = y;
+		panel.add(newPan, c);
+		
+		if (r1Des !=null) {
+			c.gridx = 0; c.gridy = 0;
+			JPanel oldPan1 = new JPanel();
+			oldPan1.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Old "+r1.getName()+" Runway"));
+			JLabel oldPos1 = new JLabel(r1Des + " Position");
+			oldPan1.add(oldPos1, c);
+			
+			c.gridx = 1;
+			choiceBox2 = new JComboBox<String>(choices);
+			oldPan1.add(choiceBox2, c);
+			
+			y++;
+			c.gridx = 0; c.gridy = y;
+			panel.add(oldPan1, c);
+		}
+		
+		if (r2Des !=null) {
+			c.gridx = 0; c.gridy = 0;
+			JPanel oldPan2 = new JPanel();
+			oldPan2.setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(), "Old "+r2.getName()+" Runway"));
+			JLabel oldPos2 = new JLabel(r2Des + " Position");
+			oldPan2.add(oldPos2, c);
+			
+			c.gridx = 1;
+			choiceBox3 = new JComboBox<String>(choices);
+			oldPan2.add(choiceBox3, c);
+			
+			y++;
+			c.gridx = 0; c.gridy = y;
+			panel.add(oldPan2, c);
+		}
+		
+		c.gridx = 0; c.gridy = 0;
+		lrFrame.add(panel, c);
+		
+		JButton confirm = new JButton("Confirm");
+		confirm.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				/* ================================================================================*/
+				String newDes1 = (String) choiceBox1.getSelectedItem();
+				String opNewDes1 = null;
+				if (newDes1.equals("C")) opNewDes1 = "C";
+				else if (newDes1.equals("L")) opNewDes1 = "R";
+				else opNewDes1 = "L";
+				
+				sDes = sDes + newDes1;
+				lDes = lDes + opNewDes1;
+				runway.lowAngle().designator = r1.lowAngle().designator.substring(0, 2) + newDes1;
+				runway.highAngle().designator = r1.highAngle().designator.substring(0, 2) + opNewDes1;
+				
+				runway.setDesignator();
+
+				String newDes2 = null, opNewDes2 = null;
+				if (r1Des !=null) {
+					newDes2 = (String) choiceBox2.getSelectedItem();
+					if (newDes2.equals("C")) opNewDes2 = "C";
+					else if (newDes2.equals("L")) opNewDes2 = "R";
+					else opNewDes2 = "L";
+
+					r1.lowAngle().designator = r1.lowAngle().designator.substring(0, 2) + newDes2;
+					r1.highAngle().designator = r1.highAngle().designator.substring(0, 2) + opNewDes2;
+					
+					r1.setDesignator();
+				}
+
+				String newDes3 = null, opNewDes3 = null;
+				if (r2Des !=null) {
+					newDes3 = (String) choiceBox3.getSelectedItem();
+					if (newDes3.equals("C")) opNewDes3 = "C";
+					else if (newDes3.equals("L")) opNewDes3 = "R";
+					else opNewDes3 = "L";
+
+					r2.lowAngle().designator = r2.lowAngle().designator.substring(0, 2) + newDes3;
+					r2.highAngle().designator = r2.highAngle().designator.substring(0, 2) + opNewDes3;
+					
+					r2.setDesignator();
+				}
+				controller.updateRunways();
+				lrFrame.dispose();
+			}
+		});
+		c.gridx = 0; c.gridy = 1;
+		lrFrame.add(confirm, c);
+		
+		lrFrame.pack();
+		lrFrame.setVisible(true);
+		return true;
 	}
 	
 	public void addRunway() {
