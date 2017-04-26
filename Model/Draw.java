@@ -764,7 +764,7 @@ public class Draw
 			if (!controller.lowAngleRunway) {
 				left = !left;
 			}
-			drawObstacle(g2d, drawLEFT + drawObstacleXPos, windowHeight - drawObstacleHeight, drawObstacleLength, drawObstacleHeight, reverse, colourScheme.obstacle, width/2, left, ALSWidth, drawObstacleHeight);
+			drawObstacle(g2d, drawLEFT + drawObstacleXPos, windowHeight - drawObstacleHeight, drawObstacleLength, drawObstacleHeight, reverse, colourScheme.obstacle, width/2, left, ALSWidth, obstacle.height);
 			ArrayList<Integer> newThreshold = controller.recalculatedValues;
 			tora = newThreshold.get(0);
 			toda = newThreshold.get(1);
