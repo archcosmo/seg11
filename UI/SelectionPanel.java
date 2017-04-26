@@ -114,11 +114,11 @@ public class SelectionPanel extends JPanel
 			CONTROLLER.uiDraw();
 		});
 
-		//TODO add create runway popup in button listener
-		// TODO edit runway popup + event listener
-		//TODO remove runway even listener
 		removeRunway.addActionListener(e -> {
-			CONTROLLER.selectedAirport.removeRunway(CONTROLLER.selectedRunway);
+			if (runwayComboBox.getItemCount() > 1) {
+				CONTROLLER.selectedAirport.removeRunway(CONTROLLER.selectedRunway);
+				updateRunways();
+			}
 		});
 		editRunway.addActionListener(e -> {
 			new AddRunwayFrame(CONTROLLER, CONTROLLER.selectedRunway);
@@ -340,10 +340,6 @@ public class SelectionPanel extends JPanel
 		removeObstacle.setPreferredSize(new Dimension(30, 30));
 		editObstacle.setPreferredSize(new Dimension(30, 30));
 
-		// TODO add create obstacle popup in button listener
-		// TODO edit obstacle popup + event listener
-		// TODO remove obstacle event listener
-
 
 		addObstacle.addActionListener(e -> {
 			new AddObstacleFrame(CONTROLLER);
@@ -355,7 +351,10 @@ public class SelectionPanel extends JPanel
 			}
 		});
 		removeObstacle.addActionListener(e -> {
-			if (CONTROLLER.selectedObstacle != null) CONTROLLER.obstacles.remove(CONTROLLER.selectedObstacle);
+			if (CONTROLLER.selectedObstacle != null) {
+				CONTROLLER.obstacles.remove(CONTROLLER.selectedObstacle);
+				updateObstacles();
+			}
 		});
 
 		gbc.weightx = 0.2;
@@ -484,5 +483,15 @@ public class SelectionPanel extends JPanel
 
 	public void updateObstacles(Obstacle o) {
 		obstacleComboBox.addItem(o.getName());
+	}
+	public void updateObstacles() {
+		int size = obstacleComboBox.getItemCount();
+		obstacleComboBox.addItem("None");
+		for (Obstacle ob : CONTROLLER.getObstacles()) {
+			obstacleComboBox.addItem(ob.getName());
+		}
+		for (int i = 0; i < size; i++) {
+			obstacleComboBox.removeItemAt(0);
+		}
 	}
 }
