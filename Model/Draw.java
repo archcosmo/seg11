@@ -224,7 +224,6 @@ public class Draw
 		
 		/*Draw Compass*/
 		if(drawCompass) {
-			System.out.println(runway.shortAngleLogicalRunway.designator);
 			int angle = Integer.parseInt(runway.shortAngleLogicalRunway.designator.substring(0,2)) * 10;
 
 			int lowAngle = -90 - angle;

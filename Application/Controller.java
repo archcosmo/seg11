@@ -46,7 +46,7 @@ public class Controller
 	
 	private Calculations calculator;
 	public ArrayList<Integer> recalculatedValues;
-	String calcBreakdown;
+	String calcBreakdown = "";
 	
 	public Draw getDraw() { return draw; }
 	
