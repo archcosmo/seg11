@@ -387,7 +387,10 @@ public class SelectionPanel extends JPanel
 			}
 		});
 		removeObstacle.addActionListener(e -> {
-			if (CONTROLLER.selectedObstacle != null) CONTROLLER.obstacles.remove(CONTROLLER.selectedObstacle);
+			if (CONTROLLER.selectedObstacle != null) {
+				CONTROLLER.obstacles.remove(CONTROLLER.selectedObstacle);
+				updateObstacles();
+			}
 		});
 
 		gbc.weightx = 0.2;
@@ -516,5 +519,15 @@ public class SelectionPanel extends JPanel
 
 	public void updateObstacles(Obstacle o) {
 		obstacleComboBox.addItem(o.getName());
+	}
+	public void updateObstacles() {
+		int size = obstacleComboBox.getItemCount();
+		obstacleComboBox.addItem("None");
+		for (Obstacle ob : CONTROLLER.getObstacles()) {
+			obstacleComboBox.addItem(ob.getName());
+		}
+		for (int i = 0; i < size; i++) {
+			obstacleComboBox.removeItemAt(0);
+		}
 	}
 }
