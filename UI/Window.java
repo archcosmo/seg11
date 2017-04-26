@@ -20,7 +20,6 @@ public class Window extends JFrame
 	
 	TopBarPanel TOP_BAR;
 	SideBarPanel SIDE_BAR;
-	DataPanel DATA;
 	SideViewPanel SIDE;
 	TopViewPanel TOP;
 	NotificationsPanel NOTIFICATION;
@@ -105,7 +104,6 @@ public class Window extends JFrame
 		
 		SIDE = new SideViewPanel(CONTROLLER.getDraw(), CONTROLLER);
 		TOP = new TopViewPanel(CONTROLLER.getDraw(), CONTROLLER);
-		DATA = new DataPanel(CONTROLLER);
 
 		tabs.addTab("Top View", TOP);
 		tabs.addTab("Side View", SIDE);
@@ -126,8 +124,6 @@ public class Window extends JFrame
 	{
 		SIDE.repaint();
 		TOP.repaint();
-		DATA.repaint();
-
 	}
 	
 	public void notify(String s)
