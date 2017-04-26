@@ -114,9 +114,6 @@ public class SelectionPanel extends JPanel
 			CONTROLLER.uiDraw();
 		});
 
-		//TODO add create runway popup in button listener
-		// TODO edit runway popup + event listener
-		//TODO remove runway even listener
 		removeRunway.addActionListener(e -> {
 			if (runwayComboBox.getItemCount() > 1) {
 				CONTROLLER.selectedAirport.removeRunway(CONTROLLER.selectedRunway);
