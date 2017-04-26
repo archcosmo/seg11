@@ -217,7 +217,7 @@ public class Controller
 			
 			LogicalRunway temp = getSelectedLogicalRunway();
 			originalValues = 
-				"Recalculated Threshold Values: <br> <br>" +
+				"Original Values: <br> <br>" +
 				"TORA = " + temp.tora + "<br>" +
 				"TODA = " + temp.toda + "<br>" +
 				"ASDA = " + temp.tora + "<br>" +
