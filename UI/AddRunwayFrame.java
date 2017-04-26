@@ -29,6 +29,9 @@ public class AddRunwayFrame {
 	Runway runway;
 	Boolean edit = false;
 	JFrame errorFrame;
+	String sDes, lDes;
+	String r1Des, r2Des;
+	JComboBox<String> choiceBox1, choiceBox2, choiceBox3;
 
 	public AddRunwayFrame(Controller c) {
 		controller = c;
@@ -256,36 +259,37 @@ public class AddRunwayFrame {
 		lLdVal = validateNumber(lLDAField.getText(), 0, 10000);
 		
 		if (sTorVal.value > lengthVal.value) {
-			sTorVal.validationString += "<html>TORA must not be greater than runway length.</html>";
+			sTorVal.validationString = appendHTMLToString(sTorVal.validationString, "TORA must not be greater than runway length.");
+
 			sTorVal.valid = false;			
 		}
 		if (sTodVal.value < sTorVal.value) {
-			sTorVal.validationString += "<html>TORA must not be greater than TODA.</html>";
-			sTorVal.valid = false;
+			sTodVal.validationString = appendHTMLToString(sTodVal.validationString, "TODA must not be less than TORA.");
+			sTodVal.valid = false;
 		}
 		if (sAsdVal.value < sTorVal.value) {
-			sTorVal.validationString += "<html>TORA must not be greater than ASDA.</html>";
-			sTorVal.valid = false;
+			sAsdVal.validationString = appendHTMLToString(sAsdVal.validationString, "ASDA must not be less than TORA.");
+			sAsdVal.valid = false;
 		}
 		if (sTorVal.value < sLdVal.value) {
-			sTorVal.validationString += "<html>LDA must not be greater than TORA.</html>";
+			sLdVal.validationString = appendHTMLToString(sLdVal.validationString, "LDA must not be greater than TORA.");
 			sLdVal.valid = false;
 		}
 
 		if (lTorVal.value > lengthVal.value) {
-			lTorVal.validationString += "<html>TORA must not be greater than runway length.</html>";
+			lTorVal.validationString = appendHTMLToString(lTorVal.validationString, "TORA must not be greater than runway length.");
 			lTorVal.valid = false;
 		}
 		if (lTodVal.value < lTorVal.value) {
-			lTorVal.validationString += "<html>TORA must not be greater than TODA.</html>";
-			lTorVal.valid = false;
+			lTodVal.validationString = appendHTMLToString(lTodVal.validationString, "TODA must not be less than TORA.");
+			lTodVal.valid = false;
 		}
 		if (lAsdVal.value < lTorVal.value) {
-			lTorVal.validationString += "<html>TORA must not be greater than ASDA.</html>";
-			lTorVal.valid = false;
+			lAsdVal.validationString = appendHTMLToString(lAsdVal.validationString, "ASDA must not be less than TORA.");
+			lAsdVal.valid = false;
 		}
 		if (lTorVal.value < lLdVal.value) {
-			lTorVal.validationString += "<html>LDA must not be greater than TORA.</html>";
+			lLdVal.validationString = appendHTMLToString(lLdVal.validationString, "LDA must not be greater than TORA.");
 			lLdVal.valid = false;
 		}
 
@@ -377,7 +381,7 @@ public class AddRunwayFrame {
 		return true;
 	}
 
-	String sDes, lDes;
+
 	public void makeRunway() {
 		runway = new Runway(resaVal.value, blastVal.value, stripVal.value, lengthVal.value, widthVal.value);
 		int sAngle, lAngle;
@@ -411,8 +415,7 @@ public class AddRunwayFrame {
 		runway.setLogicalRunways(s, l);
 	}
 	
-	String r1Des, r2Des;
-	JComboBox<String> choiceBox1, choiceBox2, choiceBox3;
+
 	public boolean setLR(String r, Runway r1, Runway r2) {
 		String rDes = r; 
 		r1Des = null; r2Des = null;
@@ -594,5 +597,12 @@ public class AddRunwayFrame {
 			label.setForeground(Color.RED);
 		}
 		return  label;
+	}
+
+	private String appendHTMLToString(String htmlString, String appendString) {
+		htmlString = htmlString.substring(0, htmlString.length() - 7);
+		htmlString += appendString;
+		htmlString += "</html>";
+		return htmlString;
 	}
 }
