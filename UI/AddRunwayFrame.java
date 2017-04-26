@@ -432,6 +432,7 @@ public class AddRunwayFrame {
 		JFrame lrFrame = new JFrame("Designator for "+rDes);
 		lrFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		lrFrame.setLocationRelativeTo(null);
+		lrFrame.setResizable(false);
 		lrFrame.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.insets = new Insets(5,5,5,5);
@@ -439,6 +440,10 @@ public class AddRunwayFrame {
 		JPanel panel = new JPanel();
 		panel.setBorder(BorderFactory.createEtchedBorder());
 		panel.setLayout(new GridBagLayout());
+		
+		c.gridx = 0; c.gridy = 0;
+		JLabel info = new JLabel("<html><body>Runway already exists at<br>this angle. Set designator<br>for these runways.</body></html>");
+		lrFrame.add(info, c);
 		
 		c.gridx = 0; c.gridy = 0;
 		JPanel newPan = new JPanel();
@@ -486,7 +491,7 @@ public class AddRunwayFrame {
 			panel.add(oldPan2, c);
 		}
 		
-		c.gridx = 0; c.gridy = 0;
+		c.gridx = 0; c.gridy = 1;
 		lrFrame.add(panel, c);
 		
 		JButton confirm = new JButton("Confirm");
@@ -552,7 +557,7 @@ public class AddRunwayFrame {
 				}
 			}
 		});
-		c.gridx = 0; c.gridy = 1;
+		c.gridx = 0; c.gridy = 2;
 		lrFrame.add(confirm, c);
 		
 		lrFrame.pack();
