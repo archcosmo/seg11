@@ -76,11 +76,11 @@ public class Window extends JFrame
 		/* Adding top bar panel */
 		TOP_BAR = new TopBarPanel(CONTROLLER);
 
-		contentPanel.add(TOP_BAR, BorderLayout.PAGE_START); //TODO: Doing this fucks up the top of the tabbed pane
+		contentPanel.add(TOP_BAR, BorderLayout.PAGE_START);
 
 		
 		/* Adding right hand (Selection) panel */
-		SIDE_BAR = new SideBarPanel(CONTROLLER);
+		SIDE_BAR = new SideBarPanel(CONTROLLER, this);
 		contentPanel.add(SIDE_BAR, BorderLayout.EAST);
 		
 		JPanel tabsExportWrapper = new JPanel();

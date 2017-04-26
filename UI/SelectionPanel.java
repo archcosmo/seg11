@@ -261,7 +261,6 @@ public class SelectionPanel extends JPanel
 		gbc.fill = GridBagConstraints.NONE;
 
 		//TODO add scale and rotation listeners to update labels and view
-		//TODO notify controller when scale/rotation changed?
 
 		//SCALE LABEL
 		gbc.gridx = 0;

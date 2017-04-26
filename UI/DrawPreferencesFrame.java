@@ -6,11 +6,12 @@ import java.awt.GridBagLayout;
 import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 import Application.Controller;
 
 @SuppressWarnings("serial")
-public class DrawPreferencesFrame extends JFrame {
+public class DrawPreferencesFrame extends JPanel {
 
 	Window PARENT;
 	Controller CONTROLLER;
@@ -27,11 +28,8 @@ public class DrawPreferencesFrame extends JFrame {
 		
 		initComponents();
 		
-		setTitle("Graph Preferences");
 		setSize(420, 300);
 		setLocation(PARENT.getLocation().x + PARENT.getWidth(), PARENT.getLocation().y + PARENT.getHeight() - getHeight());
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		setResizable(false);
 		setVisible(true);
 	}
 	

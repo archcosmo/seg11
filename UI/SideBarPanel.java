@@ -17,28 +17,30 @@ public class SideBarPanel extends JPanel {
 	
 	public SelectionPanel getSELECTION() { return SELECTION; }
 	
-	public SideBarPanel(Controller CONTROLLER) {
-		init(CONTROLLER);
+	public SideBarPanel(Controller CONTROLLER, Window WINDOW) {
+		init(CONTROLLER, WINDOW);
 	}
 	
-	public void init(Controller CONTROLLER) {
+	public void init(Controller CONTROLLER, Window WINDOW) {
 		setLayout(new BorderLayout());
 		
 		ORIG = new OrigValPanel(CONTROLLER);
 		RECALC = new RecalcValPanel(CONTROLLER);
 		DATA = new DataPanel(CONTROLLER);
 		
-		addComponents(CONTROLLER);
+		addComponents(CONTROLLER, WINDOW);
 	}
 	
-	public void addComponents(Controller CONTROLLER) {
+	public void addComponents(Controller CONTROLLER, Window WINDOW) {
 		SELECTION = new SelectionPanel(CONTROLLER);
 		add(SELECTION, BorderLayout.NORTH);
+		
 		
 		JTabbedPane valueTabs = new JTabbedPane();
 		valueTabs.addTab("Original Values", ORIG);
 		valueTabs.addTab("Recalculated Values", RECALC);
 		valueTabs.addTab("Calculation Breakdown", DATA);
+		valueTabs.addTab("Diagram Preferences", new DrawPreferencesFrame(WINDOW, CONTROLLER));
 		add(valueTabs, BorderLayout.CENTER);
 	}
 }
