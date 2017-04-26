@@ -47,6 +47,7 @@ public class Controller
 	private Calculations calculator;
 	public ArrayList<Integer> recalculatedValues;
 	String calcBreakdown = "";
+	String calcValues = "";
 	
 	public Draw getDraw() { return draw; }
 	
@@ -210,6 +211,7 @@ public class Controller
 		if (selectedRunway != null) {
 			recalculatedValues = calculator.calculateDistances(getSelectedLogicalRunway(), selectedObstacle, towardsSelectedLR);
 			calcBreakdown = calculator.getLastCalculationBreakdown();
+			calcValues = calculator.getLastCalculationValues();
 			if (selectedObstacle == null) { calcBreakdown = ""; }
 			UI.draw();
 			notify("Printed Calculations Breakdown, Updated Diagrams");
@@ -403,6 +405,11 @@ public class Controller
 
 	public void uiDraw() {
 		UI.draw();
+	}
+
+	public String getCalculationValues() 
+	{
+		return calcValues;
 	}
 	
 

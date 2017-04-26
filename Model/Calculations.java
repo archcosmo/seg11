@@ -6,7 +6,7 @@ public class Calculations {
 
 	private static final int DEFAULT_ANGLE_OF_DESCENT = 50;
 	private StringBuilder lastCalculationBreakdown;
-	private String lastCalculationValues;
+	private String lastCalculationValues = "";
 
 	public Calculations() {
 		lastCalculationBreakdown =  new StringBuilder();
@@ -99,6 +99,15 @@ public class Calculations {
 			lastCalculationBreakdown.append("     = "+logicalRunway.lda+" - "+fromThresh+" - "+DEFAULT_ANGLE_OF_DESCENT +"*"+ obstacle.height+" - "+logicalRunway.getStripEnd()+"<br>");
 			lastCalculationBreakdown.append("     = "+newLda+"<br>");
 		}
+		
+		lastCalculationValues = 
+				"Recalculated Threshold Values: <br> <br>" +
+				"TORA = " + newTora + "<br>" +
+				"TODA = " + newToda + "<br>" +
+				"ASDA = " + newTora + "<br>" +
+				"LDA  = " + newLda + "<br>"
+				
+				;
 
 		ArrayList<Integer> thresholds = new ArrayList<>();
 		thresholds.add(newTora);
