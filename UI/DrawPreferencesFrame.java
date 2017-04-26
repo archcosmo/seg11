@@ -103,32 +103,6 @@ public class DrawPreferencesFrame extends JFrame {
 		gbc.gridy++;
 		add(drawLegend, gbc);
 		
-		JCheckBox floatingLegend = new JCheckBox("Floating Legend");
-		floatingLegend.setSelected(false);
-		floatingLegend.addChangeListener(l -> {
-			try {
-				CONTROLLER.setDrawPreference("floatingLegend", floatingLegend.isSelected());
-			} catch (Exception e) {
-				JOptionPane.showMessageDialog(this, e.getMessage());
-			}
-		});
-		
-		gbc.gridy++;
-		add(floatingLegend, gbc);
-		
-		JCheckBox floatingCompassAndDirection = new JCheckBox("Floating Compass and Direction");
-		floatingCompassAndDirection.setSelected(false);
-		floatingCompassAndDirection.addChangeListener(l -> {
-			try {
-				CONTROLLER.setDrawPreference("floatingCompassAndDirection", floatingCompassAndDirection.isSelected());
-			} catch (Exception e) {
-				JOptionPane.showMessageDialog(this, e.getMessage());
-			}
-		});
-		
-		gbc.gridy++;
-		add(floatingCompassAndDirection, gbc);
-		
 		JCheckBox drawDirection = new JCheckBox("Draw Takeoff/Landing Direction Arrow");
 		drawDirection.setSelected(true);
 		drawDirection.addChangeListener(l -> {
