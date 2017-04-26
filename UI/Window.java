@@ -47,7 +47,6 @@ public class Window extends JFrame
 		loadAirportSelectionLayout();
 	}
 	
-	public DataPanel getDATA() {return DATA;}
 	public TopViewPanel getTOP() {return TOP;}
 	public SideViewPanel getSIDE() {return SIDE;}
 	public SelectionPanel getSELECTION() {return SIDE_BAR.SELECTION;}
