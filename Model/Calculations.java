@@ -45,22 +45,22 @@ public class Calculations {
 			//Take off towards/ land towards logical runway start
 
 			newTora = fromThresh + logicalRunway.displacedThreshold - ALSWidth - logicalRunway.getStripEnd();
-			lastCalculationBreakdown.append("TORA = Distance from Threshold + Displaced Threshold - Slope Calculation - Strip End\n");
-			lastCalculationBreakdown.append("     = "+fromThresh+" + "+logicalRunway.displacedThreshold+" - "+DEFAULT_ANGLE_OF_DESCENT +"*"+ obstacle.height+" - "+logicalRunway.getStripEnd()+"\n");
-			lastCalculationBreakdown.append("     = "+newTora+"\n");
+			lastCalculationBreakdown.append("TORA = Distance from Threshold + Displaced Threshold - Slope Calculation - Strip End<br>");
+			lastCalculationBreakdown.append("     = "+fromThresh+" + "+logicalRunway.displacedThreshold+" - "+DEFAULT_ANGLE_OF_DESCENT +"*"+ obstacle.height+" - "+logicalRunway.getStripEnd()+"<br>");
+			lastCalculationBreakdown.append("     = "+newTora+"<br>");
 
 			newToda = newTora;
-			lastCalculationBreakdown.append("TODA = (R) TORA\n");
-			lastCalculationBreakdown.append("     = "+newToda+"\n");
+			lastCalculationBreakdown.append("TODA = (R) TORA<br>");
+			lastCalculationBreakdown.append("     = "+newToda+"<br>");
 
 			newAsda = newTora;
-			lastCalculationBreakdown.append("ASDA = (R) TORA\n");
-			lastCalculationBreakdown.append("     = "+newAsda+"\n");
+			lastCalculationBreakdown.append("ASDA = (R) TORA<br>");
+			lastCalculationBreakdown.append("     = "+newAsda+"<br>");
 
 			newLda = fromThresh - RESA - logicalRunway.getStripEnd();
-			lastCalculationBreakdown.append("LDA  = Distance from Threshold - RESA - Strip End\n");
-			lastCalculationBreakdown.append("     = "+fromThresh+" - "+RESA+" - "+logicalRunway.getStripEnd()+"\n");
-			lastCalculationBreakdown.append("     = "+newLda+"\n");
+			lastCalculationBreakdown.append("LDA  = Distance from Threshold - RESA - Strip End<br>");
+			lastCalculationBreakdown.append("     = "+fromThresh+" - "+RESA+" - "+logicalRunway.getStripEnd()+"<br>");
+			lastCalculationBreakdown.append("     = "+newLda+"<br>");
 
 		} else {
 			//Take off away/ land away from logical runway start
@@ -72,31 +72,31 @@ public class Calculations {
 			if (RESA_StripEnd > blast_DThreshold) {
 
 				newTora = logicalRunway.tora - fromThresh - (RESA_StripEnd);
-				lastCalculationBreakdown.append("TORA = Original TORA - Distance from Threshold - "+"RESA - Strip End\n");
-				lastCalculationBreakdown.append("     = "+logicalRunway.tora+" - "+fromThresh+" - "+RESA+" - "+logicalRunway.getStripEnd()+"\n");
-				lastCalculationBreakdown.append("     = "+newTora+"\n");
+				lastCalculationBreakdown.append("TORA = Original TORA - Distance from Threshold - "+"RESA - Strip End<br>");
+				lastCalculationBreakdown.append("     = "+logicalRunway.tora+" - "+fromThresh+" - "+RESA+" - "+logicalRunway.getStripEnd()+"<br>");
+				lastCalculationBreakdown.append("     = "+newTora+"<br>");
 			} else {
 
 				newTora = logicalRunway.tora - fromThresh - (blast_DThreshold);
-				lastCalculationBreakdown.append("TORA = Original TORA - Distance from Threshold - "+"Blast Protection - Displaced Threshold\n");
-				lastCalculationBreakdown.append("     = "+logicalRunway.tora+" - "+fromThresh+" - "+blastAllowance + " - "+logicalRunway.displacedThreshold+"\n");
-				lastCalculationBreakdown.append("     = "+newTora+"\n");
+				lastCalculationBreakdown.append("TORA = Original TORA - Distance from Threshold - "+"Blast Protection - Displaced Threshold<br>");
+				lastCalculationBreakdown.append("     = "+logicalRunway.tora+" - "+fromThresh+" - "+blastAllowance + " - "+logicalRunway.displacedThreshold+"<br>");
+				lastCalculationBreakdown.append("     = "+newTora+"<br>");
 			}
 
 			newToda = newTora + logicalRunway.clearwayLength;
-			lastCalculationBreakdown.append("TODA = (R) TORA + Clearway\n");
-			lastCalculationBreakdown.append("     = "+newTora+" + "+logicalRunway.clearwayLength+"\n");
-			lastCalculationBreakdown.append("     = "+newToda+"\n");
+			lastCalculationBreakdown.append("TODA = (R) TORA + Clearway<br>");
+			lastCalculationBreakdown.append("     = "+newTora+" + "+logicalRunway.clearwayLength+"<br>");
+			lastCalculationBreakdown.append("     = "+newToda+"<br>");
 
 			newAsda = newTora + logicalRunway.stopwayLength;
-			lastCalculationBreakdown.append("ASDA = (R) TORA + Stopway\n");
-			lastCalculationBreakdown.append("     = "+newTora+" + "+logicalRunway.stopwayLength+"\n");
-			lastCalculationBreakdown.append("     = "+newAsda+"\n");
+			lastCalculationBreakdown.append("ASDA = (R) TORA + Stopway<br>");
+			lastCalculationBreakdown.append("     = "+newTora+" + "+logicalRunway.stopwayLength+"<br>");
+			lastCalculationBreakdown.append("     = "+newAsda+"<br>");
 
 			newLda = logicalRunway.lda - fromThresh - obstacle.length - ALSWidth - logicalRunway.getStripEnd();
-			lastCalculationBreakdown.append("LDA  = Original LDA - Distance from Threshold - Slope Calculation - Strip End\n");
-			lastCalculationBreakdown.append("     = "+logicalRunway.lda+" - "+fromThresh+" - "+DEFAULT_ANGLE_OF_DESCENT +"*"+ obstacle.height+" - "+logicalRunway.getStripEnd()+"\n");
-			lastCalculationBreakdown.append("     = "+newLda+"\n");
+			lastCalculationBreakdown.append("LDA  = Original LDA - Distance from Threshold - Slope Calculation - Strip End<br>");
+			lastCalculationBreakdown.append("     = "+logicalRunway.lda+" - "+fromThresh+" - "+DEFAULT_ANGLE_OF_DESCENT +"*"+ obstacle.height+" - "+logicalRunway.getStripEnd()+"<br>");
+			lastCalculationBreakdown.append("     = "+newLda+"<br>");
 		}
 
 		ArrayList<Integer> thresholds = new ArrayList<>();

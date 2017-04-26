@@ -24,14 +24,14 @@ public class RecalcValPanel extends JPanel
 	@Override
 	public void paintComponent(Graphics g) 
 	{
-		String s = CONTROLLER.getCalculations();
-		if (s.equals("")) 
-		{
-			calculations.setText("Currently no calculations to display");
-		}
-		else
-		{
-			calculations.setText("<html>"+s+"</html>");;
-		}
+//		String s = CONTROLLER.getCalculations();
+//		if (s.equals("")) 
+//		{
+//			calculations.setText("Currently no calculations to display");
+//		}
+//		else
+//		{
+//			calculations.setText("<html>"+s+"</html>");;
+//		}
 	}
 }

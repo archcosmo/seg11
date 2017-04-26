@@ -123,7 +123,7 @@ public class SelectionPanel extends JPanel
 		//Runway add, remove and edit
 		JButton addRunway = new JButton("+");
 		JButton removeRunway = new JButton("-");
-		JButton editRunway = new JButton("P");
+		JButton editRunway = new JButton("✎");
 		
 		addRunway.setMargin(new Insets(0, 0, 0, 0));
 		removeRunway.setMargin(new Insets(0, 0, 0, 0));
@@ -358,7 +358,7 @@ public class SelectionPanel extends JPanel
 		//Obstacle add, remove and edit
 		JButton addObstacle = new JButton("+");
 		JButton removeObstacle = new JButton("-");
-		JButton editObstacle = new JButton("P");
+		JButton editObstacle = new JButton("✎");
 		
 		addObstacle.setMargin(new Insets(0, 0, 0, 0));
 		removeObstacle.setMargin(new Insets(0, 0, 0, 0));
