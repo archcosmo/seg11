@@ -57,33 +57,6 @@ public class SelectionPanel extends JPanel
 		gbc.anchor = GridBagConstraints.WEST;
 		gbc.insets.bottom = 8;
 		gbc.insets.left = 5;
-		//gbc.fill = GridBagConstraints.BOTH;
-
-		//		JPanel emptyPanel1 = new JPanel();
-		//		JPanel exportViewPanel = new JPanel();
-		//		JPanel runwayPanel = new JPanel(new GridLayout(2, 1));
-		//		JPanel designatorPanel = new JPanel(new GridLayout(2, 1));
-		//		JPanel planePositionPanel = new JPanel(new GridLayout(2, 1));
-		//		JPanel colourSchemePanel = new JPanel(new GridLayout(2, 1));
-		//		JPanel scalePanel = new JPanel(new GridLayout(2, 1));
-		//		JPanel rotationPanel = new JPanel(new GridLayout(2, 1));
-		//		JPanel obstaclePanel = new JPanel(new GridLayout(2, 1));
-		//		JPanel emptyPanel2 = new JPanel();
-		//		JPanel obstacleThresholdDistancePanel = new JPanel(new GridLayout(2, 1));
-		//		JPanel obstacleCentrelineDistancePanel = new JPanel(new GridLayout(2, 1));
-
-		//Add borders to all panels
-		//		exportViewPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 18, 10));
-		//		runwayPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 18, 10));
-		//		designatorPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 18, 10));
-		//		planePositionPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 18, 10));
-		//		colourSchemePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 18, 10));
-		//		scalePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 18, 10));
-		//		rotationPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 18, 10));
-		//		obstaclePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 18, 10));
-		//		obstacleThresholdDistancePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 18, 10));
-		//		obstacleCentrelineDistancePanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 18, 10));
-
 
 		//RUNWAY LABEL
 		gbc.gridwidth = 4;
@@ -91,7 +64,6 @@ public class SelectionPanel extends JPanel
 		JLabel runwayLabel = new JLabel("Select Runway");
 		runwayLabel.setFont(labelFont);
 		add(runwayLabel, gbc);
-		//JPanel runwaySelectionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
 		//RUNWAY COMBOBOX
 		gbc.gridx = 0;
@@ -113,9 +85,6 @@ public class SelectionPanel extends JPanel
 			CONTROLLER.notify("Runway selected : "+ (String) runwayComboBox.getSelectedItem());
 		});
 		add(runwayComboBox, gbc);
-		//JLabel spaceMaker = new JLabel("");
-		//spaceMaker.setPreferredSize(new Dimension(10, 20));
-		//runwaySelectionPanel.add(spaceMaker);
 
 		gbc.weightx =0;
 		gbc.fill = GridBagConstraints.NONE;
@@ -371,9 +340,9 @@ public class SelectionPanel extends JPanel
 		removeObstacle.setPreferredSize(new Dimension(30, 30));
 		editObstacle.setPreferredSize(new Dimension(30, 30));
 
-		//todo add create obstacle popup in button listener
-		// todo edit obstacle popup + event listener
-		//todo remove obstacle even listener
+		// TODO add create obstacle popup in button listener
+		// TODO edit obstacle popup + event listener
+		// TODO remove obstacle event listener
 
 
 		addObstacle.addActionListener(e -> {
@@ -447,7 +416,7 @@ public class SelectionPanel extends JPanel
 		gbc.ipady = 0;
 
 		//OBSTACLE THRESHOLD DISTANCE LABEL
-		gbc.gridx = 4;
+		gbc.gridx = 4;		//TODO notify controller when scale/rotation changed?
 		gbc.gridy = 8;
 		gbc.gridwidth = 1;
 		gbc.insets.top = 10;
