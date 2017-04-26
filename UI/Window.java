@@ -20,7 +20,6 @@ public class Window extends JFrame
 	
 	TopBarPanel TOP_BAR;
 	SideBarPanel SIDE_BAR;
-	DataPanel DATA;
 	SideViewPanel SIDE;
 	TopViewPanel TOP;
 	NotificationsPanel NOTIFICATION;
@@ -48,7 +47,6 @@ public class Window extends JFrame
 		loadAirportSelectionLayout();
 	}
 	
-	public DataPanel getDATA() {return DATA;}
 	public TopViewPanel getTOP() {return TOP;}
 	public SideViewPanel getSIDE() {return SIDE;}
 	public SelectionPanel getSELECTION() {return SIDE_BAR.SELECTION;}
@@ -78,11 +76,11 @@ public class Window extends JFrame
 		/* Adding top bar panel */
 		TOP_BAR = new TopBarPanel(CONTROLLER);
 
-		contentPanel.add(TOP_BAR, BorderLayout.PAGE_START); //TODO: Doing this fucks up the top of the tabbed pane
+		contentPanel.add(TOP_BAR, BorderLayout.PAGE_START);
 
 		
 		/* Adding right hand (Selection) panel */
-		SIDE_BAR = new SideBarPanel(CONTROLLER);
+		SIDE_BAR = new SideBarPanel(CONTROLLER, this);
 		contentPanel.add(SIDE_BAR, BorderLayout.EAST);
 		
 		JPanel tabsExportWrapper = new JPanel();
@@ -105,7 +103,6 @@ public class Window extends JFrame
 		
 		SIDE = new SideViewPanel(CONTROLLER.getDraw(), CONTROLLER);
 		TOP = new TopViewPanel(CONTROLLER.getDraw(), CONTROLLER);
-		DATA = new DataPanel(CONTROLLER);
 
 		tabs.addTab("Top View", TOP);
 		tabs.addTab("Side View", SIDE);
@@ -126,8 +123,6 @@ public class Window extends JFrame
 	{
 		SIDE.repaint();
 		TOP.repaint();
-		DATA.repaint();
-
 	}
 	
 	public void notify(String s)
