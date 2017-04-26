@@ -26,6 +26,7 @@ public class AddRunwayFrame {
 	int angle, length, width, resa, blast, strip, sTor, sTod, sAsd, sLd, lTor, lTod, lAsd, lLd;
 	Runway runway;
 	Boolean edit = false;
+	JFrame errorFrame;
 
 	public AddRunwayFrame(Controller c) {
 		controller = c;
@@ -63,6 +64,10 @@ public class AddRunwayFrame {
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		frame.setLayout(gridBagLayout);
 		GridBagConstraints c = new GridBagConstraints();
+		c.insets = new Insets(5,5,5,5);
+		c.weightx = 1.0;
+		c.weighty = 1.0;
+		c.fill = GridBagConstraints.BOTH;
 		
 		/* ========================================== */
 		
@@ -71,7 +76,7 @@ public class AddRunwayFrame {
 		runway.setLayout(gridBagLayout);
 		
 		c.gridx = 0; c.gridy = 0;
-		runway.add(new JLabel("Angle"), c);
+		runway.add(new JLabel("Angle (degrees)"), c);
 		c.gridx = 1;
 		angleField = new JTextField();
 		angleField.setColumns(5);
@@ -207,7 +212,6 @@ public class AddRunwayFrame {
 		confirm.setPreferredSize(new Dimension(150, 20));
 		confirm.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//TODO: Put values into program
 				if (checkValues()) {
 					makeRunway();
 					addRunway();
@@ -315,7 +319,8 @@ public class AddRunwayFrame {
 		}
 		
 		if (!(ang && len && wid && res && ba && se && sTORA && sTODA && sASDA && sLDA && lTORA && lTODA && lASDA && lLDA)) {
-			JFrame errorFrame = new JFrame();
+			if (errorFrame !=  null) errorFrame.dispose();
+			errorFrame = new JFrame();
 			errorFrame.setLayout(new GridBagLayout());
 			GridBagConstraints c = new GridBagConstraints();
 			c.anchor = GridBagConstraints.WEST;
