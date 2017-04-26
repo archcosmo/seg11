@@ -80,6 +80,9 @@ public class AirportSelectPanel extends JPanel {
 			/* Vertical Spacer */
 			add(Box.createRigidArea(new Dimension(0, 150)));
 		}
+		MenuItem newAirportNotification = new MenuItem("<html><center><br>NT: New Airports will be pre-loaded with a generic runway 00/18 when they are first made.");
+		add(newAirportNotification);
+		
 		/* Add a newAirport option */
 		String temp = noAirports ? "No airports found in files. Create a new airport with name: " : "or create and use a new airport with name : ";
 		MenuItem newAirport = new MenuItem(temp, labelFont);
