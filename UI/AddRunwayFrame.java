@@ -21,6 +21,9 @@ import Application.Controller;
 import Model.LogicalRunway;
 import Model.Runway;
 
+import static UI.ValidateValue.createValidationTitleJLabel;
+import static UI.ValidateValue.validateNumber;
+
 public class AddRunwayFrame {
 	Controller controller;
 	JTextField angleField, lengthField, widthField, resaField, baField, 
@@ -239,9 +242,6 @@ public class AddRunwayFrame {
 	public boolean checkValues(){
 		
 		//Input validation
-
-
-
 		angleVal = validateNumber(angleField.getText(), 0, 359);
 		angleVal.value = angleVal.value /10;
 		lengthVal = validateNumber(lengthField.getText(), 100, 10000);
@@ -570,38 +570,6 @@ public class AddRunwayFrame {
 			controller.selectedAirport.addRunway(runway);
 			controller.updateCombo(runway);
 		}
-	}
-
-	private ValidateValue validateNumber(String input, int min, int max) {
-		boolean valid = true;
-		int value = 0;
-		String validation = "<html>";
-		if (input.matches("\\d+")) {
-			value = Integer.parseInt(input);
-			if (value < min) {
-				validation += "Value must be a greater than " + min + ".<br>";
-				valid = false;
-			}
-			if (value > max) {
-				validation += "Value must be less than " + max + ".<br>";
-				valid = false;
-			}
-		} else {
-			validation += "Input not valid.<br>";
-			valid = false;
-		}
-		validation += "</html>";
-		return new ValidateValue(valid, value, validation);
-	}
-
-	private JLabel createValidationTitleJLabel (ValidateValue validateValue, String labelTitle) {
-		JLabel label = new JLabel(labelTitle);
-		if (validateValue.valid) {
-			label.setForeground(Color.GREEN);
-		} else {
-			label.setForeground(Color.RED);
-		}
-		return  label;
 	}
 
 	private String appendHTMLToString(String htmlString, String appendString) {
