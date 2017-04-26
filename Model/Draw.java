@@ -3,7 +3,6 @@
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -15,7 +14,7 @@ public class Draw
 
 	Controller controller;
 	private float zoom;
-	private int topPanX, sidePanX, topPanY, sidePanY;
+	private int topPanX, sidePanX, topPanY, sidePanY, topMouseX, topMouseY, sideMouseX, sideMouseY;
 	private ColourScheme colourScheme;
 	private boolean drawLabels, labelMeasurements, displayDistancesOnMeasurements, drawOrigMeasurements, 
 					drawLegend, floatingLegend, floatingCompassAndDirection, drawCompass, drawDirection;
@@ -38,6 +37,16 @@ public class Draw
 	public void setSidePan(int panX, int panY) {
 		sidePanX += panX;
 		sidePanY += panY;
+	}
+	
+	public void setTopMousePos(int x, int y) {
+		topMouseX = x;
+		topMouseY = y;
+	}
+	
+	public void setSideMousePos(int x, int y) {
+		sideMouseX = x;
+		sideMouseY = y;
 	}
 	
 	public void setColourScheme(ColourScheme scheme) {
@@ -234,26 +243,33 @@ public class Draw
 		}
 	}
 	
+	private boolean mouseInLegend(int legendX, int legendY, int width, int height, int mX, int mY) {
+		return mX > legendX && mY > legendY && mX < legendX+width && mY < legendY+height;
+	}
+	
 	private void drawLegend(Graphics2D g2d, int width, int height, boolean topView) {
 		float scale = (1.3F * width / 698) * (floatingLegend ? 1 : zoom);
 		
 		int legendX = width/2 - (int)(329 * width * (floatingLegend ? 1 : zoom) / 698) + (floatingLegend ? 0 : (topView ? topPanX : sidePanX));
 		int legendY = height/2 - (int)(260 * height * (floatingLegend ? 1 : zoom) / 601) + (floatingLegend ? 0 : (topView ? topPanY : sidePanY));
-		
-		g2d.setColor(new Color(255, 255, 255, 100));
-		g2d.fillRect(legendX, legendY, (int)(190*scale), (int)(131*scale));
-		
-		int legendKeyX = legendX + (int)(8*scale);
-		int legendKeyY = legendY + (int)(8*scale);
-		
-		drawLegendKey(g2d, scale, legendKeyX, legendKeyY, topView ? colourScheme.runway : colourScheme.runwaySide, "Runway");
-		drawLegendKey(g2d, scale, legendKeyX, legendKeyY + (int)(15*scale), colourScheme.centerline, "Centerline");
-		drawLegendKey(g2d, scale, legendKeyX, legendKeyY + (int)(30*scale), colourScheme.threshold, "Threshold Marker");
-		drawLegendKey(g2d, scale, legendKeyX, legendKeyY + (int)(45*scale), colourScheme.cga, "Cleared And Graded Area");
-		drawLegendKey(g2d, scale, legendKeyX, legendKeyY + (int)(60*scale), colourScheme.obstacle, "Obstacle");
-		drawLegendKey(g2d, scale, legendKeyX, legendKeyY + (int)(75*scale), colourScheme.recalculatedThreshold, "Recalculated Threshold");
-		drawLegendKey(g2d, scale, legendKeyX, legendKeyY + (int)(90*scale), topView ? colourScheme.clearwayBorders : colourScheme.clearwaySide, "Clearway");
-		drawLegendKey(g2d, scale, legendKeyX, legendKeyY + (int)(105*scale), topView ? colourScheme.stopways : colourScheme.stopwaySide, "Stopway");
+
+		if((topView && !mouseInLegend(legendX, legendY, (int)(190*scale), (int)(131*scale), topMouseX, topMouseY)) || (!topView && !mouseInLegend(legendX, legendY, (int)(190*scale), (int)(131*scale), sideMouseX, sideMouseY))) {
+
+			g2d.setColor(new Color(255, 255, 255, 100));
+			g2d.fillRect(legendX, legendY, (int)(190*scale), (int)(131*scale));
+
+			int legendKeyX = legendX + (int)(8*scale);
+			int legendKeyY = legendY + (int)(8*scale);
+
+			drawLegendKey(g2d, scale, legendKeyX, legendKeyY, topView ? colourScheme.runway : colourScheme.runwaySide, "Runway");
+			drawLegendKey(g2d, scale, legendKeyX, legendKeyY + (int)(15*scale), colourScheme.centerline, "Centerline");
+			drawLegendKey(g2d, scale, legendKeyX, legendKeyY + (int)(30*scale), colourScheme.threshold, "Threshold Marker");
+			drawLegendKey(g2d, scale, legendKeyX, legendKeyY + (int)(45*scale), colourScheme.cga, "Cleared And Graded Area");
+			drawLegendKey(g2d, scale, legendKeyX, legendKeyY + (int)(60*scale), colourScheme.obstacle, "Obstacle");
+			drawLegendKey(g2d, scale, legendKeyX, legendKeyY + (int)(75*scale), colourScheme.recalculatedThreshold, "Recalculated Threshold");
+			drawLegendKey(g2d, scale, legendKeyX, legendKeyY + (int)(90*scale), topView ? colourScheme.clearwayBorders : colourScheme.clearwaySide, "Clearway");
+			drawLegendKey(g2d, scale, legendKeyX, legendKeyY + (int)(105*scale), topView ? colourScheme.stopways : colourScheme.stopwaySide, "Stopway");
+		}
 	}
 	
 	private void drawLegendKey(Graphics2D g2d, float scale, int x, int y, Color col, String label) {

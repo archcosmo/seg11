@@ -22,12 +22,16 @@ public class Runway {
 	public void setLogicalRunways(LogicalRunway shortAngleLogicalRunway, LogicalRunway longAngleLogicalRunway) {
 		this.shortAngleLogicalRunway = shortAngleLogicalRunway;
 		this.longAngleLogicalRunway = longAngleLogicalRunway;
-		this.designator = shortAngleLogicalRunway.designator + "/" + longAngleLogicalRunway.designator;
+		setDesignator();
 	}
 	
 	public String getName() 
 	{
 		return designator;
+	}
+	
+	public void setDesignator() {
+		this.designator = shortAngleLogicalRunway.designator + "/" + longAngleLogicalRunway.designator;
 	}
 	
     public LogicalRunway lowAngle() {

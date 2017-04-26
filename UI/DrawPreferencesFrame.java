@@ -4,13 +4,13 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
 import javax.swing.JCheckBox;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 import Application.Controller;
 
 @SuppressWarnings("serial")
-public class DrawPreferencesFrame extends JFrame {
+public class DrawPreferencesFrame extends JPanel {
 
 	Window PARENT;
 	Controller CONTROLLER;
@@ -27,11 +27,8 @@ public class DrawPreferencesFrame extends JFrame {
 		
 		initComponents();
 		
-		setTitle("Graph Preferences");
 		setSize(420, 300);
 		setLocation(PARENT.getLocation().x + PARENT.getWidth(), PARENT.getLocation().y + PARENT.getHeight() - getHeight());
-		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		setResizable(false);
 		setVisible(true);
 	}
 	
@@ -102,32 +99,6 @@ public class DrawPreferencesFrame extends JFrame {
 		
 		gbc.gridy++;
 		add(drawLegend, gbc);
-		
-		JCheckBox floatingLegend = new JCheckBox("Floating Legend");
-		floatingLegend.setSelected(false);
-		floatingLegend.addChangeListener(l -> {
-			try {
-				CONTROLLER.setDrawPreference("floatingLegend", floatingLegend.isSelected());
-			} catch (Exception e) {
-				JOptionPane.showMessageDialog(this, e.getMessage());
-			}
-		});
-		
-		gbc.gridy++;
-		add(floatingLegend, gbc);
-		
-		JCheckBox floatingCompassAndDirection = new JCheckBox("Floating Compass and Direction");
-		floatingCompassAndDirection.setSelected(false);
-		floatingCompassAndDirection.addChangeListener(l -> {
-			try {
-				CONTROLLER.setDrawPreference("floatingCompassAndDirection", floatingCompassAndDirection.isSelected());
-			} catch (Exception e) {
-				JOptionPane.showMessageDialog(this, e.getMessage());
-			}
-		});
-		
-		gbc.gridy++;
-		add(floatingCompassAndDirection, gbc);
 		
 		JCheckBox drawDirection = new JCheckBox("Draw Takeoff/Landing Direction Arrow");
 		drawDirection.setSelected(true);

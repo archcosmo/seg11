@@ -47,6 +47,8 @@ public class Controller
 	private Calculations calculator;
 	public ArrayList<Integer> recalculatedValues;
 	String calcBreakdown = "";
+	String calcValues = "";
+	String originalValues = "";
 	
 	public Draw getDraw() { return draw; }
 	
@@ -210,7 +212,17 @@ public class Controller
 		if (selectedRunway != null) {
 			recalculatedValues = calculator.calculateDistances(getSelectedLogicalRunway(), selectedObstacle, towardsSelectedLR);
 			calcBreakdown = calculator.getLastCalculationBreakdown();
+			calcValues = calculator.getLastCalculationValues();
 			if (selectedObstacle == null) { calcBreakdown = ""; }
+			
+			LogicalRunway temp = getSelectedLogicalRunway();
+			originalValues = 
+				"Recalculated Threshold Values: <br> <br>" +
+				"TORA = " + temp.tora + "<br>" +
+				"TODA = " + temp.toda + "<br>" +
+				"ASDA = " + temp.tora + "<br>" +
+				"LDA  = " + temp.lda + "<br>";
+			
 			UI.draw();
 			notify("Printed Calculations Breakdown, Updated Diagrams");
 		}
@@ -390,6 +402,17 @@ public class Controller
 		UI.draw();
 	}
 	
+	//Tracks mouse position, so legend can be made invisible
+	public void setTopMousePos(int x, int y) {
+		draw.setTopMousePos(x,y);
+		UI.draw();
+	}
+	
+	public void setSideMousePos(int x, int y) {
+		draw.setSideMousePos(x,y);
+		UI.draw();
+	}
+	
 
 	public void updateCombo(Obstacle o) {
 		UI.getSELECTION().updateObstacles(o);
@@ -397,9 +420,22 @@ public class Controller
 	public void updateCombo(Runway r) {
 		UI.getSELECTION().updateRunways(r);
 	}
+	public void updateRunways() {
+		UI.getSELECTION().updateRunways();
+	}
 
 	public void uiDraw() {
 		UI.draw();
+	}
+
+	public String getCalculationValues() 
+	{
+		return calcValues;
+	}
+
+	public String getOriginalValues() 
+	{
+		return originalValues;
 	}
 	
 
