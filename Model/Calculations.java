@@ -6,6 +6,7 @@ public class Calculations {
 
 	private static final int DEFAULT_ANGLE_OF_DESCENT = 50;
 	private StringBuilder lastCalculationBreakdown;
+	private String lastCalculationValues;
 
 	public Calculations() {
 		lastCalculationBreakdown =  new StringBuilder();
@@ -117,7 +118,10 @@ public class Calculations {
 	public String getLastCalculationBreakdown() {
 		return lastCalculationBreakdown.toString();
 	}
-
+	public String getLastCalculationValues() {
+		return lastCalculationValues;
+	}
+	
 	static class BreakdownWrapper {
 		public String breakdownStr;
 	}
