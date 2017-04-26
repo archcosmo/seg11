@@ -24,8 +24,6 @@ public class Window extends JFrame
 	SideViewPanel SIDE;
 	TopViewPanel TOP;
 	NotificationsPanel NOTIFICATION;
-	RunwayEditPanel RUNWAY;
-	ObstacleEditPanel OBSTACLE;
 	
 	JTabbedPane tabs = new JTabbedPane();
 	
@@ -107,11 +105,7 @@ public class Window extends JFrame
 		
 		SIDE = new SideViewPanel(CONTROLLER.getDraw(), CONTROLLER);
 		TOP = new TopViewPanel(CONTROLLER.getDraw(), CONTROLLER);
-		//TODO move to under selection panel
 		DATA = new DataPanel(CONTROLLER);
-		//TODO move to popup window
-		RUNWAY = new RunwayEditPanel(CONTROLLER);
-		OBSTACLE = new ObstacleEditPanel(CONTROLLER);
 
 		tabs.addTab("Top View", TOP);
 		tabs.addTab("Side View", SIDE);
@@ -133,11 +127,7 @@ public class Window extends JFrame
 		SIDE.repaint();
 		TOP.repaint();
 		DATA.repaint();
-		
-		/* Nasty hack to get the UI to work */
-//		int temp = tabs.getSelectedIndex();
-//		tabs.setSelectedIndex(temp - 1);
-//		tabs.setSelectedIndex(temp);
+
 	}
 	
 	public void notify(String s)

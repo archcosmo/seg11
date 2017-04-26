@@ -138,7 +138,6 @@ public class SelectionPanel extends JPanel
 		editRunway.setPreferredSize(new Dimension(30, 30));
 
 		addRunway.addActionListener(e -> {
-			RunwayEditPanel runwayEditPanel = new RunwayEditPanel(CONTROLLER);
 			new AddRunwayFrame(CONTROLLER);
 		});
 
@@ -146,9 +145,9 @@ public class SelectionPanel extends JPanel
 			CONTROLLER.uiDraw();
 		});
 
-		//todo add create runway popup in button listener
-		// todo edit runway popup + event listener
-		//todo remove runway even listener
+		//TODO add create runway popup in button listener
+		// TODO edit runway popup + event listener
+		//TODO remove runway even listener
 		removeRunway.addActionListener(e -> {
 			CONTROLLER.selectedAirport.removeRunway(CONTROLLER.selectedRunway);
 		});
@@ -261,8 +260,8 @@ public class SelectionPanel extends JPanel
 		gbc.insets.right = 0;
 		gbc.fill = GridBagConstraints.NONE;
 
-		//todo add scale and rotation listeners to update labels and view
-		//todo notify controller when scale/rotation changed?
+		//TODO add scale and rotation listeners to update labels and view
+		//TODO notify controller when scale/rotation changed?
 
 		//SCALE LABEL
 		gbc.gridx = 0;
