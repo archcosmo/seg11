@@ -13,6 +13,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -568,6 +569,7 @@ public class AddRunwayFrame {
 		
 		
 		JFrame lrFrame = new JFrame("Designator for "+rDes);
+		lrFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		lrFrame.setLocationRelativeTo(null);
 		lrFrame.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
@@ -629,8 +631,24 @@ public class AddRunwayFrame {
 		JButton confirm = new JButton("Confirm");
 		confirm.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				/* ================================================================================*/
 				String newDes1 = (String) choiceBox1.getSelectedItem();
+				String newDes2 = null,newDes3 = null;
+				if (r1Des !=null) newDes2 = (String) choiceBox2.getSelectedItem();
+				if (r2Des !=null) newDes3 = (String) choiceBox3.getSelectedItem();
+				boolean valid = true;
+				
+				if (newDes2 != null) {
+					if (newDes3 != null) {
+						if (newDes1.equals(newDes2) || newDes1.equals(newDes3) || newDes2.equals(newDes3)) {
+							JOptionPane.showMessageDialog(lrFrame, "Cannot choose the same value twice");
+							valid = false;
+						}
+					} else if (newDes1.equals(newDes2) || newDes1.equals(newDes3)) {
+						JOptionPane.showMessageDialog(lrFrame, "Cannot choose the same value twice");
+						valid = false;
+					} 					
+				}
+				
 				String opNewDes1 = null;
 				if (newDes1.equals("C")) opNewDes1 = "C";
 				else if (newDes1.equals("L")) opNewDes1 = "R";
@@ -643,9 +661,8 @@ public class AddRunwayFrame {
 				
 				runway.setDesignator();
 
-				String newDes2 = null, opNewDes2 = null;
+				String opNewDes2 = null;
 				if (r1Des !=null) {
-					newDes2 = (String) choiceBox2.getSelectedItem();
 					if (newDes2.equals("C")) opNewDes2 = "C";
 					else if (newDes2.equals("L")) opNewDes2 = "R";
 					else opNewDes2 = "L";
@@ -656,7 +673,7 @@ public class AddRunwayFrame {
 					r1.setDesignator();
 				}
 
-				String newDes3 = null, opNewDes3 = null;
+				String opNewDes3 = null;
 				if (r2Des !=null) {
 					newDes3 = (String) choiceBox3.getSelectedItem();
 					if (newDes3.equals("C")) opNewDes3 = "C";
@@ -668,8 +685,10 @@ public class AddRunwayFrame {
 					
 					r2.setDesignator();
 				}
-				controller.updateRunways();
-				lrFrame.dispose();
+				if (valid) {
+					controller.updateRunways();
+					lrFrame.dispose();
+				}
 			}
 		});
 		c.gridx = 0; c.gridy = 1;
