@@ -98,7 +98,7 @@ public class SelectionPanel extends JPanel
 		gbc.weightx = 0.4;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		
-		JComboBox<String> runwayComboBox = new JComboBox<String>();
+		runwayComboBox = new JComboBox<String>();
 		
 		runwayComboBox.setPreferredSize(new Dimension(75, 30));
 		runwayComboBox.setFont(notLabelFont);
@@ -337,7 +337,7 @@ public class SelectionPanel extends JPanel
 		gbc.weightx = 0.4;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		
-		JComboBox<String> obstacleComboBox = new JComboBox<String>();
+		obstacleComboBox = new JComboBox<String>();
 		obstacleComboBox.setPreferredSize(new Dimension(100, 30));
 		obstacleComboBox.setFont(notLabelFont);
 		obstacleComboBox.addItem("None");
