@@ -53,7 +53,7 @@ public class ColourScheme {
 	public String toString() { return this.name; }
 	
 	public static ColourScheme[] defaultThemes() {
-		ColourScheme[] schemes = new ColourScheme[2];
+		ColourScheme[] schemes = new ColourScheme[3];
 		
 		Color[] defaultColours = new Color[17];
 		defaultColours[0] = new Color(200, 221, 242); //Background
@@ -75,6 +75,26 @@ public class ColourScheme {
 		defaultColours[16] = Color.LIGHT_GRAY; //Stopway in side view
 		schemes[0] = new ColourScheme("Default", defaultColours);
 		
+		Color[] altColours = new Color[17];
+		altColours[0] = new Color(200, 221, 242); //Background
+		altColours[1] = Color.gray; //Runway
+		altColours[2] = Color.gray; //Runway in Side View
+		altColours[3] = new Color(220, 220, 220); //Runway Centerline
+		altColours[4] = Color.WHITE; //Designator Labels
+		altColours[5] = new Color(0, 0, 0, 150); //Threshold Marker
+		altColours[6] = Color.BLACK; //Measurement Arrows and Labels
+		altColours[7] = Color.CYAN; //Cleared and Graded Area
+		altColours[8] = Color.WHITE; //Obstacle Background
+		altColours[9] = Color.BLACK; //Obstacle Border
+		altColours[10] = Color.BLACK; //Obstacle Label
+		altColours[11] = new Color(255, 0, 0, 150); //Recalculated Threshold Marker
+		altColours[12] = Color.RED; //Label for Recalculated Threshold
+		altColours[13] = Color.GRAY; //Clearway Boxes
+		altColours[14] = Color.GRAY; //Clearways in side view
+		altColours[15] = Color.LIGHT_GRAY; //Stopway Blocks
+		altColours[16] = Color.LIGHT_GRAY; //Stopway in side view
+		schemes[1] = new ColourScheme("Default", altColours);
+		
 		Color[] highContrastColours = new Color[17];
 		highContrastColours[0] = Color.BLACK; //Background
 		highContrastColours[1] = Color.PINK; //Runway
@@ -93,7 +113,7 @@ public class ColourScheme {
 		highContrastColours[14] = new Color(228, 209, 22); //Clearways in side view
 		highContrastColours[15] = new Color(0, 145, 166); //Stopway Blocks
 		highContrastColours[16] = new Color(0, 145, 166); //Stopway in side view
-		schemes[1] = new ColourScheme("High Contrast", highContrastColours);
+		schemes[2] = new ColourScheme("High Contrast", highContrastColours);
 		
 		return schemes;
 	}
