@@ -333,14 +333,14 @@ public class AddRunwayFrame {
 			errorFrame.add(new JLabel(stripVal.validationString), c);
 
 			c.gridx = 0; c.gridy = 6;
-			errorFrame.add(createValidationTitleJLabel(sTorVal, "Short Angle TORA"), c);
-			c.gridx = 1;
-			errorFrame.add(new JLabel(sTorVal.validationString), c);
-
-			c.gridx = 0; c.gridy = 7;
-			errorFrame.add(createValidationTitleJLabel(sTodVal, "Short Angle TODA"), c);
+			errorFrame.add(createValidationTitleJLabel(sTorVal, "Short Angle TODA"), c);
 			c.gridx = 1;
 			errorFrame.add(new JLabel(sTodVal.validationString), c);
+
+			c.gridx = 0; c.gridy = 7;
+			errorFrame.add(createValidationTitleJLabel(sTodVal, "Short Angle TORA"), c);
+			c.gridx = 1;
+			errorFrame.add(new JLabel(sTorVal.validationString), c);
 
 			c.gridx = 0; c.gridy = 8;
 			errorFrame.add(createValidationTitleJLabel(sAsdVal, "Short Angle ASDA"), c);
@@ -353,14 +353,14 @@ public class AddRunwayFrame {
 			errorFrame.add(new JLabel(sLdVal.validationString), c);
 
 			c.gridx = 0; c.gridy = 10;
-			errorFrame.add(createValidationTitleJLabel(lTorVal, "Long Angle TORA"), c);
-			c.gridx = 1;
-			errorFrame.add(new JLabel(lTorVal.validationString), c);
-
-			c.gridx = 0; c.gridy = 11;
-			errorFrame.add(createValidationTitleJLabel(lTodVal, "Long Angle TODA"), c);
+			errorFrame.add(createValidationTitleJLabel(lTorVal, "Long Angle TODA"), c);
 			c.gridx = 1;
 			errorFrame.add(new JLabel(lTodVal.validationString), c);
+
+			c.gridx = 0; c.gridy = 11;
+			errorFrame.add(createValidationTitleJLabel(lTodVal, "Long Angle TORA"), c);
+			c.gridx = 1;
+			errorFrame.add(new JLabel(lTorVal.validationString), c);
 
 			c.gridx = 0; c.gridy = 12;
 			errorFrame.add(createValidationTitleJLabel(lAsdVal, "Long Angle ASDA"), c);
