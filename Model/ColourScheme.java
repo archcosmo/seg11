@@ -93,7 +93,7 @@ public class ColourScheme {
 		altColours[14] = Color.GRAY; //Clearways in side view
 		altColours[15] = Color.LIGHT_GRAY; //Stopway Blocks
 		altColours[16] = Color.LIGHT_GRAY; //Stopway in side view
-		schemes[1] = new ColourScheme("Default", altColours);
+		schemes[1] = new ColourScheme("Alternative", altColours);
 		
 		Color[] highContrastColours = new Color[17];
 		highContrastColours[0] = Color.BLACK; //Background
