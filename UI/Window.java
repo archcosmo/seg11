@@ -114,6 +114,10 @@ public class Window extends JFrame
 		
 		contentPanel.add(NOTIFICATION, BorderLayout.SOUTH);
 		
+		//Initialise rotation angle
+		int angle = Integer.parseInt(CONTROLLER.getSelectedLogicalRunway().getParentRunway().lowAngle().designator.substring(0,2)) * 10;
+		CONTROLLER.setViewRotation(angle);
+		
 		//Reset scaling to 1
 		try {
 			CONTROLLER.setViewZoom(0);

@@ -399,6 +399,12 @@ public class Controller
 		return zoomFactor;
 	}
 	
+	/*Sets the rotation of the top view in degrees*/
+	public void setViewRotation(int rotdeg) {
+		draw.setRotation(rotdeg);
+		UI.draw();
+	}
+	
 	/*Adjusts the panning offset for the top view by a given amount*/
 	public void adjustTopPan(int panX, int panY) {
 		draw.setTopPan(panX, panY);

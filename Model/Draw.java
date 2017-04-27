@@ -3,6 +3,7 @@
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -14,7 +15,7 @@ public class Draw
 
 	Controller controller;
 	private float zoom;
-	private int topPanX, sidePanX, topPanY, sidePanY, topMouseX, topMouseY, sideMouseX, sideMouseY;
+	private int topPanX, sidePanX, topPanY, sidePanY, topMouseX, topMouseY, sideMouseX, sideMouseY, rotdeg;
 	private ColourScheme colourScheme;
 	private boolean drawLabels, labelMeasurements, displayDistancesOnMeasurements, drawOrigMeasurements, 
 					drawLegend, floatingLegend, floatingCompassAndDirection, drawCompass, drawDirection;
@@ -26,7 +27,11 @@ public class Draw
 		}
 		return false;
 	}
-	int rangus = 0;
+
+	public void setRotation(int degrees) {
+		rotdeg = degrees;
+	}
+	
 	public float getZoomFactor() { return this.zoom; }
 	
 	public void setTopPan(int panX, int panY) {
@@ -93,6 +98,7 @@ public class Draw
 	public Draw(Controller controller) {
 		this.controller = controller;
 		this.zoom = 1.0F;
+		this.rotdeg = 0;
 		this.topPanX = 0;
 		this.topPanY = 0;
 		
@@ -187,7 +193,13 @@ public class Draw
 //					recalculatedRunway.setLogicalRunways(new LogicalRunway(runway.shortAngleLogicalRunway.designator, recalculatedRunway, controller.recalculatedValues.get(0), controller.recalculatedValues.get(1), controller.recalculatedValues.get(2), controller.recalculatedValues.get(3), 0), runway.longAngleLogicalRunway);
 //				runway = recalculatedRunway;
 //			}
-
+			
+			AffineTransform origAt = g2d.getTransform();
+			AffineTransform at = g2d.getTransform();
+			int angle = Integer.parseInt(runway.lowAngle().designator.substring(0,2)) * 10;
+			at.setToRotation(-((rotdeg-angle) * Math.PI / 180), width/2, height/2);
+			g2d.setTransform(at);
+			
 			drawRunwayTop(g2d, runway, runwayX, adjustedRunwayLength, adjustedRunwayWidth, centerLine, scale);
 
 			if (ob != null) {
@@ -197,6 +209,8 @@ public class Draw
 
 			drawLogicalRunwayMeasurementsTop(g2d, controller.lowAngleRunway, runway, runwayX, adjustedRunwayLength, adjustedRunwayWidth, centerLine, scale);
 
+			g2d.setTransform(origAt);
+			
 			if(drawLegend)
 				drawLegend(g2d, width, height, true);
 			
@@ -213,8 +227,8 @@ public class Draw
 		
 		//Biggest Direction
 		int drawWidth = g2d.getFontMetrics().stringWidth("Landing/Take-Off Direction: ") + (int)(50*scale);
-		if(!drawDirection)
-			drawWidth = g2d.getFontMetrics().stringWidth("Compass Heading: ") + (int)(60*scale);
+//		if(!drawDirection)
+//			drawWidth = g2d.getFontMetrics().stringWidth("Compass Heading: ") + (int)(60*scale);
 		
 		int localX = width/2 + (int)(339 * scale) - drawWidth + (floatingCompassAndDirection ? 0 : (topView ? topPanX : sidePanX));
 		int localY = height/2 - (int)(240 * height * (floatingCompassAndDirection ? 1 : zoom) / 601) + (floatingCompassAndDirection ? 0 : (topView ? topPanY : sidePanY));
@@ -236,10 +250,10 @@ public class Draw
 		if(drawCompass) {
 			int angle = Integer.parseInt(runway.shortAngleLogicalRunway.designator.substring(0,2)) * 10;
 
-			int lowAngle = -90 - angle;
+			int lowAngle = -90 - rotdeg;
 			
 			g2d.drawString("Compass Heading: ", localX, localY + (drawDirection ? g2d.getFontMetrics().getHeight() : 0));
-			drawArrow(g2d, lowAngle, scale, localX + g2d.getFontMetrics().stringWidth("Compass Heading: ") + (lowAngle < 0 ? (int)(scale*50) : ((lowAngle == 0 || lowAngle == 180) ? (int)(scale*25) : 0)), localY + (drawDirection ? g2d.getFontMetrics().getHeight() : 0), 50);
+			drawArrow(g2d, lowAngle, scale, localX + g2d.getFontMetrics().stringWidth("Compass Heading: ") + (int)(scale*50), localY + (int)(scale*50) - (!drawDirection ? g2d.getFontMetrics().getHeight() : 0), 50);
 		}
 	}
 	

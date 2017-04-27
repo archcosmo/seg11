@@ -18,6 +18,10 @@ public class LogicalRunway {
         this.clearwayLength = toda - tora;
     }
     
+    public Runway getParentRunway() {
+    	return runway;
+    }
+    
     public int getRESA() {
     	return runway.RESA;
     }

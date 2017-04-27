@@ -274,7 +274,9 @@ public class SelectionPanel extends JPanel
 		gbc.gridwidth = 1;
 		gbc.insets.top = 10;
 
-		JLabel rotationLabel = new JLabel("View Rotation: 90°"); //Alt + 248 = °
+		int angle = Integer.parseInt(CONTROLLER.getSelectedLogicalRunway().getParentRunway().lowAngle().designator.substring(0,2)) * 10;
+		
+		JLabel rotationLabel = new JLabel("View Rotation: " + angle + "°"); //Alt + 248 = °
 		rotationLabel.setFont(labelFont);
 		add(rotationLabel, gbc);
 
@@ -286,18 +288,49 @@ public class SelectionPanel extends JPanel
 		gbc.gridwidth = 1;
 		gbc.insets.right = 10;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
-
-		JSlider rotationSlider = new JSlider(0, 359, 90);
+		
+		JSlider rotationSlider = new JSlider(0, 359, angle);
+		rotationSlider.addChangeListener(l -> {
+			CONTROLLER.setViewRotation(rotationSlider.getValue());
+			rotationLabel.setText(String.format("View Rotation: %d°", rotationSlider.getValue()));
+		});
 		add(rotationSlider, gbc);
 
+		gbc.fill = GridBagConstraints.NONE;
+		gbc.insets.right = 0;
+		
+		//SNAP TO RUNWAY ANGLE
+		gbc.gridx = 0;
+		gbc.gridy = 6;
+		gbc.gridwidth = 4;
+		
+		JButton snapToRunwayButton = new JButton("Snap To Runway Angle");
+		snapToRunwayButton.addActionListener(e -> {
+			rotationSlider.setValue(angle);
+		});
+		add(snapToRunwayButton, gbc);
+		
+		//SNAP TO COMPASS HEADING
+		gbc.gridx = 4;
+		gbc.gridy = 6;
+		gbc.gridwidth = 1;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.insets.right = 10;
+		
+		JButton snapToCompassButton = new JButton("Snap To North");
+		snapToCompassButton.addActionListener(e -> {
+			rotationSlider.setValue(270);
+		});
+		add(snapToCompassButton, gbc);
+		
 		gbc.fill = GridBagConstraints.NONE;
 		gbc.insets.right = 0;
 
 		//OBSTACLE LABEL
 		gbc.gridx = 0;
-		gbc.gridy = 6;
+		gbc.gridy = 7;
 		gbc.gridwidth = 4;
-		gbc.insets.top = 40;
+		gbc.insets.top = 20;
 
 		JLabel obstacleLabel = new JLabel("Select obstacle");
 		obstacleLabel.setFont(labelFont);
@@ -307,7 +340,7 @@ public class SelectionPanel extends JPanel
 
 		//OBSTACLE COMBOBOX
 		gbc.gridx = 0;
-		gbc.gridy = 7;
+		gbc.gridy = 8;
 		gbc.gridwidth = 1;
 		gbc.weightx = 0.4;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -388,7 +421,7 @@ public class SelectionPanel extends JPanel
 
 		//OBSTACLE CENTERLINE LABEL
 		gbc.gridx = 0;
-		gbc.gridy = 8;
+		gbc.gridy = 9;
 		gbc.gridwidth = 4;
 		gbc.insets.top = 10;
 
@@ -400,7 +433,7 @@ public class SelectionPanel extends JPanel
 
 		//OBSTACLE CENTERLINE TEXTFIELD
 		gbc.gridx = 0;
-		gbc.gridy = 9;
+		gbc.gridy = 10;
 		gbc.gridwidth = 4;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.ipady = 5;
@@ -430,7 +463,7 @@ public class SelectionPanel extends JPanel
 
 		//OBSTACLE THRESHOLD DISTANCE LABEL
 		gbc.gridx = 4;		//TODO notify controller when scale/rotation changed?
-		gbc.gridy = 8;
+		gbc.gridy = 9;
 		gbc.gridwidth = 1;
 		gbc.insets.top = 10;
 
@@ -442,7 +475,7 @@ public class SelectionPanel extends JPanel
 
 		//OBSTACLE THRESHOLD DISTANCE TEXTFIELD
 		gbc.gridx = 4;
-		gbc.gridy = 9;
+		gbc.gridy = 10;
 		gbc.gridwidth = 1;
 		gbc.insets.right = 10;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
