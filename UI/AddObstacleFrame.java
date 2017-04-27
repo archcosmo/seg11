@@ -204,6 +204,7 @@ public class AddObstacleFrame {
 			obstacle.width = widthVal.value;
 			obstacle.height = heightVal.value;
 		}
+		controller.uiDraw();
 		try {
 			XML.saveObstacleInfoToXML(controller.obstacles);
 		} catch (IOException e) {}

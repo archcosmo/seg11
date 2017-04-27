@@ -582,6 +582,7 @@ public class AddRunwayFrame {
 			runway.setDesignator();
 			controller.updateRunways();
 		}
+		controller.uiDraw();
 		try {
 			XML.saveAirportInfoToXML(controller.selectedAirport);
 		} catch (IOException e) {}

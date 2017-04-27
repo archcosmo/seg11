@@ -1,6 +1,7 @@
 package UI;
 
 import java.awt.BorderLayout;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -128,8 +129,10 @@ public class Window extends JFrame
 	
 	public void draw()
 	{
-		SIDE.repaint();
-		TOP.repaint();
+		if(SIDE != null)
+			SIDE.repaint();
+		if(TOP != null)
+			TOP.repaint();
 	}
 	
 	public void notify(String s)

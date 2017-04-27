@@ -247,7 +247,7 @@ public class Draw
 		}
 		
 		/*Draw Compass*/
-		if(drawCompass) {
+		if(drawCompass && topView) {
 			int angle = Integer.parseInt(runway.shortAngleLogicalRunway.designator.substring(0,2)) * 10;
 
 			int lowAngle = -90 - rotdeg;
