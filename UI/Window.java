@@ -114,7 +114,12 @@ public class Window extends JFrame
 		
 		contentPanel.add(NOTIFICATION, BorderLayout.SOUTH);
 		
-		draw();
+		//Reset scaling to 1
+		try {
+			CONTROLLER.setViewZoom(0);
+		} catch (Exception e) {
+			notify(e.getMessage());
+		}
 	}
 	
 	public void draw()
