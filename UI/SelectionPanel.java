@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -21,6 +22,7 @@ import Application.Controller;
 import Model.ColourScheme;
 import Model.Obstacle;
 import Model.Runway;
+import Model.XML;
 
 @SuppressWarnings("serial")
 public class SelectionPanel extends JPanel
@@ -30,6 +32,7 @@ public class SelectionPanel extends JPanel
 	JTextField thresholdDistanceTextField;
 	JComboBox<String> runwayComboBox;
 	JComboBox<String> obstacleComboBox;
+	JComboBox<String> designatorComboBox;
 
 	public SelectionPanel(Controller c) 
 	{
@@ -83,6 +86,11 @@ public class SelectionPanel extends JPanel
 		runwayComboBox.addActionListener(e -> {
 			CONTROLLER.selectRunway((String) runwayComboBox.getSelectedItem());
 			CONTROLLER.notify("Runway selected : "+ (String) runwayComboBox.getSelectedItem());
+			designatorComboBox.removeAllItems();
+			designatorComboBox.addItem(CONTROLLER.selectedRunway.lowAngle().designator);
+			designatorComboBox.addItem(CONTROLLER.selectedRunway.highAngle().designator);
+			CONTROLLER.setRunwayAngle(designatorComboBox.getSelectedIndex() == 0);
+			CONTROLLER.notify("Designator selected : "+ (String) designatorComboBox.getSelectedItem());
 		});
 		add(runwayComboBox, gbc);
 
@@ -121,6 +129,9 @@ public class SelectionPanel extends JPanel
 				if (reply == JOptionPane.YES_OPTION) {
 					CONTROLLER.notify("Runway removed: " + CONTROLLER.selectedRunway.getName());
 					CONTROLLER.selectedAirport.removeRunway(CONTROLLER.selectedRunway);
+					try {
+						XML.saveAirportInfoToXML(CONTROLLER.selectedAirport);
+					} catch (IOException e1) {}
 					updateRunways();
 				}
 			}
@@ -161,7 +172,7 @@ public class SelectionPanel extends JPanel
 		gbc.insets.right = 10;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 
-		JComboBox<String> designatorComboBox = new JComboBox<String>();
+		designatorComboBox = new JComboBox<String>();
 		designatorComboBox.setFont(notLabelFont);
 		designatorComboBox.addItem(CONTROLLER.selectedRunway.lowAngle().designator);
 		designatorComboBox.addItem(CONTROLLER.selectedRunway.highAngle().designator);
@@ -399,6 +410,9 @@ public class SelectionPanel extends JPanel
 				if (reply == JOptionPane.YES_OPTION) {
 					CONTROLLER.notify("Obstacle removed: " + CONTROLLER.selectedObstacle.getName());
 					CONTROLLER.obstacles.remove(CONTROLLER.selectedObstacle);
+					try {
+						XML.saveObstacleInfoToXML(CONTROLLER.obstacles);
+					} catch (IOException e1) {}
 					updateObstacles();
 				}
 			}

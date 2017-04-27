@@ -79,7 +79,7 @@ public class Controller
 	private void addGenericObstacle() 
 	{
 		obstacles = new ArrayList<Obstacle>();
-		obstacles.add(new Obstacle("Dafault Obstacle", 20, 100, 40));
+		obstacles.add(new Obstacle("Default Obst.", 20, 100, 40));
 		try {
 			XML.saveObstacleInfoToXML(obstacles);
 		} catch (IOException e) {
@@ -230,11 +230,11 @@ public class Controller
 			
 			LogicalRunway temp = getSelectedLogicalRunway();
 			originalValues = 
-				"Original Values: <br> <br>" +
-				"TORA = " + temp.tora + "<br>" +
-				"TODA = " + temp.toda + "<br>" +
-				"ASDA = " + temp.tora + "<br>" +
-				"LDA  = " + temp.lda + "<br>";
+				"<center>Original Values:</center> <br> <br>" +
+				"<center>TORA = " + temp.tora + "<br></center>" +
+				"<center>TODA = " + temp.toda + "<br></center>" +
+				"<center>ASDA = " + temp.tora + "<br></center>" +
+				"<center>LDA  = " + temp.lda + "<br></center>";
 			
 			UI.draw();
 			notify("Printed Calculations Breakdown, Updated Diagrams");

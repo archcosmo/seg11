@@ -101,11 +101,11 @@ public class Calculations {
 		}
 		
 		lastCalculationValues = 
-				"Recalculated Threshold Values: <br> <br>" +
-				"TORA = " + newTora + "<br>" +
-				"TODA = " + newToda + "<br>" +
-				"ASDA = " + newTora + "<br>" +
-				"LDA  = " + newLda + "<br>";
+				"<center>Recalculated Threshold Values:</center> <br> <br>" +
+				"<center>TORA = " + newTora + "<br></center>" +
+				"<center>TODA = " + newToda + "<br></center>" +
+				"<center>ASDA = " + newTora + "<br></center>" +
+				"<center>LDA  = " + newLda + "<br></center>";
 
 		ArrayList<Integer> thresholds = new ArrayList<>();
 		thresholds.add(newTora);

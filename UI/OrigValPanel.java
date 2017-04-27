@@ -1,6 +1,7 @@
 package UI;
 
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 
 import javax.swing.JLabel;
@@ -24,7 +25,9 @@ public class OrigValPanel extends JScrollPane
 		JPanel pane = new JPanel();
 		this.setViewportView(pane);
 		
+		Font labelFont = this.getFont().deriveFont(20.0f);
 		calculations = new JLabel("");
+		calculations.setFont(labelFont);
 		pane.add(calculations);
 	}
 	
@@ -38,7 +41,7 @@ public class OrigValPanel extends JScrollPane
 		}
 		else
 		{
-			calculations.setText("<html><br><br>"+s+"</html>");;
+			calculations.setText("<html><br>"+s+"</html>");;
 		}
 	}
 }

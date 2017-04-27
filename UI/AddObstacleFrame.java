@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -14,6 +15,7 @@ import javax.swing.JTextField;
 
 import Application.Controller;
 import Model.Obstacle;
+import Model.XML;
 
 import static UI.ValidateValue.createValidationTitleJLabel;
 import static UI.ValidateValue.validateNumber;
@@ -202,5 +204,8 @@ public class AddObstacleFrame {
 			obstacle.width = widthVal.value;
 			obstacle.height = heightVal.value;
 		}
+		try {
+			XML.saveObstacleInfoToXML(controller.obstacles);
+		} catch (IOException e) {}
 	}
 }
