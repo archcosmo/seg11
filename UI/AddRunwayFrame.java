@@ -6,6 +6,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -19,6 +20,7 @@ import javax.swing.JTextField;
 import Application.Controller;
 import Model.LogicalRunway;
 import Model.Runway;
+import Model.XML;
 
 import static UI.ValidateValue.createValidationTitleJLabel;
 import static UI.ValidateValue.validateNumber;
@@ -580,6 +582,9 @@ public class AddRunwayFrame {
 			runway.setDesignator();
 			controller.updateRunways();
 		}
+		try {
+			XML.saveAirportInfoToXML(controller.selectedAirport);
+		} catch (IOException e) {}
 	}
 
 	private String appendHTMLToString(String htmlString, String appendString) {
