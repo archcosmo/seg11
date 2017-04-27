@@ -148,7 +148,7 @@ public class AddObstacleFrame {
 		
 		if (!(named && lengthVal.valid && widthVal.valid && heightVal.valid)) {
 			if (errorFrame != null)	errorFrame.dispose();
-			errorFrame = new JFrame();
+			errorFrame = new JFrame("New Obstacle Validation");
 			errorFrame.setLayout(new GridBagLayout());
 			GridBagConstraints c = new GridBagConstraints();
 			c.anchor = GridBagConstraints.WEST;

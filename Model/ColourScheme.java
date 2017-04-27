@@ -56,23 +56,23 @@ public class ColourScheme {
 		ColourScheme[] schemes = new ColourScheme[3];
 		
 		Color[] defaultColours = new Color[17];
-		defaultColours[0] = new Color(200, 221, 242); //Background
+		defaultColours[0] = new Color(0x609090); //Background
 		defaultColours[1] = Color.gray; //Runway
-		defaultColours[2] = Color.gray; //Runway in Side View
+		defaultColours[2] = new Color(0xBBBBBB); //Runway in Side View
 		defaultColours[3] = new Color(220, 220, 220); //Runway Centerline
 		defaultColours[4] = Color.WHITE; //Designator Labels
 		defaultColours[5] = new Color(0, 0, 0, 150); //Threshold Marker
 		defaultColours[6] = Color.BLACK; //Measurement Arrows and Labels
-		defaultColours[7] = Color.CYAN; //Cleared and Graded Area
-		defaultColours[8] = Color.WHITE; //Obstacle Background
-		defaultColours[9] = Color.BLACK; //Obstacle Border
+		defaultColours[7] = new Color(0x116416); //Cleared and Graded Area
+		defaultColours[8] = new Color(0xD46D6A); //Obstacle Background
+		defaultColours[9] = new Color(0x801815); //Obstacle Border
 		defaultColours[10] = Color.BLACK; //Obstacle Label
-		defaultColours[11] = new Color(255, 0, 0, 150); //Recalculated Threshold Marker
-		defaultColours[12] = Color.RED; //Label for Recalculated Threshold
-		defaultColours[13] = Color.GRAY; //Clearway Boxes
-		defaultColours[14] = Color.GRAY; //Clearways in side view
-		defaultColours[15] = Color.LIGHT_GRAY; //Stopway Blocks
-		defaultColours[16] = Color.LIGHT_GRAY; //Stopway in side view
+		defaultColours[11] = new Color(0xD46D6A); //Recalculated Threshold Marker
+		defaultColours[12] = new Color(0xD46D6A); //Label for Recalculated Threshold
+		defaultColours[13] = new Color(0x801815); //Clearway Boxes
+		defaultColours[14] = new Color(0x801815); //Clearways in side view
+		defaultColours[15] = new Color(0x86C98A); //Stopway Blocks
+		defaultColours[16] = new Color(0x86C98A); //Stopway in side view
 		schemes[0] = new ColourScheme("Default", defaultColours);
 		
 		Color[] altColours = new Color[17];
@@ -96,7 +96,7 @@ public class ColourScheme {
 		schemes[1] = new ColourScheme("Alternative", altColours);
 		
 		Color[] highContrastColours = new Color[17];
-		highContrastColours[0] = Color.BLACK; //Background
+		highContrastColours[0] = new Color(30, 30, 30, 255); //Background
 		highContrastColours[1] = Color.PINK; //Runway
 		highContrastColours[2] = Color.RED; //Runway in Side View
 		highContrastColours[3] = Color.GREEN; //Runway Centerline

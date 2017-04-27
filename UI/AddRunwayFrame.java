@@ -298,7 +298,7 @@ public class AddRunwayFrame {
 	
 		if (!(angleVal.valid && lengthVal.valid && widthVal.valid && resaVal.valid && blastVal.valid && stripVal.valid && sTorVal.valid && sTodVal.valid && sAsdVal.valid && sLdVal.valid && lTorVal.valid && lTodVal.valid && lAsdVal.valid && lLdVal.valid)) {
 			if (errorFrame !=  null) errorFrame.dispose();
-			errorFrame = new JFrame();
+			errorFrame = new JFrame("New Runway Validation");
 			errorFrame.setLayout(new GridBagLayout());
 			GridBagConstraints c = new GridBagConstraints();
 			c.anchor = GridBagConstraints.WEST;
