@@ -33,10 +33,12 @@ public class SelectionPanel extends JPanel
 	JComboBox<String> runwayComboBox;
 	JComboBox<String> obstacleComboBox;
 	JComboBox<String> designatorComboBox;
+	int angle;
 
 	public SelectionPanel(Controller c) 
 	{
 		CONTROLLER = c;
+		angle = Integer.parseInt(CONTROLLER.getSelectedLogicalRunway().getParentRunway().lowAngle().designator.substring(0,2)) * 10;
 		initPanel();
 	}
 
@@ -50,8 +52,7 @@ public class SelectionPanel extends JPanel
 
 	/* Create menu */
 	private void addComponents() 
-	{
-
+	{		
 		Font labelFont = this.getFont().deriveFont(16.0f);
 		Font notLabelFont = this.getFont().deriveFont(16.0f);
 
@@ -284,8 +285,6 @@ public class SelectionPanel extends JPanel
 		gbc.gridy = 4;
 		gbc.gridwidth = 1;
 		gbc.insets.top = 10;
-
-		int angle = Integer.parseInt(CONTROLLER.getSelectedLogicalRunway().getParentRunway().lowAngle().designator.substring(0,2)) * 10;
 		
 		JLabel rotationLabel = new JLabel("View Rotation: " + angle + "°"); //Alt + 248 = °
 		rotationLabel.setFont(labelFont);
@@ -527,6 +526,12 @@ public class SelectionPanel extends JPanel
 		gbc.insets.right = 0;
 		gbc.fill = GridBagConstraints.NONE;
 		gbc.ipady = 0;
+		
+		//Rotational bug fix
+		designatorComboBox.addActionListener(e -> {
+			angle = Integer.parseInt(CONTROLLER.getSelectedLogicalRunway().getParentRunway().lowAngle().designator.substring(0,2)) * 10;
+			rotationSlider.setValue(angle);
+		});
 	}
 
 	public void updateRunways(Runway r) {

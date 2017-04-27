@@ -253,7 +253,7 @@ public class Draw
 			int lowAngle = -90 - rotdeg;
 			
 			g2d.drawString("Compass Heading: ", localX, localY + (drawDirection ? g2d.getFontMetrics().getHeight() : 0));
-			drawArrow(g2d, lowAngle, scale, localX + g2d.getFontMetrics().stringWidth("Compass Heading: ") + (int)(scale*50), localY + (int)(scale*50) - (!drawDirection ? g2d.getFontMetrics().getHeight() : 0), 50);
+			drawArrow(g2d, lowAngle, scale, localX + g2d.getFontMetrics().stringWidth("Compass Heading: ") + (int)(scale*50), localY + (int)(scale*50) - (!drawDirection ? g2d.getFontMetrics().getHeight() : -10), 50);
 		}
 	}
 	
