@@ -34,11 +34,11 @@ public class DataPanel extends JScrollPane
 		String s = CONTROLLER.getCalculations();
 		if (s.equals("")) 
 		{
-			calculations.setText("Currently no calculations to display");
+			calculations.setText("<html><br>Currently no calculations to display");
 		}
 		else
 		{
-			calculations.setText("<html>"+s+"</html>");;
+			calculations.setText("<html><br>"+s+"</html>");;
 		}
 	}
 }

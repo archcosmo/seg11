@@ -46,7 +46,7 @@ public class Calculations {
 			//Take off towards/ land towards logical runway start
 
 			newTora = fromThresh + logicalRunway.displacedThreshold - ALSWidth - logicalRunway.getStripEnd();
-			lastCalculationBreakdown.append("TORA = Distance from Threshold + Displaced Threshold - Slope Calculation - Strip End<br>");
+			lastCalculationBreakdown.append("TORA = Distance from Threshold + <br> &nbsp; &nbsp; Displaced Threshold - Slope Calculation - Strip End<br>");
 			lastCalculationBreakdown.append("     = "+fromThresh+" + "+logicalRunway.displacedThreshold+" - "+DEFAULT_ANGLE_OF_DESCENT +"*"+ obstacle.height+" - "+logicalRunway.getStripEnd()+"<br>");
 			lastCalculationBreakdown.append("     = "+newTora+"<br>");
 
@@ -73,13 +73,13 @@ public class Calculations {
 			if (RESA_StripEnd > blast_DThreshold) {
 
 				newTora = logicalRunway.tora - fromThresh - (RESA_StripEnd);
-				lastCalculationBreakdown.append("TORA = Original TORA - Distance from Threshold - "+"RESA - Strip End<br>");
+				lastCalculationBreakdown.append("TORA = Original TORA - <br> &nbsp; &nbsp; Distance from Threshold - "+"RESA - Strip End<br>");
 				lastCalculationBreakdown.append("     = "+logicalRunway.tora+" - "+fromThresh+" - "+RESA+" - "+logicalRunway.getStripEnd()+"<br>");
 				lastCalculationBreakdown.append("     = "+newTora+"<br>");
 			} else {
 
 				newTora = logicalRunway.tora - fromThresh - (blast_DThreshold);
-				lastCalculationBreakdown.append("TORA = Original TORA - Distance from Threshold - "+"Blast Protection - Displaced Threshold<br>");
+				lastCalculationBreakdown.append("TORA = Original TORA - <br> &nbsp; &nbsp; Distance from Threshold - "+"Blast Protection - Displaced Threshold<br>");
 				lastCalculationBreakdown.append("     = "+logicalRunway.tora+" - "+fromThresh+" - "+blastAllowance + " - "+logicalRunway.displacedThreshold+"<br>");
 				lastCalculationBreakdown.append("     = "+newTora+"<br>");
 			}
@@ -95,7 +95,7 @@ public class Calculations {
 			lastCalculationBreakdown.append("     = "+newAsda+"<br>");
 
 			newLda = logicalRunway.lda - fromThresh - obstacle.length - ALSWidth - logicalRunway.getStripEnd();
-			lastCalculationBreakdown.append("LDA  = Original LDA - Distance from Threshold - Slope Calculation - Strip End<br>");
+			lastCalculationBreakdown.append("LDA  = Original LDA - <br> &nbsp; &nbsp; Distance from Threshold - Slope Calculation - Strip End<br>");
 			lastCalculationBreakdown.append("     = "+logicalRunway.lda+" - "+fromThresh+" - "+DEFAULT_ANGLE_OF_DESCENT +"*"+ obstacle.height+" - "+logicalRunway.getStripEnd()+"<br>");
 			lastCalculationBreakdown.append("     = "+newLda+"<br>");
 		}
