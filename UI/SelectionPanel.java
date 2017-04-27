@@ -162,7 +162,7 @@ public class SelectionPanel extends JPanel
 		//DESIGNATOR LABEL
 		gbc.gridx = 4;
 		gbc.gridy = 0;
-		gbc.gridwidth = 1;
+		gbc.gridwidth = 2;
 
 		JLabel designatorLabel = new JLabel("Select Designator");
 		designatorLabel.setFont(labelFont);
@@ -218,7 +218,7 @@ public class SelectionPanel extends JPanel
 		//COLOUR SCHEME LABEL
 		gbc.gridx = 4;
 		gbc.gridy = 2;
-		gbc.gridwidth = 1;
+		gbc.gridwidth = 2;
 		gbc.insets.top = 10;
 
 		JLabel colourSchemeLabel = new JLabel("Colour Scheme");
@@ -283,7 +283,7 @@ public class SelectionPanel extends JPanel
 		//ROTATION LABEL
 		gbc.gridx = 4;
 		gbc.gridy = 4;
-		gbc.gridwidth = 1;
+		gbc.gridwidth = 2;
 		gbc.insets.top = 10;
 		
 		JLabel rotationLabel = new JLabel("View Rotation: " + angle + "°"); //Alt + 248 = °
@@ -295,7 +295,7 @@ public class SelectionPanel extends JPanel
 		//ROTATION SLIDER
 		gbc.gridx = 4;
 		gbc.gridy = 5;
-		gbc.gridwidth = 1;
+		gbc.gridwidth = 2;
 		gbc.insets.right = 10;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		
@@ -323,7 +323,7 @@ public class SelectionPanel extends JPanel
 		//SNAP TO COMPASS HEADING
 		gbc.gridx = 4;
 		gbc.gridy = 6;
-		gbc.gridwidth = 1;
+		gbc.gridwidth = 2;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.insets.right = 10;
 		
@@ -432,6 +432,29 @@ public class SelectionPanel extends JPanel
 		gbc.weightx = 0;
 		gbc.fill = GridBagConstraints.NONE;
 
+		//EXPORT OBSTACLE BUTTON
+		gbc.gridx = 4;
+		gbc.gridy = 8;
+		gbc.gridwidth = 1;
+		gbc.fill = GridBagConstraints.HORIZONTAL;
+		gbc.weightx = 0.5;
+		
+		JButton exportObstacleButton = new JButton("Export");
+		add(exportObstacleButton, gbc);
+		
+		//IMPORT OBSTACLE BUTTON
+		gbc.gridx = 5;
+		gbc.gridy = 8;
+		gbc.gridwidth = 1;
+		gbc.insets.right = 10;
+		
+		JButton importObstacleButton = new JButton("Import");
+		add(importObstacleButton, gbc);
+		
+		gbc.fill = GridBagConstraints.NONE;
+		gbc.insets.right = 0;
+		gbc.weightx = 0;
+		
 		//OBSTACLE CENTERLINE LABEL
 		gbc.gridx = 0;
 		gbc.gridy = 9;
@@ -477,7 +500,7 @@ public class SelectionPanel extends JPanel
 		//OBSTACLE THRESHOLD DISTANCE LABEL
 		gbc.gridx = 4;		//TODO notify controller when scale/rotation changed?
 		gbc.gridy = 9;
-		gbc.gridwidth = 1;
+		gbc.gridwidth = 2;
 		gbc.insets.top = 10;
 
 		JLabel thresholdLabel = new JLabel("Distance from threshold");
@@ -489,7 +512,7 @@ public class SelectionPanel extends JPanel
 		//OBSTACLE THRESHOLD DISTANCE TEXTFIELD
 		gbc.gridx = 4;
 		gbc.gridy = 10;
-		gbc.gridwidth = 1;
+		gbc.gridwidth = 2;
 		gbc.insets.right = 10;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.ipady = 5;
