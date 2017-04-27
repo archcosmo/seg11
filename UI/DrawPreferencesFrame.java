@@ -62,7 +62,7 @@ public class DrawPreferencesFrame extends JPanel {
 		add(labelMeasurements, gbc);
 		
 		JCheckBox displayDistancesOnMeasurements = new JCheckBox("Draw Distance on Measurements");
-		displayDistancesOnMeasurements.setSelected(false);
+		displayDistancesOnMeasurements.setSelected(true);
 		displayDistancesOnMeasurements.addChangeListener(l -> {
 			try {
 				CONTROLLER.setDrawPreference("displayDistancesOnMeasurements", displayDistancesOnMeasurements.isSelected());
