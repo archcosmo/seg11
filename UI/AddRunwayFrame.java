@@ -246,19 +246,19 @@ public class AddRunwayFrame {
 		//Input validation
 		angleVal = validateNumber(angleField.getText(), 0, 359);
 		angleVal.value = (angleVal.value+5) /10;
-		lengthVal = validateNumber(lengthField.getText(), 100, 10000);
-		widthVal = validateNumber(widthField.getText(), 5, 2000);
+		lengthVal = validateNumber(lengthField.getText(), 1000, 5000);
+		widthVal = validateNumber(widthField.getText(), 100, 500);
 		resaVal = validateNumber(resaField.getText(), 0, 1000);
 		blastVal = validateNumber(baField.getText(), 0, 1000);
 		stripVal = validateNumber(seField.getText(), 0, 1000);
-		sTorVal = validateNumber(sTORAField.getText(), 0, 10000);
-		sTodVal = validateNumber(sTODAField.getText(), 0, 10000);
-		sAsdVal = validateNumber(sASDAField.getText(), 0, 10000);
-		sLdVal = validateNumber(sLDAField.getText(), 0, 10000);
-		lTorVal = validateNumber(lTORAField.getText(), 0, 10000);
-		lTodVal = validateNumber(lTODAField.getText(), 0, 10000);
-		lAsdVal = validateNumber(lASDAField.getText(), 0, 10000);
-		lLdVal = validateNumber(lLDAField.getText(), 0, 10000);
+		sTorVal = validateNumber(sTORAField.getText(), 0, 5000);
+		sTodVal = validateNumber(sTODAField.getText(), 0, 5000);
+		sAsdVal = validateNumber(sASDAField.getText(), 0, 5000);
+		sLdVal = validateNumber(sLDAField.getText(), 0, 5000);
+		lTorVal = validateNumber(lTORAField.getText(), 0, 5000);
+		lTodVal = validateNumber(lTODAField.getText(), 0, 5000);
+		lAsdVal = validateNumber(lASDAField.getText(), 0, 5000);
+		lLdVal = validateNumber(lLDAField.getText(), 0, 5000);
 		
 		if (sTorVal.value > lengthVal.value) {
 			sTorVal.validationString = appendHTMLToString(sTorVal.validationString, "TORA must not be greater than runway length.");
