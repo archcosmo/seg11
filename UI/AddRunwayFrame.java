@@ -30,6 +30,7 @@ public class AddRunwayFrame {
 		seField, sTODAField, sTORAField, sASDAField, sLDAField, lTODAField, lTORAField, lASDAField, lLDAField;
 	ValidateValue angleVal, lengthVal, widthVal, resaVal, blastVal, stripVal, sTorVal, sTodVal, sAsdVal, sLdVal, lTorVal, lTodVal, lAsdVal, lLdVal;
 	Runway runway;
+	Runway newRunway;
 	Boolean edit = false;
 	JFrame errorFrame;
 	String sDes, lDes;
@@ -381,9 +382,9 @@ public class AddRunwayFrame {
 		return true;
 	}
 
-
+	LogicalRunway l, s;
 	public void makeRunway() {
-		runway = new Runway(resaVal.value, blastVal.value, stripVal.value, lengthVal.value, widthVal.value);
+		newRunway = new Runway(resaVal.value, blastVal.value, stripVal.value, lengthVal.value, widthVal.value);
 		int sAngle, lAngle;
 		if (angleVal.value >= 18) {
 			lAngle = angleVal.value;
@@ -410,9 +411,9 @@ public class AddRunwayFrame {
 		}
 		if (i>1 && !edit) setLR(sDes, run1, run2);
 		
-		LogicalRunway s = new LogicalRunway(sDes, runway, sTorVal.value, sTodVal.value, sAsdVal.value, sLdVal.value);
-		LogicalRunway l = new LogicalRunway(lDes, runway, lTorVal.value, lTodVal.value, lAsdVal.value, lLdVal.value);
-		runway.setLogicalRunways(s, l);
+		s = new LogicalRunway(sDes, newRunway, sTorVal.value, sTodVal.value, sAsdVal.value, sLdVal.value);
+		l = new LogicalRunway(lDes, newRunway, lTorVal.value, lTodVal.value, lAsdVal.value, lLdVal.value);
+		newRunway.setLogicalRunways(s, l);
 	}
 	
 
@@ -567,9 +568,16 @@ public class AddRunwayFrame {
 	
 	public void addRunway() {
 		if (!edit) {
-			controller.selectedAirport.addRunway(runway);
-			controller.notify("Runway added: " + runway.getName());
-			controller.updateCombo(runway);
+			controller.selectedAirport.addRunway(newRunway);
+			controller.notify("Runway added: " + newRunway.getName());
+			controller.updateCombo(newRunway);
+		} else {
+			runway.RESA = newRunway.RESA;
+			runway.blastAllowance = newRunway.blastAllowance;
+			runway.stripEnd = newRunway.stripEnd;
+			runway.length = newRunway.length;
+			runway.width = newRunway.width;
+			runway.setLogicalRunways(s, l);
 		}
 	}
 
