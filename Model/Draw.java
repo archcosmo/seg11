@@ -229,7 +229,7 @@ public class Draw
 			g2d.drawString("Landing/Take-Off Direction: ", localX, localY);
 			int dirAngle = controller.lowAngleRunway ? 90 : -90;
 
-			drawArrow(g2d, dirAngle, scale, localX + g2d.getFontMetrics().stringWidth("Landing/Take-Off Direction: ") + (dirAngle == -90 ? (int)(scale*50) : 0), localY, 50);
+			drawArrow(g2d, dirAngle, scale, localX + g2d.getFontMetrics().stringWidth("Landing/Take-Off Direction: ") + (dirAngle == -90 ? (int)(scale*50) : 0), localY - 7, 50);
 		}
 		
 		/*Draw Compass*/
