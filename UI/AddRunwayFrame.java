@@ -568,6 +568,7 @@ public class AddRunwayFrame {
 	public void addRunway() {
 		if (!edit) {
 			controller.selectedAirport.addRunway(runway);
+			controller.notify("Runway added: " + runway.getName());
 			controller.updateCombo(runway);
 		}
 	}

@@ -119,6 +119,7 @@ public class SelectionPanel extends JPanel
 				int reply = JOptionPane.showConfirmDialog(null, "Are you sure you want to remove the runway " + 
 						CONTROLLER.selectedRunway.getName() + "?", "Remove Runway?",  JOptionPane.YES_NO_OPTION);
 				if (reply == JOptionPane.YES_OPTION) {
+					CONTROLLER.notify("Runway removed: " + CONTROLLER.selectedRunway.getName());
 					CONTROLLER.selectedAirport.removeRunway(CONTROLLER.selectedRunway);
 					updateRunways();
 				}
@@ -126,6 +127,7 @@ public class SelectionPanel extends JPanel
 		});
 		editRunway.addActionListener(e -> {
 			new AddRunwayFrame(CONTROLLER, CONTROLLER.selectedRunway);
+			CONTROLLER.notify("Runway edited: " + CONTROLLER.selectedRunway.getName());
 			CONTROLLER.selectRunway((String) runwayComboBox.getSelectedItem());
 		});
 
@@ -351,6 +353,7 @@ public class SelectionPanel extends JPanel
 		editObstacle.addActionListener(e -> {
 			if (CONTROLLER.selectedObstacle != null) {
 				new AddObstacleFrame(CONTROLLER, CONTROLLER.selectedObstacle);
+				CONTROLLER.notify("Obstacle edited: " + CONTROLLER.selectedObstacle.getName());
 				CONTROLLER.selectObstacle((String) obstacleComboBox.getSelectedItem());
 			}
 		});
@@ -359,6 +362,7 @@ public class SelectionPanel extends JPanel
 				int reply = JOptionPane.showConfirmDialog(null, "Are you sure you want to remove " + 
 						CONTROLLER.selectedObstacle.getName() + "?", "Remove Obstacle",  JOptionPane.YES_NO_OPTION);
 				if (reply == JOptionPane.YES_OPTION) {
+					CONTROLLER.notify("Obstacle removed: " + CONTROLLER.selectedObstacle.getName());
 					CONTROLLER.obstacles.remove(CONTROLLER.selectedObstacle);
 					updateObstacles();
 				}

@@ -195,6 +195,7 @@ public class AddObstacleFrame {
 		if (!edit) {
 			obstacle = new Obstacle(name, widthVal.value, lengthVal.value, heightVal.value);
 			controller.obstacles.add(obstacle);
+			controller.notify("Obstacle added: " + name);
 			controller.updateCombo(obstacle);
 		}
 		else {
