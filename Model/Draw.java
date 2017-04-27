@@ -141,11 +141,11 @@ public class Draw
 
 			float scale = (0.8F * width / totalLength);
 
-			/*Show selected logical runway*/
+			/*Show selected logical runway
 			String selectedLogRun = "None";
 			if (controller.getSelectedLogicalRunway() != null) {
 				selectedLogRun = controller.getSelectedLogicalRunway().designator;
-			}
+			}*/
 
 			////////////////////////////////////////////////////////////////////////////
 			///////Re-adjust scale and width to fit No Clearway/No Stopway labels if needed///////
@@ -561,7 +561,7 @@ public class Draw
 
 		int threshX = (lowAngle && !controller.towardsSelectedLR) || (!lowAngle && controller.towardsSelectedLR) ? (int)(displacementX + scale*lr.tora - scale*lr.lda) : (int)(displacementX - scale*lr.tora + scale*lr.lda);
 
-		LogicalRunway selectedLR = lowAngle ? runway.shortAngleLogicalRunway : runway.longAngleLogicalRunway;
+		//LogicalRunway selectedLR = lowAngle ? runway.shortAngleLogicalRunway : runway.longAngleLogicalRunway;
 
 //		if(controller.towardsSelectedLR) {
 //			int measureX = (lowAngle && !controller.towardsSelectedLR) || (!lowAngle && controller.towardsSelectedLR) ? (int)(runwayX + scale*(ob.distanceFromLowAngleEndOfRunway + ob.length) ) : (int)(runwayX + scale*ob.distanceFromLowAngleEndOfRunway) ;

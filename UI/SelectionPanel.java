@@ -26,8 +26,8 @@ import Model.Runway;
 public class SelectionPanel extends JPanel
 {
 	Controller CONTROLLER;
-	JTextField xPosInput;
-	JTextField yPosInput;
+	JTextField centrelineDistanceTextField;
+	JTextField thresholdDistanceTextField;
 	JComboBox<String> runwayComboBox;
 	JComboBox<String> obstacleComboBox;
 
@@ -323,6 +323,8 @@ public class SelectionPanel extends JPanel
 		obstacleComboBox.addActionListener(e -> {
 			CONTROLLER.selectObstacle((String) obstacleComboBox.getSelectedItem());
 			CONTROLLER.notify("Obstacle selected : "+ (String) obstacleComboBox.getSelectedItem());
+			centrelineDistanceTextField.setText("0");
+			thresholdDistanceTextField.setText("0");
 		});
 		add(obstacleComboBox, gbc);
 
@@ -403,7 +405,7 @@ public class SelectionPanel extends JPanel
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.ipady = 5;
 
-		JTextField centrelineDistanceTextField = new JTextField();
+		centrelineDistanceTextField = new JTextField();
 		centrelineDistanceTextField.getDocument().addDocumentListener( new DocumentListener() {
 
 			@Override
@@ -446,7 +448,7 @@ public class SelectionPanel extends JPanel
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 		gbc.ipady = 5;
 
-		JTextField thresholdDistanceTextField = new JTextField();
+		thresholdDistanceTextField = new JTextField();
 		thresholdDistanceTextField.getDocument().addDocumentListener(new DocumentListener()
 				{
 
