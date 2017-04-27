@@ -32,6 +32,7 @@ public class SelectionPanel extends JPanel
 	JTextField thresholdDistanceTextField;
 	JComboBox<String> runwayComboBox;
 	JComboBox<String> obstacleComboBox;
+	JComboBox<String> designatorComboBox;
 
 	public SelectionPanel(Controller c) 
 	{
@@ -85,6 +86,11 @@ public class SelectionPanel extends JPanel
 		runwayComboBox.addActionListener(e -> {
 			CONTROLLER.selectRunway((String) runwayComboBox.getSelectedItem());
 			CONTROLLER.notify("Runway selected : "+ (String) runwayComboBox.getSelectedItem());
+			designatorComboBox.removeAllItems();
+			designatorComboBox.addItem(CONTROLLER.selectedRunway.lowAngle().designator);
+			designatorComboBox.addItem(CONTROLLER.selectedRunway.highAngle().designator);
+			CONTROLLER.setRunwayAngle(designatorComboBox.getSelectedIndex() == 0);
+			CONTROLLER.notify("Designator selected : "+ (String) designatorComboBox.getSelectedItem());
 		});
 		add(runwayComboBox, gbc);
 
@@ -166,7 +172,7 @@ public class SelectionPanel extends JPanel
 		gbc.insets.right = 10;
 		gbc.fill = GridBagConstraints.HORIZONTAL;
 
-		JComboBox<String> designatorComboBox = new JComboBox<String>();
+		designatorComboBox = new JComboBox<String>();
 		designatorComboBox.setFont(notLabelFont);
 		designatorComboBox.addItem(CONTROLLER.selectedRunway.lowAngle().designator);
 		designatorComboBox.addItem(CONTROLLER.selectedRunway.highAngle().designator);
