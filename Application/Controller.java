@@ -213,6 +213,7 @@ public class Controller
 	public void setRunwayAngle(boolean lowAngle)
 	{
 		lowAngleRunway = lowAngle;
+		setObstaclePos();
 		recalculateValues();
 	}
 	
