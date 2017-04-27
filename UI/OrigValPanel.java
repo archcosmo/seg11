@@ -41,7 +41,7 @@ public class OrigValPanel extends JScrollPane
 		}
 		else
 		{
-			calculations.setText("<html><br><br>"+s+"</html>");;
+			calculations.setText("<html><br>"+s+"</html>");;
 		}
 	}
 }

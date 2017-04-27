@@ -27,6 +27,7 @@ public class RecalcValPanel extends JScrollPane
 		
 		Font labelFont = this.getFont().deriveFont(20.0f);
 		calculations = new JLabel("");
+		calculations.setFont(labelFont);
 		pane.add(calculations);
 	}
 	
@@ -36,11 +37,11 @@ public class RecalcValPanel extends JScrollPane
 		String s = CONTROLLER.getCalculationValues();
 		if (s == null || s.equals("")) 
 		{
-			calculations.setText("<html><br><br>Currently no calculated values to display");
+			calculations.setText("<html><br>Currently no calculated values to display");
 		}
 		else
 		{
-			calculations.setText("<html><br><br>"+s+"</html>");;
+			calculations.setText("<html><br>"+s+"</html>");;
 		}
 	}
 }
