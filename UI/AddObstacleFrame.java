@@ -22,8 +22,7 @@ public class AddObstacleFrame {
 	Controller controller;
 	Obstacle obstacle;
 	JTextField nameField, lengthField, widthField, heightField;
-	String name; 
-	//int length, width, height;
+	String name;
 	ValidateValue lengthVal, widthVal, heightVal;
 	Boolean edit = false;
 	JFrame errorFrame;
