@@ -62,6 +62,8 @@ public class Controller
 		loadObstacleInfoFromFile();
 		loadAirportInfoFromFile();
 		
+		if (obstacles == null || obstacles.isEmpty()) addGenericObstacle();
+		
 		this.colourSchemes = new ArrayList<ColourScheme>();
 		Collections.addAll(colourSchemes, ColourScheme.defaultThemes());
 		
@@ -74,6 +76,17 @@ public class Controller
         });
 	}
 	
+	private void addGenericObstacle() 
+	{
+		obstacles = new ArrayList<Obstacle>();
+		obstacles.add(new Obstacle("Dafault Obstacle", 20, 100, 40));
+		try {
+			XML.saveObstacleInfoToXML(obstacles);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	/* Redisplays Airport Selection Panel */
 	public void showAirportSelection() 
 	{
@@ -94,7 +107,6 @@ public class Controller
 				/* If no obstacles found, add a default obstacle */
 				obstacles.add(new Obstacle("Generic Obstacle", 50, 400, 60));
 				XML.saveObstacleInfoToXML(obstacles);
-				//TODO: If file does not exist, make a new one
 			}
 			
 			return true;	
@@ -147,7 +159,7 @@ public class Controller
 	public boolean newAirport(String airport)
 	{
 		if (airport.equals(" ") || airport.length() == 0) { return false; }
-		//TODO: Add default runway to airport before saving
+		
 		selectedAirport = new Airport(airport);
 		airports.add(selectedAirport);
 		
@@ -159,6 +171,7 @@ public class Controller
 		} catch (IOException e) {}
 		
 		notify("New Airport Added and Selected");
+		AIRPORT_NAME = airport;
 		UI.loadRunningLayout();
 		UI.setVisible(true);
 		return true;
@@ -437,8 +450,6 @@ public class Controller
 	{
 		return originalValues;
 	}
-	
-
 }
 
 

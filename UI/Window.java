@@ -113,9 +113,6 @@ public class Window extends JFrame
 		
 		contentPanel.add(NOTIFICATION, BorderLayout.SOUTH);
 		
-		//TODO Add a button to bring up this frame
-		new DrawPreferencesFrame(this, CONTROLLER);
-		
 		draw();
 	}
 	
