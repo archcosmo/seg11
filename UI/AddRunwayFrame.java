@@ -578,6 +578,8 @@ public class AddRunwayFrame {
 			runway.length = newRunway.length;
 			runway.width = newRunway.width;
 			runway.setLogicalRunways(s, l);
+			runway.setDesignator();
+			controller.updateRunways();
 		}
 	}
 
