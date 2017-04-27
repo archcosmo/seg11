@@ -166,6 +166,13 @@ public class Controller
 		addGenericRunway();
 		selectedRunway = selectedAirport.getRunways().get(0);
 		
+		originalValues = 
+				"<center>Original Values:</center> <br> <br>" +
+				"<center>TORA = " + selectedRunway.lowAngle().tora + "<br></center>" +
+				"<center>TODA = " + selectedRunway.lowAngle().toda + "<br></center>" +
+				"<center>ASDA = " + selectedRunway.lowAngle().tora + "<br></center>" +
+				"<center>LDA  = " + selectedRunway.lowAngle().lda + "<br></center>";
+		
 		try {
 			XML.saveAirportInfoToXML(selectedAirport);
 		} catch (IOException e) {}
