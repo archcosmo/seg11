@@ -20,7 +20,7 @@ public class ValidateValue{
 		int value = 0;
 		String validation = "<html>";
 		if (input.matches("\\d+")) {
-			if (input.length() > 9) { //prevents crashing
+			if (input.length() < 9) { //prevents crashing
 				value = Integer.parseInt(input);
 				if (value < min) {
 					validation += "Value must be a greater than " + min + ".<br>";
