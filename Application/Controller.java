@@ -343,6 +343,8 @@ public class Controller
 	{
 		selectedObstacle.setPosition(distanceFromThreshold, getSelectedLogicalRunway(), lowAngleRunway, lowAngleRunway,distanceFromCenterline);
 		recalculateValues();
+		//Trigger value tabs to update
+		UI.getSIDE_BAR().repaint();
 	}
 	
 	public String getCalculations() 
