@@ -79,7 +79,7 @@ public class Controller
 	private void addGenericObstacle() 
 	{
 		obstacles = new ArrayList<Obstacle>();
-		obstacles.add(new Obstacle("Dafault Obstacle", 20, 100, 40));
+		obstacles.add(new Obstacle("Default Obst.", 20, 100, 40));
 		try {
 			XML.saveObstacleInfoToXML(obstacles);
 		} catch (IOException e) {
