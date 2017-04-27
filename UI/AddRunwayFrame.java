@@ -523,10 +523,10 @@ public class AddRunwayFrame {
 				
 				sDes = sDes + newDes1;
 				lDes = lDes + opNewDes1;
-				runway.lowAngle().designator = r1.lowAngle().designator.substring(0, 2) + newDes1;
-				runway.highAngle().designator = r1.highAngle().designator.substring(0, 2) + opNewDes1;
+				newRunway.lowAngle().designator = r1.lowAngle().designator.substring(0, 2) + newDes1;
+				newRunway.highAngle().designator = r1.highAngle().designator.substring(0, 2) + opNewDes1;
 				
-				runway.setDesignator();
+				newRunway.setDesignator();
 
 				String opNewDes2 = null;
 				if (r1Des !=null) {
