@@ -341,8 +341,10 @@ public class Controller
 	
 	private void setObstaclePos() 
 	{
-		selectedObstacle.setPosition(distanceFromThreshold, getSelectedLogicalRunway(), lowAngleRunway, lowAngleRunway,distanceFromCenterline);
-		recalculateValues();
+		if (selectedObstacle != null) {
+			selectedObstacle.setPosition(distanceFromThreshold, getSelectedLogicalRunway(), lowAngleRunway, lowAngleRunway, distanceFromCenterline);
+			recalculateValues();
+		}
 		//Trigger value tabs to update
 		UI.getSIDE_BAR().repaint();
 	}
