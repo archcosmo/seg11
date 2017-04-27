@@ -102,7 +102,7 @@ public class Draw
 		displayDistancesOnMeasurements = false;
 		drawOrigMeasurements = true;
 		drawLegend = true;
-		floatingLegend = false;
+		floatingLegend = true;
 		floatingCompassAndDirection = false;
 		drawCompass = true;
 		drawDirection = true;
