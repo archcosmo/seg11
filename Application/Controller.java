@@ -281,7 +281,6 @@ public class Controller
 				{
 					selectedObstacle = o;
 					break;
-					
 				}
 			}
 		}
@@ -353,6 +352,56 @@ public class Controller
 		return calcBreakdown;
 	}
 	
+	//Exports obstacle of given name to given file.
+	public void exportObstacle(String obj, File file) throws Exception {
+		Obstacle ob = null;
+		if (obj.equals("None")) 
+			throw new Exception("'None' is not an exportable object!");
+		
+		for (Obstacle o: obstacles) {
+			if (obj.equals(o.getName())) 
+			{
+				ob = o;
+				break;
+			}
+		}
+		
+		if(ob == null)
+			throw new Exception("'" + obj + "' is not a valid obstacle.");
+		
+		List<Obstacle> obList = new ArrayList<Obstacle>();
+		obList.add(ob);
+		
+		XML.saveObstacleInfoToXML(file, obList);
+		UI.notify("Exported obstacle '" + obj + "' to '" + file.getAbsolutePath() + "'");
+	}
+	
+	//Exports obstacle of given name to given file.
+	public void importObstacle(File file) throws Exception {
+		List<Obstacle> obList = XML.readObstacleInfoFromXML(file);
+
+		UI.notify("Importing obstacles from '" + file.getAbsolutePath() + "'...");
+		
+		for(Obstacle ob : obList) {
+			boolean canAdd = true;
+			
+			for(Obstacle ob2 : obstacles) {
+				if(ob.getName().equals(ob2.getName())) {
+					canAdd = false;
+					UI.notify("There is already an obstacle named '" + ob.getName() + "', not added.");
+					break;
+				}
+			}
+			if(canAdd) {
+				obstacles.add(ob);
+				notify("Obstacle added: " + ob.getName());
+				updateCombo(ob);
+			}
+		}
+		
+		XML.saveObstacleInfoToXML(obstacles);
+	}
+
 	//Exports the Graphical Views to files in the given directory
 	public void exportGraphs(File dir) throws Exception {
 		if(!dir.isDirectory())

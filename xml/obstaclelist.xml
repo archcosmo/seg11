@@ -1,1 +1,1 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><obstaclelist><obstacle name="debris"><height>20</height><width>50</width><length>200</length></obstacle></obstaclelist>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><obstaclelist><obstacle name="debris"><height>20</height><width>50</width><length>200</length></obstacle><obstacle name="debris2"><height>20</height><width>50</width><length>200</length></obstacle><obstacle name="debris3"><height>20</height><width>50</width><length>200</length></obstacle></obstaclelist>

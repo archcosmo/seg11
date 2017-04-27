@@ -10,6 +10,7 @@ import java.io.IOException;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -17,6 +18,8 @@ import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+
+import org.xml.sax.SAXParseException;
 
 import Application.Controller;
 import Model.ColourScheme;
@@ -440,6 +443,18 @@ public class SelectionPanel extends JPanel
 		gbc.weightx = 0.5;
 		
 		JButton exportObstacleButton = new JButton("Export");
+		exportObstacleButton.addActionListener(e -> {
+			JFileChooser fc = new JFileChooser();
+			fc.setDialogTitle("Export " + (String) obstacleComboBox.getSelectedItem() + " to file...");
+			
+			if(fc.showDialog(this, "Export") == JFileChooser.APPROVE_OPTION) {
+				try {
+					CONTROLLER.exportObstacle((String) obstacleComboBox.getSelectedItem(), fc.getSelectedFile());
+				} catch (Exception e1) {
+					JOptionPane.showMessageDialog(this, "Error: " + e1.getMessage());
+				}
+			}
+		});
 		add(exportObstacleButton, gbc);
 		
 		//IMPORT OBSTACLE BUTTON
@@ -449,6 +464,21 @@ public class SelectionPanel extends JPanel
 		gbc.insets.right = 10;
 		
 		JButton importObstacleButton = new JButton("Import");
+		importObstacleButton.addActionListener(e -> {
+			JFileChooser fc = new JFileChooser();
+			fc.setDialogTitle("Import obstacle from file...");
+			
+			if(fc.showDialog(this, "Import") == JFileChooser.APPROVE_OPTION) {
+				try {
+					CONTROLLER.importObstacle(fc.getSelectedFile());
+				} catch(SAXParseException e1) {
+					JOptionPane.showMessageDialog(this, "Invalid file, xml file expected.");
+				}
+				catch (Exception e1) {
+					JOptionPane.showMessageDialog(this, "Error: " + e1.getMessage());
+				}
+			}
+		});
 		add(importObstacleButton, gbc);
 		
 		gbc.fill = GridBagConstraints.NONE;

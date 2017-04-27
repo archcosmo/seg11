@@ -229,7 +229,7 @@ public class XML {
 		return nThreshold;
 	}
 	
-	public static boolean saveObstacleInfoToXML(List<Obstacle> obstacles) throws IOException {
+	public static boolean saveObstacleInfoToXML(File file, List<Obstacle> obstacles) throws IOException {
 		DocumentBuilder db;
 		try {
 			db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -243,7 +243,7 @@ public class XML {
 			
 			DOMSource xmlSource = new DOMSource(doc);
 			
-			FileWriter fw = new FileWriter(new File("xml/obstaclelist.xml"));
+			FileWriter fw = new FileWriter(file);
 			StreamResult outputTarget = new StreamResult(fw);
 			
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
@@ -254,6 +254,10 @@ public class XML {
 		} catch (ParserConfigurationException | TransformerException e) {
 			return false;
 		}
+	}
+	
+	public static boolean saveObstacleInfoToXML(List<Obstacle> obstacles) throws IOException {
+		return saveObstacleInfoToXML(new File("xml/obstaclelist.xml"), obstacles);
 	}
 	
 	private static Node marshallObstacle(Obstacle obstacle, Document doc) {
@@ -275,10 +279,10 @@ public class XML {
 		return eObstacle;
 	}
 	
-	public static List<Obstacle> readObstacleInfoFromXML() throws IOException, SAXException, ParserConfigurationException {
+	public static List<Obstacle> readObstacleInfoFromXML(File file) throws IOException, SAXException, ParserConfigurationException {
 		//Load and parse XML file
 		DocumentBuilder db = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-		Document doc = db.parse(new File("xml/obstaclelist.xml"));
+		Document doc = db.parse(file);
 		doc.getDocumentElement().normalize();
 
 		Element eObstacleList = doc.getDocumentElement();
@@ -294,6 +298,10 @@ public class XML {
 			obstacleList.add(unmarshallObstacle(obstacles.item(i)));
 		
 		return obstacleList;
+	}
+	
+	public static List<Obstacle> readObstacleInfoFromXML() throws IOException, SAXException, ParserConfigurationException {
+		return readObstacleInfoFromXML(new File("xml/obstaclelist.xml"));
 	}
 	
 	private static Obstacle unmarshallObstacle(Node nObstacle) throws SAXException {
