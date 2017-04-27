@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -21,6 +22,7 @@ import Application.Controller;
 import Model.ColourScheme;
 import Model.Obstacle;
 import Model.Runway;
+import Model.XML;
 
 @SuppressWarnings("serial")
 public class SelectionPanel extends JPanel
@@ -121,6 +123,9 @@ public class SelectionPanel extends JPanel
 				if (reply == JOptionPane.YES_OPTION) {
 					CONTROLLER.notify("Runway removed: " + CONTROLLER.selectedRunway.getName());
 					CONTROLLER.selectedAirport.removeRunway(CONTROLLER.selectedRunway);
+					try {
+						XML.saveAirportInfoToXML(CONTROLLER.selectedAirport);
+					} catch (IOException e1) {}
 					updateRunways();
 				}
 			}
@@ -366,6 +371,9 @@ public class SelectionPanel extends JPanel
 				if (reply == JOptionPane.YES_OPTION) {
 					CONTROLLER.notify("Obstacle removed: " + CONTROLLER.selectedObstacle.getName());
 					CONTROLLER.obstacles.remove(CONTROLLER.selectedObstacle);
+					try {
+						XML.saveObstacleInfoToXML(CONTROLLER.obstacles);
+					} catch (IOException e1) {}
 					updateObstacles();
 				}
 			}
