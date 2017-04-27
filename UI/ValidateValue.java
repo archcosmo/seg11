@@ -23,15 +23,15 @@ public class ValidateValue{
 			if (input.length() < 9) { //prevents crashing
 				value = Integer.parseInt(input);
 				if (value < min) {
-					validation += "Value must be a greater than " + min + ".<br>";
+					validation += "Value must be equal or greater than " + min + ".<br>";
 					valid = false;
 				}
 				if (value > max) {
-					validation += "Value must be less than " + max + ".<br>";
+					validation += "Value must be equal or less than " + max + ".<br>";
 					valid = false;
 				}
 			} else {
-				validation += "Value must be less than " + max + ".<br>";
+				validation += "Value must be equal or less than " + max + ".<br>";
 				valid = false;
 			}
 		} else {
