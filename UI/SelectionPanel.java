@@ -452,17 +452,17 @@ public class SelectionPanel extends JPanel
 
 					@Override
 					public void changedUpdate(DocumentEvent arg0) {
-						if (CONTROLLER.selectedObstacle == null || thresholdDistanceTextField.getText() == "" || !CONTROLLER.selectObstacleYPos(thresholdDistanceTextField.getText()));	
+						if (CONTROLLER.selectedObstacle == null || thresholdDistanceTextField.getText() == "" || !CONTROLLER.selectObstacleYPos(thresholdDistanceTextField.getText()));
 					}
 
 					@Override
 					public void insertUpdate(DocumentEvent arg0) {
-						if (CONTROLLER.selectedObstacle == null || thresholdDistanceTextField.getText() == "" || !CONTROLLER.selectObstacleYPos(thresholdDistanceTextField.getText()));	
+						if (CONTROLLER.selectedObstacle == null || thresholdDistanceTextField.getText() == "" || !CONTROLLER.selectObstacleYPos(thresholdDistanceTextField.getText()));
 					}
 
 					@Override
 					public void removeUpdate(DocumentEvent arg0) {
-						if (CONTROLLER.selectedObstacle == null || thresholdDistanceTextField.getText() == "" || !CONTROLLER.selectObstacleYPos(thresholdDistanceTextField.getText()));	
+						if (CONTROLLER.selectedObstacle == null || thresholdDistanceTextField.getText() == "" || !CONTROLLER.selectObstacleYPos(thresholdDistanceTextField.getText()));
 					}
 				}
 				);

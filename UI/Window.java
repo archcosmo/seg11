@@ -50,6 +50,7 @@ public class Window extends JFrame
 	public TopViewPanel getTOP() {return TOP;}
 	public SideViewPanel getSIDE() {return SIDE;}
 	public SelectionPanel getSELECTION() {return SIDE_BAR.SELECTION;}
+	public SideBarPanel getSIDE_BAR() {return SIDE_BAR;}
 
 	/* Initial Screen on load up, 
 	 * - gets user to choose or make a new airport 
