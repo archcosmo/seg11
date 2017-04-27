@@ -166,10 +166,10 @@ public class Controller
 	
 	public void addGenericRunway()
 	{
-		Runway newRunway = new Runway(240, 300, 60, 2000, 400);
+		Runway newRunway = new Runway(240, 300, 60, 3000, 250);
 		newRunway.setLogicalRunways(
-				new LogicalRunway("00", newRunway, 100, 100, 100, 100), 
-				new LogicalRunway("18", newRunway, 100, 100, 100, 100));
+				new LogicalRunway("00", newRunway, 3000, 3500, 3300, 2900),
+				new LogicalRunway("18", newRunway, 3000, 3700, 3400, 3000));
 		selectedAirport.addRunway(newRunway);
 	}
 	

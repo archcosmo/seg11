@@ -10,7 +10,7 @@ import Application.Controller;
 public class ExportButton extends JButton {
 	
 	public ExportButton(Controller CONTROLLER) {
-		super("Export view");
+		super("Save View to File");
 		addActionListener(e -> {
 			JFileChooser fc = new JFileChooser();
 			fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);

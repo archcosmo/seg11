@@ -21,6 +21,9 @@ import Application.Controller;
 import Model.LogicalRunway;
 import Model.Runway;
 
+import static UI.ValidateValue.createValidationTitleJLabel;
+import static UI.ValidateValue.validateNumber;
+
 public class AddRunwayFrame {
 	Controller controller;
 	JTextField angleField, lengthField, widthField, resaField, baField, 
@@ -29,6 +32,9 @@ public class AddRunwayFrame {
 	Runway runway;
 	Boolean edit = false;
 	JFrame errorFrame;
+	String sDes, lDes;
+	String r1Des, r2Des;
+	JComboBox<String> choiceBox1, choiceBox2, choiceBox3;
 
 	public AddRunwayFrame(Controller c) {
 		controller = c;
@@ -236,11 +242,8 @@ public class AddRunwayFrame {
 	public boolean checkValues(){
 		
 		//Input validation
-
-
-
 		angleVal = validateNumber(angleField.getText(), 0, 359);
-		angleVal.value = angleVal.value /10;
+		angleVal.value = (angleVal.value+5) /10;
 		lengthVal = validateNumber(lengthField.getText(), 100, 10000);
 		widthVal = validateNumber(widthField.getText(), 5, 2000);
 		resaVal = validateNumber(resaField.getText(), 0, 1000);
@@ -256,36 +259,37 @@ public class AddRunwayFrame {
 		lLdVal = validateNumber(lLDAField.getText(), 0, 10000);
 		
 		if (sTorVal.value > lengthVal.value) {
-			sTorVal.validationString += "<html>TORA must not be greater than runway length.</html>";
+			sTorVal.validationString = appendHTMLToString(sTorVal.validationString, "TORA must not be greater than runway length.");
+
 			sTorVal.valid = false;			
 		}
 		if (sTodVal.value < sTorVal.value) {
-			sTorVal.validationString += "<html>TORA must not be greater than TODA.</html>";
-			sTorVal.valid = false;
+			sTodVal.validationString = appendHTMLToString(sTodVal.validationString, "TODA must not be less than TORA.");
+			sTodVal.valid = false;
 		}
 		if (sAsdVal.value < sTorVal.value) {
-			sTorVal.validationString += "<html>TORA must not be greater than ASDA.</html>";
-			sTorVal.valid = false;
+			sAsdVal.validationString = appendHTMLToString(sAsdVal.validationString, "ASDA must not be less than TORA.");
+			sAsdVal.valid = false;
 		}
 		if (sTorVal.value < sLdVal.value) {
-			sTorVal.validationString += "<html>LDA must not be greater than TORA.</html>";
+			sLdVal.validationString = appendHTMLToString(sLdVal.validationString, "LDA must not be greater than TORA.");
 			sLdVal.valid = false;
 		}
 
 		if (lTorVal.value > lengthVal.value) {
-			lTorVal.validationString += "<html>TORA must not be greater than runway length.</html>";
+			lTorVal.validationString = appendHTMLToString(lTorVal.validationString, "TORA must not be greater than runway length.");
 			lTorVal.valid = false;
 		}
 		if (lTodVal.value < lTorVal.value) {
-			lTorVal.validationString += "<html>TORA must not be greater than TODA.</html>";
-			lTorVal.valid = false;
+			lTodVal.validationString = appendHTMLToString(lTodVal.validationString, "TODA must not be less than TORA.");
+			lTodVal.valid = false;
 		}
 		if (lAsdVal.value < lTorVal.value) {
-			lTorVal.validationString += "<html>TORA must not be greater than ASDA.</html>";
-			lTorVal.valid = false;
+			lAsdVal.validationString = appendHTMLToString(lAsdVal.validationString, "ASDA must not be less than TORA.");
+			lAsdVal.valid = false;
 		}
 		if (lTorVal.value < lLdVal.value) {
-			lTorVal.validationString += "<html>LDA must not be greater than TORA.</html>";
+			lLdVal.validationString = appendHTMLToString(lLdVal.validationString, "LDA must not be greater than TORA.");
 			lLdVal.valid = false;
 		}
 
@@ -329,14 +333,14 @@ public class AddRunwayFrame {
 			errorFrame.add(new JLabel(stripVal.validationString), c);
 
 			c.gridx = 0; c.gridy = 6;
-			errorFrame.add(createValidationTitleJLabel(sTorVal, "Short Angle TORA"), c);
-			c.gridx = 1;
-			errorFrame.add(new JLabel(sTorVal.validationString), c);
-
-			c.gridx = 0; c.gridy = 7;
-			errorFrame.add(createValidationTitleJLabel(sTodVal, "Short Angle TODA"), c);
+			errorFrame.add(createValidationTitleJLabel(sTorVal, "Short Angle TODA"), c);
 			c.gridx = 1;
 			errorFrame.add(new JLabel(sTodVal.validationString), c);
+
+			c.gridx = 0; c.gridy = 7;
+			errorFrame.add(createValidationTitleJLabel(sTodVal, "Short Angle TORA"), c);
+			c.gridx = 1;
+			errorFrame.add(new JLabel(sTorVal.validationString), c);
 
 			c.gridx = 0; c.gridy = 8;
 			errorFrame.add(createValidationTitleJLabel(sAsdVal, "Short Angle ASDA"), c);
@@ -349,14 +353,14 @@ public class AddRunwayFrame {
 			errorFrame.add(new JLabel(sLdVal.validationString), c);
 
 			c.gridx = 0; c.gridy = 10;
-			errorFrame.add(createValidationTitleJLabel(lTorVal, "Long Angle TORA"), c);
-			c.gridx = 1;
-			errorFrame.add(new JLabel(lTorVal.validationString), c);
-
-			c.gridx = 0; c.gridy = 11;
-			errorFrame.add(createValidationTitleJLabel(lTodVal, "Long Angle TODA"), c);
+			errorFrame.add(createValidationTitleJLabel(lTorVal, "Long Angle TODA"), c);
 			c.gridx = 1;
 			errorFrame.add(new JLabel(lTodVal.validationString), c);
+
+			c.gridx = 0; c.gridy = 11;
+			errorFrame.add(createValidationTitleJLabel(lTodVal, "Long Angle TORA"), c);
+			c.gridx = 1;
+			errorFrame.add(new JLabel(lTorVal.validationString), c);
 
 			c.gridx = 0; c.gridy = 12;
 			errorFrame.add(createValidationTitleJLabel(lAsdVal, "Long Angle ASDA"), c);
@@ -377,7 +381,7 @@ public class AddRunwayFrame {
 		return true;
 	}
 
-	String sDes, lDes;
+
 	public void makeRunway() {
 		runway = new Runway(resaVal.value, blastVal.value, stripVal.value, lengthVal.value, widthVal.value);
 		int sAngle, lAngle;
@@ -404,15 +408,14 @@ public class AddRunwayFrame {
 				i++;
 			}
 		}
-		if (i>1) setLR(sDes, run1, run2);
+		if (i>1 && !edit) setLR(sDes, run1, run2);
 		
 		LogicalRunway s = new LogicalRunway(sDes, runway, sTorVal.value, sTodVal.value, sAsdVal.value, sLdVal.value);
 		LogicalRunway l = new LogicalRunway(lDes, runway, lTorVal.value, lTodVal.value, lAsdVal.value, lLdVal.value);
 		runway.setLogicalRunways(s, l);
 	}
 	
-	String r1Des, r2Des;
-	JComboBox<String> choiceBox1, choiceBox2, choiceBox3;
+
 	public boolean setLR(String r, Runway r1, Runway r2) {
 		String rDes = r; 
 		r1Des = null; r2Des = null;
@@ -429,6 +432,7 @@ public class AddRunwayFrame {
 		JFrame lrFrame = new JFrame("Designator for "+rDes);
 		lrFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		lrFrame.setLocationRelativeTo(null);
+		lrFrame.setResizable(false);
 		lrFrame.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.insets = new Insets(5,5,5,5);
@@ -436,6 +440,10 @@ public class AddRunwayFrame {
 		JPanel panel = new JPanel();
 		panel.setBorder(BorderFactory.createEtchedBorder());
 		panel.setLayout(new GridBagLayout());
+		
+		c.gridx = 0; c.gridy = 0;
+		JLabel info = new JLabel("<html><body>Runway already exists at<br>this angle. Set designator<br>for these runways.</body></html>");
+		lrFrame.add(info, c);
 		
 		c.gridx = 0; c.gridy = 0;
 		JPanel newPan = new JPanel();
@@ -483,7 +491,7 @@ public class AddRunwayFrame {
 			panel.add(oldPan2, c);
 		}
 		
-		c.gridx = 0; c.gridy = 0;
+		c.gridx = 0; c.gridy = 1;
 		lrFrame.add(panel, c);
 		
 		JButton confirm = new JButton("Confirm");
@@ -549,7 +557,7 @@ public class AddRunwayFrame {
 				}
 			}
 		});
-		c.gridx = 0; c.gridy = 1;
+		c.gridx = 0; c.gridy = 2;
 		lrFrame.add(confirm, c);
 		
 		lrFrame.pack();
@@ -560,39 +568,15 @@ public class AddRunwayFrame {
 	public void addRunway() {
 		if (!edit) {
 			controller.selectedAirport.addRunway(runway);
+			controller.notify("Runway added: " + runway.getName());
 			controller.updateCombo(runway);
 		}
 	}
 
-	private ValidateValue validateNumber(String input, int min, int max) {
-		boolean valid = true;
-		int value = 0;
-		String validation = "<html>";
-		if (input.matches("\\d+")) {
-			value = Integer.parseInt(input);
-			if (value < min) {
-				validation += "Value must be a greater than " + min + ".<br>";
-				valid = false;
-			}
-			if (value > max) {
-				validation += "Value must be less than " + max + ".<br>";
-				valid = false;
-			}
-		} else {
-			validation += "Input not valid.<br>";
-			valid = false;
-		}
-		validation += "</html>";
-		return new ValidateValue(valid, value, validation);
-	}
-
-	private JLabel createValidationTitleJLabel (ValidateValue validateValue, String labelTitle) {
-		JLabel label = new JLabel(labelTitle);
-		if (validateValue.valid) {
-			label.setForeground(Color.GREEN);
-		} else {
-			label.setForeground(Color.RED);
-		}
-		return  label;
+	private String appendHTMLToString(String htmlString, String appendString) {
+		htmlString = htmlString.substring(0, htmlString.length() - 7);
+		htmlString += appendString;
+		htmlString += "</html>";
+		return htmlString;
 	}
 }

@@ -2,9 +2,6 @@ package Model;
 
 public class Runway {
 
-	public static final int DEFAULT_RESA = 240;
-	public static final int DEFAULT_BLAST_ALLOWANCE = 300;
-	public static final int STRIP_END = 60;
 	String designator;
 	LogicalRunway shortAngleLogicalRunway; //Logical runway with angle 0 to 17
 	LogicalRunway longAngleLogicalRunway;

@@ -15,12 +15,15 @@ import javax.swing.JTextField;
 import Application.Controller;
 import Model.Obstacle;
 
+import static UI.ValidateValue.createValidationTitleJLabel;
+import static UI.ValidateValue.validateNumber;
+
 public class AddObstacleFrame {
 	Controller controller;
 	Obstacle obstacle;
 	JTextField nameField, lengthField, widthField, heightField;
-	String name; 
-	int length, width, height;
+	String name;
+	ValidateValue lengthVal, widthVal, heightVal;
 	Boolean edit = false;
 	JFrame errorFrame;
 	
@@ -118,94 +121,64 @@ public class AddObstacleFrame {
 	
 	public boolean checkValues() {
 		boolean named = false;
+		String nameValidation = "";
 		String nameFieldText = nameField.getText();
 		if (nameFieldText.matches("[a-zA-Z0-9][a-zA-Z0-9 ]+")) {
 			for (Obstacle obstacle : controller.getObstacles()) {
-				if (nameFieldText.equals(obstacle)) {
+				if (nameFieldText.equals(obstacle.getName())) {
+					nameValidation = "There is already an object with this name.";
 					break;
 				}
 			}
 			name = nameFieldText;
 			named = true;
+		} else {
+			if (nameFieldText.length() < 2) {
+				nameValidation = "Name must be at least 2 characters.";
+			} else {
+				nameValidation = "Can only use letters, numbers and spaces.";
+			}
 		}
+
+		lengthVal = validateNumber(lengthField.getText(), 0, 10000);
+		widthVal = validateNumber(widthField.getText(), 0, 5000);
+		heightVal = validateNumber(heightField.getText(), 0, 100);
 		
-		boolean len = false;
-		if (lengthField.getText().matches("\\d+")) {
-			length = Integer.parseInt(lengthField.getText());
-			if (length <= 10000 && length > 0) len = true;
-		}
-		
-		boolean wid = false;
-		if (widthField.getText().matches("\\d+")) {
-			width = Integer.parseInt(widthField.getText());
-			if (width <= 5000 && width > 0) wid = true;
-		}
-		
-		boolean hei = false;
-		if (heightField.getText().matches("\\d+")) {
-			height = Integer.parseInt(heightField.getText());
-			if (height <= 100 && height > 0) hei = true;
-		}
-		
-		if (!(named && len && wid && hei)) {
+		if (!(named && lengthVal.valid && widthVal.valid && heightVal.valid)) {
 			if (errorFrame != null)	errorFrame.dispose();
 			errorFrame = new JFrame();
 			errorFrame.setLayout(new GridBagLayout());
 			GridBagConstraints c = new GridBagConstraints();
 			c.anchor = GridBagConstraints.WEST;
 			c.insets = new Insets(2,2,2,2);
-			
-			c.gridx = 1; c.gridy = 0;
-			errorFrame.add(new JLabel("Name must not be blank"), c);
-			c.gridx = 0;
-			JLabel nameValid = new JLabel();
+
+
+			c.gridx = 0; c.gridy = 0;
+			JLabel nameLabel = new JLabel("Name");
 			if (named) {
-				nameValid.setForeground(Color.GREEN);
-				nameValid.setText("Valid Input");
+				nameLabel.setForeground(Color.GREEN);
 			} else {
-				nameValid.setForeground(Color.RED);
-				nameValid.setText("Invalid Input");
+				nameLabel.setForeground(Color.RED);
 			}
-			errorFrame.add(nameValid, c);
-			
-			c.gridx = 1; c.gridy = 1;
-			errorFrame.add(new JLabel("Length must be integer between 1 and 1000"), c);
-			c.gridx = 0;
-			JLabel lengthValid = new JLabel();
-			if (len) {
-				lengthValid.setForeground(Color.GREEN);
-				lengthValid.setText("Valid Input");
-			} else {
-				lengthValid.setForeground(Color.RED);
-				lengthValid.setText("Invalid Input");
-			}
-			errorFrame.add(lengthValid, c);
-			
-			c.gridx = 1; c.gridy = 2;
-			errorFrame.add(new JLabel("Width must be integer between 1 and 5000"), c);
-			c.gridx = 0;
-			JLabel widthValid = new JLabel();
-			if (wid) {
-				widthValid.setForeground(Color.GREEN);
-				widthValid.setText("Valid Input");
-			} else {
-				widthValid.setForeground(Color.RED);
-				widthValid.setText("Invalid Input");
-			}
-			errorFrame.add(widthValid, c);
-			
-			c.gridx = 1; c.gridy = 3;
-			errorFrame.add(new JLabel("Height must be integer between 1 and 500"), c);
-			c.gridx = 0;
-			JLabel heightValid = new JLabel();
-			if (hei) {
-				heightValid.setForeground(Color.GREEN);
-				heightValid.setText("Valid Input");
-			} else {
-				heightValid.setForeground(Color.RED);
-				heightValid.setText("Invalid Input");
-			}
-			errorFrame.add(heightValid, c);
+			errorFrame.add(nameLabel, c);
+			c.gridx = 1;
+			errorFrame.add(new JLabel(nameValidation), c);
+
+
+			c.gridx = 0; c.gridy = 1;
+			errorFrame.add(createValidationTitleJLabel(lengthVal, "Length"), c);
+			c.gridx = 1;
+			errorFrame.add(new JLabel(lengthVal.validationString), c);
+
+			c.gridx = 0; c.gridy = 2;
+			errorFrame.add(createValidationTitleJLabel(widthVal, "Width"), c);
+			c.gridx = 1;
+			errorFrame.add(new JLabel(widthVal.validationString), c);
+
+			c.gridx = 0; c.gridy = 3;
+			errorFrame.add(createValidationTitleJLabel(heightVal, "height"), c);
+			c.gridx = 1;
+			errorFrame.add(new JLabel(heightVal.validationString), c);
 			
 			errorFrame.pack();
 			errorFrame.setLocationRelativeTo(null);
@@ -219,14 +192,15 @@ public class AddObstacleFrame {
 	
 	public void addObstacle() {
 		if (!edit) {
-			obstacle = new Obstacle(name, width, length, height);
+			obstacle = new Obstacle(name, widthVal.value, lengthVal.value, heightVal.value);
 			controller.obstacles.add(obstacle);
+			controller.notify("Obstacle added: " + name);
 			controller.updateCombo(obstacle);
 		}
 		else {
-			obstacle.length = length;
-			obstacle.width = width;
-			obstacle.height = height;
+			obstacle.length = lengthVal.value;
+			obstacle.width = widthVal.value;
+			obstacle.height = heightVal.value;
 		}
 	}
 }
